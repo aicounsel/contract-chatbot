@@ -9,13 +9,62 @@ const documentId = getQueryParam('documentId') || 'default-doc-id';
 
 // 2. For testing, define a sample questions array.
 // In production, you'll want to fetch this from your GetQuestions endpoint via AJAX.
-let questions = [
-  "What is the date?",
-  "What is the purchaser's name?",
-  "What is the entity type?",
-  "What is the jurisdiction?",
-  "What is the address?"
-];
+function fetchQuestions() {
+  // Retrieve documentId from URL query parameters
+  const documentId = getQueryParam('documentId');
+  if (!documentId) {
+    console.error("No documentId found in URL");
+    appendBubble("Error: Document ID not provided.", "bot");
+    return;
+  }
+  
+  // Replace with your actual GetQuestions Flow endpoint URL
+  const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
+  
+  const requestBody = {
+    documentId: documentId
+  };
+  
+  fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(requestBody)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok, status " + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Expecting data to be in the format: { "questions": "[\"What is the date?\", \"What is the purchaser's name?\", ...]" }
+    let fetchedQuestions;
+    if (typeof data.questions === "string") {
+      try {
+        fetchedQuestions = JSON.parse(data.questions);
+      } catch (e) {
+        console.error("Error parsing questions string:", e);
+        appendBubble("Error: Could not parse questions data.", "bot");
+        return;
+      }
+    } else {
+      fetchedQuestions = data.questions;
+    }
+    // Save fetched questions globally
+    window.questions = fetchedQuestions;
+    // Start the conversation by showing the first question
+    currentQuestionIndex = 0; // Reset index if needed
+    showNextQuestion();
+  })
+  .catch(error => {
+    console.error("Error fetching questions:", error);
+    appendBubble("Error fetching questions. Please try again later.", "bot");
+  });
+}
+
+fetchQuestions();
 
 // 3. Set up variables to track conversation state
 let currentQuestionIndex = 0;
