@@ -1,7 +1,7 @@
 // chat.js
 
 // Global variables
-let questions = []; // This will hold the fetched questions array
+let questions = []; // Will hold an array of { placeholder, question }
 let currentQuestionIndex = 0;
 let answers = [];
 
@@ -23,9 +23,9 @@ function fetchQuestions() {
   
   // Replace with your actual GetQuestions Flow endpoint URL
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
-  
+
   const requestBody = { documentId: docId };
-  
+
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -38,7 +38,12 @@ function fetchQuestions() {
     return response.json();
   })
   .then(data => {
-    // Expecting data in format: { "questions": "[\"Question1\",\"Question2\", ...]" }
+    /*
+      Expecting data in the format:
+      {
+        "questions": "[{\"placeholder\":\"[date]\",\"question\":\"What is the date?\"}, ...]"
+      }
+    */
     let fetchedQuestions;
     if (typeof data.questions === "string") {
       try {
@@ -49,9 +54,11 @@ function fetchQuestions() {
         return;
       }
     } else {
+      // If the server returns an actual array, no parse needed
       fetchedQuestions = data.questions;
     }
-    // Set the global questions variable
+    // 'fetchedQuestions' should now be an array of { placeholder, question }
+
     questions = fetchedQuestions;
     currentQuestionIndex = 0;
     showNextQuestion();
@@ -75,7 +82,9 @@ function appendBubble(text, type='bot') {
 // 4. Function to show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
-    appendBubble(questions[currentQuestionIndex]);
+    // Display the 'question' property
+    const questionObj = questions[currentQuestionIndex];
+    appendBubble(questionObj.question, 'bot');
   } else {
     appendBubble("Thank you! All questions answered.");
     submitAnswers();
@@ -87,11 +96,19 @@ document.getElementById('sendButton').addEventListener('click', function() {
   const inputField = document.getElementById('userInput');
   const userText = inputField.value.trim();
   if (userText === "") return;
+
+  // Show user text in chat bubble
   appendBubble(userText, 'user');
+
+  // Store the placeholder + the user's answer
+  const currentQ = questions[currentQuestionIndex];
   answers.push({
-    question: questions[currentQuestionIndex],
+    placeholder: currentQ.placeholder,
     answer: userText
+    // We can keep question if we want, but placeholder is crucial for replacement
+    // question: currentQ.question
   });
+
   currentQuestionIndex++;
   inputField.value = "";
   setTimeout(showNextQuestion, 500);
@@ -99,9 +116,14 @@ document.getElementById('sendButton').addEventListener('click', function() {
 
 // 6. Function to submit answers via AJAX (for later use)
 function submitAnswers() {
-  const payload = { documentId: documentId, answers: answers };
+  const payload = {
+    documentId: documentId,
+    answers: answers
+  };
+
   console.log("Submitting payload:", payload);
-  // Uncomment and update endpoint URL to call your submission endpoint
+
+  // Later, you'll call your "ReplacePlaceholders" flow:
   /*
   fetch('https://your-powerautomate-endpoint-url', {
     method: 'POST',
