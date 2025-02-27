@@ -131,21 +131,20 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Attach the back button event listener with logging for debugging
-document.getElementById('backButton').addEventListener('click', function() {
-  console.log("Back button clicked");
-  if (currentQuestionIndex > 0) {
-    // Decrement the index to go back one question
-    currentQuestionIndex--;
-    // Remove the answer for the question being revisited from the answers array
-    answers.splice(currentQuestionIndex, 1);
-    // Clear the entire chat container so only the current question is visible
-    document.getElementById('chatContainer').innerHTML = "";
-    // Display only the current (revisited) question
-    appendBubble(questions[currentQuestionIndex].question, 'bot');
-  }
-  // If at the first question, do nothing
-});
-
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0) {
+      const container = document.getElementById('chatContainer');
+      if (container.children.length >= 2) {
+        container.removeChild(container.lastElementChild);
+        container.removeChild(container.lastElementChild);
+      } else if (container.children.length === 1) {
+        container.removeChild(container.lastElementChild);
+      }
+      currentQuestionIndex--;
+      answers.splice(currentQuestionIndex, 1);
+      document.getElementById('userInput').value = "";
+    }
+  });
 
   // Fetch questions when the DOM is ready
   fetchQuestions();
