@@ -54,7 +54,6 @@ function fetchQuestions() {
         return;
       }
     } else {
-      // If the server returns an actual array, no parse needed
       fetchedQuestions = data.questions;
     }
     // 'fetchedQuestions' should now be an array of { placeholder, question }
@@ -69,7 +68,7 @@ function fetchQuestions() {
 }
 
 // 3. Function to append a chat bubble
-function appendBubble(text, type='bot') {
+function appendBubble(text, type = 'bot') {
   const container = document.getElementById('chatContainer');
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble' + (type === 'user' ? ' user' : '');
@@ -81,12 +80,11 @@ function appendBubble(text, type='bot') {
 // 4. Function to show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
-    // Display the 'question' property of the current question object
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
     appendBubble("Thank you! All questions answered.", "bot");
-    // Call the submitAnswers() function once all questions are answered
+    // When finished, call submitAnswers to send the payload to ReplacePlaceholders flow
     submitAnswers();
   }
 }
@@ -97,10 +95,10 @@ document.getElementById('sendButton').addEventListener('click', function() {
   const userText = inputField.value.trim();
   if (userText === "") return;
 
-  // Show user text in chat bubble
+  // Show the user's answer in a chat bubble
   appendBubble(userText, 'user');
 
-  // Store the placeholder + the user's answer
+  // Store the answer object (keeping the placeholder for later replacement)
   const currentQ = questions[currentQuestionIndex];
   answers.push({
     placeholder: currentQ.placeholder,
@@ -121,7 +119,7 @@ function submitAnswers() {
 
   console.log("Submitting payload:", payload);
 
-  // Replace the URL below with your actual ReplacePlaceholders flow HTTP endpoint URL.
+  // Replace the URL below with your actual ReplacePlaceholders flow endpoint URL.
   const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
 
   fetch(endpoint, {
@@ -144,6 +142,21 @@ function submitAnswers() {
   });
 }
 
-// 7. On page load, call fetchQuestions to dynamically get the questions
-fetchQuestions();
+// 7. Back button functionality
+document.getElementById('backButton').addEventListener('click', function() {
+  if (currentQuestionIndex > 0) {
+    // Decrement the question index to go back one question
+    currentQuestionIndex--;
+    // Remove the last answer from the answers array
+    answers.splice(currentQuestionIndex, 1);
+    // Clear the input field for a new answer
+    document.getElementById('userInput').value = "";
+    // Show the previous question again
+    appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
+  } else {
+    appendBubble("You're already at the first question.", "bot");
+  }
+});
 
+// 8. On page load, call fetchQuestions to dynamically get the questions
+fetchQuestions();
