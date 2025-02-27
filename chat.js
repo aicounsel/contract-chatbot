@@ -87,7 +87,40 @@ function showNextQuestion() {
     appendBubble(questionObj.question, 'bot');
   } else {
     appendBubble("Thank you! All questions answered.");
-    submitAnswers();
+    function submitAnswers() {
+  // Build the payload using the global documentId and the answers array
+  const payload = {
+    documentId: documentId,
+    answers: answers
+  };
+
+  console.log("Submitting payload:", payload); // This will help you debug
+
+  // Replace the URL below with your actual ReplacePlaceholders flow HTTP endpoint URL.
+  const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
+
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok, status " + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    appendBubble("Submission successful: " + JSON.stringify(data), "bot");
+  })
+  .catch(error => {
+    appendBubble("Error submitting answers.", "bot");
+    console.error(error);
+  });
+}
+;
   }
 }
 
