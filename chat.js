@@ -38,12 +38,8 @@ function fetchQuestions() {
     return response.json();
   })
   .then(data => {
-    /*
-      Expecting data in the format:
-      {
-        "questions": "[{\"placeholder\":\"[date]\",\"question\":\"What is the date?\"}, ...]"
-      }
-    */
+    // Expecting data in the format:
+    // { "questions": "[{\"placeholder\":\"[date]\",\"question\":\"What is the date?\"}, ...]" }
     let fetchedQuestions;
     if (typeof data.questions === "string") {
       try {
@@ -54,7 +50,6 @@ function fetchQuestions() {
         return;
       }
     } else {
-      // If the server returns an actual array, no parse needed
       fetchedQuestions = data.questions;
     }
     // 'fetchedQuestions' should now be an array of { placeholder, question }
@@ -69,7 +64,7 @@ function fetchQuestions() {
 }
 
 // 3. Function to append a chat bubble
-function appendBubble(text, type='bot') {
+function appendBubble(text, type = 'bot') {
   const container = document.getElementById('chatContainer');
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble' + (type === 'user' ? ' user' : '');
@@ -81,36 +76,13 @@ function appendBubble(text, type='bot') {
 // 4. Function to show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
-    // Display the 'question' property of the current question object
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
     appendBubble("Thank you! All questions answered.", "bot");
-    // Call the submitAnswers() function once all questions are answered
     submitAnswers();
   }
 }
-
-// 5. Set up the send button event
-document.getElementById('sendButton').addEventListener('click', function() {
-  const inputField = document.getElementById('userInput');
-  const userText = inputField.value.trim();
-  if (userText === "") return;
-
-  // Show user text in chat bubble
-  appendBubble(userText, 'user');
-
-  // Store the placeholder + the user's answer
-  const currentQ = questions[currentQuestionIndex];
-  answers.push({
-    placeholder: currentQ.placeholder,
-    answer: userText
-  });
-
-  currentQuestionIndex++;
-  inputField.value = "";
-  setTimeout(showNextQuestion, 500);
-});
 
 // 6. Function to submit answers via AJAX
 function submitAnswers() {
@@ -144,5 +116,36 @@ function submitAnswers() {
   });
 }
 
-// 7. On page load, call fetchQuestions to dynamically get the questions
-fetchQuestions();
+// Attach event listeners once the DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Attach the send button event listener
+  document.getElementById('sendButton').addEventListener('click', function() {
+    const inputField = document.getElementById('userInput');
+    const userText = inputField.value.trim();
+    if (userText === "") return;
+    appendBubble(userText, 'user');
+    const currentQ = questions[currentQuestionIndex];
+    answers.push({
+      placeholder: currentQ.placeholder,
+      answer: userText
+    });
+    currentQuestionIndex++;
+    inputField.value = "";
+    setTimeout(showNextQuestion, 500);
+  });
+
+  // Attach the back button event listener
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      answers.splice(currentQuestionIndex, 1);
+      document.getElementById('userInput').value = "";
+      appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
+    } else {
+      appendBubble("You're already at the first question.", "bot");
+    }
+  });
+
+  // Fetch questions when the DOM is ready
+  fetchQuestions();
+});
