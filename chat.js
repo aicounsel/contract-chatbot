@@ -58,7 +58,6 @@ function fetchQuestions() {
       fetchedQuestions = data.questions;
     }
     // 'fetchedQuestions' should now be an array of { placeholder, question }
-
     questions = fetchedQuestions;
     currentQuestionIndex = 0;
     showNextQuestion();
@@ -82,45 +81,13 @@ function appendBubble(text, type='bot') {
 // 4. Function to show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
-    // Display the 'question' property
+    // Display the 'question' property of the current question object
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
-    appendBubble("Thank you! All questions answered.");
-    function submitAnswers() {
-  // Build the payload using the global documentId and the answers array
-  const payload = {
-    documentId: documentId,
-    answers: answers
-  };
-
-  console.log("Submitting payload:", payload); // This will help you debug
-
-  // Replace the URL below with your actual ReplacePlaceholders flow HTTP endpoint URL.
-  const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
-
-  fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok, status " + response.status);
-    }
-    return response.json();
-  })
-  .then(data => {
-    appendBubble("Submission successful: " + JSON.stringify(data), "bot");
-  })
-  .catch(error => {
-    appendBubble("Error submitting answers.", "bot");
-    console.error(error);
-  });
-}
-;
+    appendBubble("Thank you! All questions answered.", "bot");
+    // Call the submitAnswers() function once all questions are answered
+    submitAnswers();
   }
 }
 
@@ -138,8 +105,6 @@ document.getElementById('sendButton').addEventListener('click', function() {
   answers.push({
     placeholder: currentQ.placeholder,
     answer: userText
-    // We can keep question if we want, but placeholder is crucial for replacement
-    // question: currentQ.question
   });
 
   currentQuestionIndex++;
@@ -147,7 +112,7 @@ document.getElementById('sendButton').addEventListener('click', function() {
   setTimeout(showNextQuestion, 500);
 });
 
-// 6. Function to submit answers via AJAX (for later use)
+// 6. Function to submit answers via AJAX
 function submitAnswers() {
   const payload = {
     documentId: documentId,
@@ -156,21 +121,29 @@ function submitAnswers() {
 
   console.log("Submitting payload:", payload);
 
-  // 7. Later, you'll call your "ReplacePlaceholders" flow:
-  fetch('https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI', {
+  // Replace the URL below with your actual ReplacePlaceholders flow HTTP endpoint URL.
+  const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
+
+  fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok, status " + response.status);
+    }
+    return response.json();
+  })
   .then(data => {
-    appendBubble("Submission successful: " + JSON.stringify(data));
+    appendBubble("Submission successful: " + JSON.stringify(data), "bot");
   })
   .catch(error => {
-    appendBubble("Error submitting answers.");
+    appendBubble("Error submitting answers.", "bot");
     console.error(error);
   });
 }
 
-// 8. On page load, call fetchQuestions to dynamically get the questions
+// 7. On page load, call fetchQuestions to dynamically get the questions
 fetchQuestions();
+
