@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('userInput').value = "";
     
     // Display the previous question again
-    appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
+    appendBubble("Revisit: " + questions[currentQuestionIndex].question, "bot");
   } else {
     appendBubble("You're already at the first question.", "bot");
   }
