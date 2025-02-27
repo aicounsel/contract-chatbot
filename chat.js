@@ -38,8 +38,6 @@ function fetchQuestions() {
     return response.json();
   })
   .then(data => {
-    // Expecting data in the format:
-    // { "questions": "[{\"placeholder\":\"[date]\",\"question\":\"What is the date?\"}, ...]" }
     let fetchedQuestions;
     if (typeof data.questions === "string") {
       try {
@@ -52,7 +50,6 @@ function fetchQuestions() {
     } else {
       fetchedQuestions = data.questions;
     }
-    // 'fetchedQuestions' should now be an array of { placeholder, question }
     questions = fetchedQuestions;
     currentQuestionIndex = 0;
     showNextQuestion();
@@ -93,7 +90,6 @@ function submitAnswers() {
 
   console.log("Submitting payload:", payload);
 
-  // Replace the URL below with your actual ReplacePlaceholders flow HTTP endpoint URL.
   const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
 
   fetch(endpoint, {
@@ -134,8 +130,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(showNextQuestion, 500);
   });
 
-  // Attach the back button event listener
+  // Attach the back button event listener with logging for debugging
   document.getElementById('backButton').addEventListener('click', function() {
+    console.log("Back button clicked");
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
       answers.splice(currentQuestionIndex, 1);
