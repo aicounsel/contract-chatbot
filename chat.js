@@ -132,19 +132,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Attach the back button event listener with logging for debugging
   document.getElementById('backButton').addEventListener('click', function() {
-    if (currentQuestionIndex > 0) {
-      const container = document.getElementById('chatContainer');
-      if (container.children.length >= 2) {
-        container.removeChild(container.lastElementChild);
-        container.removeChild(container.lastElementChild);
-      } else if (container.children.length === 1) {
-        container.removeChild(container.lastElementChild);
-      }
-      currentQuestionIndex--;
-      answers.splice(currentQuestionIndex, 1);
-      document.getElementById('userInput').value = "";
+  // Prevent going back if all questions have been answered
+  if (currentQuestionIndex >= questions.length) {
+    return;
+  }
+  
+  // Otherwise, if we're not at the first question, roll back one step.
+  if (currentQuestionIndex > 0) {
+    const container = document.getElementById('chatContainer');
+    // Remove the last two bubbles: the current (unanswered) question and its preceding answer
+    if (container.children.length >= 2) {
+      container.removeChild(container.lastElementChild);
+      container.removeChild(container.lastElementChild);
+    } else if (container.children.length === 1) {
+      container.removeChild(container.lastElementChild);
     }
-  });
+    currentQuestionIndex--;
+    answers.splice(currentQuestionIndex, 1);
+    document.getElementById('userInput').value = "";
+    appendBubble(questions[currentQuestionIndex].question, "bot");
+  }
+});
 
   // Fetch questions when the DOM is ready
   fetchQuestions();
