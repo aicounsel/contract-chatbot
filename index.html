@@ -3,69 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Contract Chatbot</title>
-  <style>
-    /* Basic CSS for a chat interface */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f0f0;
-    }
-    .chat-container {
-      width: 100%;
-      max-width: 500px;
-      margin: 50px auto;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .chat-bubble {
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 15px;
-      background: #e0e0e0;
-    }
-    .chat-bubble.user {
-      background: #0084ff;
-      color: #fff;
-      text-align: right;
-    }
-    .input-area {
-      display: flex;
-      border-top: 1px solid #ccc;
-      padding: 10px;
-    }
-    .input-area input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 16px;
-    }
-    .input-area button {
-      margin-left: 10px;
-      padding: 10px 15px;
-      font-size: 16px;
-      border: none;
-      background: #0084ff;
-      color: #fff;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="chat-container" id="chatContainer">
-    <!-- Chat bubbles will be appended here -->
+    <!-- Chat bubbles will be appended here by chat.js -->
   </div>
-<div id="chatControls">
-  <button id="backButton">Back</button>
-  <input id="userInput" type="text" placeholder="Type your answer here..." />
-  <button id="sendButton">Send</button>
-</div>
-
+  <div id="chatControls">
+    <button id="backButton">Back</button>
+    <input id="userInput" type="text" placeholder="Type your answer here..." />
+    <button id="sendButton">Send</button>
+  </div>
   <script src="chat.js"></script>
 </body>
 </html>
