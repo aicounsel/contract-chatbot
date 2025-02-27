@@ -132,16 +132,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Attach the back button event listener with logging for debugging
   document.getElementById('backButton').addEventListener('click', function() {
-    console.log("Back button clicked");
-    if (currentQuestionIndex > 0) {
-      currentQuestionIndex--;
-      answers.splice(currentQuestionIndex, 1);
-      document.getElementById('userInput').value = "";
-      appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
-    } else {
-      appendBubble("You're already at the first question.", "bot");
+  console.log("Back button clicked");
+  if (currentQuestionIndex > 0) {
+    // Decrement the index to go back one question
+    currentQuestionIndex--;
+    
+    // Remove the last answer from the answers array
+    answers.splice(currentQuestionIndex, 1);
+    
+    // Remove the last user chat bubble from the chat container, if it exists.
+    const chatContainer = document.getElementById('chatContainer');
+    const userBubbles = chatContainer.getElementsByClassName('chat-bubble user');
+    if (userBubbles.length > 0) {
+      chatContainer.removeChild(userBubbles[userBubbles.length - 1]);
     }
-  });
+    
+    // Clear the input field
+    document.getElementById('userInput').value = "";
+    
+    // Display the previous question again
+    appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
+  } else {
+    appendBubble("You're already at the first question.", "bot");
+  }
+});
+
 
   // Fetch questions when the DOM is ready
   fetchQuestions();
