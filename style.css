@@ -1,1 +1,67 @@
+/* Basic CSS for the chat interface */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 500px;
+  height: 400px; /* fixed height for scrolling */
+  margin: 50px auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+}
+
+.chat-bubble {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #e0e0e0;
+  word-wrap: break-word;
+}
+
+.chat-bubble.user {
+  background-color: #0084ff;
+  color: #fff;
+  text-align: right;
+  align-self: flex-end;
+}
+
+#chatControls {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#chatControls input,
+#chatControls button {
+  font-size: 16px;
+}
+
+#userInput {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#sendButton, #backButton {
+  margin-left: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  background-color: #0084ff;
+  color: #fff;
+  cursor: pointer;
+}
 
