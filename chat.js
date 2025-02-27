@@ -130,15 +130,10 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(showNextQuestion, 500);
   });
 
-  // Attach the updated back button event listener
+  // Attach the back button event listener with logging for debugging
   document.getElementById('backButton').addEventListener('click', function() {
-    // Prevent going back if all questions have been answered
-    if (currentQuestionIndex >= questions.length) {
-      return;
-    }
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
-      // Remove the last two bubbles (user's answer and the corresponding bot question)
       if (container.children.length >= 2) {
         container.removeChild(container.lastElementChild);
         container.removeChild(container.lastElementChild);
@@ -148,10 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
       currentQuestionIndex--;
       answers.splice(currentQuestionIndex, 1);
       document.getElementById('userInput').value = "";
-      appendBubble(questions[currentQuestionIndex].question, "bot");
     }
   });
-
   // Attach keydown event for Enter on userInput
   document.getElementById('userInput').addEventListener('keydown', function(e) {
     if (e.key === "Enter" || e.keyCode === 13) {
