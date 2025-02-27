@@ -156,9 +156,8 @@ function submitAnswers() {
 
   console.log("Submitting payload:", payload);
 
-  // Later, you'll call your "ReplacePlaceholders" flow:
-  /*
-  fetch('https://your-powerautomate-endpoint-url', {
+  // 7. Later, you'll call your "ReplacePlaceholders" flow:
+  fetch('https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
@@ -171,8 +170,7 @@ function submitAnswers() {
     appendBubble("Error submitting answers.");
     console.error(error);
   });
-  */
 }
 
-// 7. On page load, call fetchQuestions to dynamically get the questions
+// 8. On page load, call fetchQuestions to dynamically get the questions
 fetchQuestions();
