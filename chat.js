@@ -143,20 +143,18 @@ function submitAnswers() {
 }
 
 // 7. Back button functionality
-document.getElementById('backButton').addEventListener('click', function() {
-  if (currentQuestionIndex > 0) {
-    // Decrement the question index to go back one question
-    currentQuestionIndex--;
-    // Remove the last answer from the answers array
-    answers.splice(currentQuestionIndex, 1);
-    // Clear the input field for a new answer
-    document.getElementById('userInput').value = "";
-    // Show the previous question again
-    appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
-  } else {
-    appendBubble("You're already at the first question.", "bot");
-  }
-});
+document.addEventListener('DOMContentLoaded', function() {
+  // Attach event listener for backButton here:
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      answers.splice(currentQuestionIndex, 1);
+      document.getElementById('userInput').value = "";
+      appendBubble("Revisiting: " + questions[currentQuestionIndex].question, "bot");
+    } else {
+      appendBubble("You're already at the first question.", "bot");
+    }
+  });
 
 // 8. On page load, call fetchQuestions to dynamically get the questions
 fetchQuestions();
