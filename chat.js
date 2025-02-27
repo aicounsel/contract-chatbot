@@ -131,42 +131,21 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Attach the back button event listener with logging for debugging
-document.getElementById('backButton').addEventListener('click', function() {
-  // Prevent going back if we're at the very start (first question) or if all questions have been answered.
-  if (currentQuestionIndex <= 0 || currentQuestionIndex >= questions.length) {
-    return;
-  }
-  
-  const container = document.getElementById('chatContainer');
-  
-  // Remove the last two chat bubbles (assumes the most recent pair belongs to the last answered question)
-  // This loop will run twice to remove two bubbles.
-  for (let i = 0; i < 2; i++) {
-    if (container.lastElementChild) {
-      container.removeChild(container.lastElementChild);
-    }
-  }
-  
-  // Decrement currentQuestionIndex to go back one step
-  currentQuestionIndex--;
-  
-  // Remove the answer corresponding to the rolled-back question from the answers array
-  answers.splice(currentQuestionIndex, 1);
-  
-  // Clear the input field
-  document.getElementById('userInput').value = "";
-  
-  // Append the previous question bubble (the one that the user is now revisiting)
-  appendBubble(questions[currentQuestionIndex].question, "bot");
-});
-
-  // Attach keydown event for Enter on userInput
-  document.getElementById('userInput').addEventListener('keydown', function(e) {
-    if (e.key === "Enter" || e.keyCode === 13) {
-      e.preventDefault();
-      document.getElementById('sendButton').click();
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0) {
+      const container = document.getElementById('chatContainer');
+      if (container.children.length >= 2) {
+        container.removeChild(container.lastElementChild);
+        container.removeChild(container.lastElementChild);
+      } else if (container.children.length === 1) {
+        container.removeChild(container.lastElementChild);
+      }
+      currentQuestionIndex--;
+      answers.splice(currentQuestionIndex, 1);
+      document.getElementById('userInput').value = "";
     }
   });
+
   // Fetch questions when the DOM is ready
   fetchQuestions();
 });
