@@ -1,61 +1,82 @@
-/* Basic CSS for the page and chat interface */
+/* Body styling */
 body {
   font-family: Arial, sans-serif;
-  background-color: rgba(128, 128, 128, 0.5); /* 50% grey */
+  background-color: #A7A7A7; /* Updated body background */
   margin: 0;
   padding: 0;
 }
 
-/* Chat container styling */
-.chat-container {
+/* Chat window: container for header, chat area, and controls */
+.chat-window {
   width: 100%;
   max-width: 500px;
-  height: 400px; /* Fixed height for scrolling */
   margin: 50px auto;
-  background-color: rgba(128, 128, 128, 0.15); /* 15% grey */
-  border: 1px solid #ccc;
+  background-color: #fff;
   border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+/* Header styling */
+.chat-header {
+  background-color: #E4E4E4; /* Updated background for header and chat area */
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.chat-header h1 {
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+
+.chat-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Chat container styling */
+.chat-container {
+  background-color: #E4E4E4; /* Updated chat container background */
+  height: 300px; /* Adjusted height as needed */
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   overflow-y: auto;
   display: flex;
-  flex-direction: column; /* Stack bubbles vertically */
+  flex-direction: column;
 }
 
 /* Chat bubble styling */
 .chat-bubble {
-  display: inline-block;    /* Size to content */
-  margin-bottom: 10px;      /* Spacing between bubbles */
+  display: inline-block;
+  margin: 5px 0;
   padding: 10px;
   border-radius: 15px;
-  background-color: #e0e0e0; /* Default background for client bubbles (will be overridden) */
   word-wrap: break-word;
-  max-width: 75%;           /* Maximum width is 75% of container */
+  max-width: 75%;
 }
 
-/* Bot bubbles: white background, aligned left */
+/* Bot bubbles: white background, left-aligned */
 .chat-bubble.bot {
   background-color: #fff;
   color: #000;
   align-self: flex-start;
 }
 
-/* User bubbles: blue background, aligned right */
+/* User bubbles: blue background, but left-aligned text */
 .chat-bubble.user {
   background-color: #0084ff;
   color: #fff;
   align-self: flex-end;
-  text-align: right;
+  text-align: left; /* Left align text inside the bubble */
 }
 
 /* Chat controls styling */
 #chatControls {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
   display: flex;
   padding: 10px;
-  box-sizing: border-box;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
 }
 
 #chatControls input,
