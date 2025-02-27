@@ -1,18 +1,18 @@
 /* Basic styling for the page */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #A7A7A7; /* 50% grey */
+  font-family: 'Roboto', sans-serif; /* Use Roboto for body text */
+  background-color: #A7A7A7; /* Body background */
   margin: 0;
   padding: 0;
 }
 
-/* Chat window: overall container for the chat interface */
+/* Chat window container */
 .chat-window {
   width: 100%;
   max-width: 500px;
   margin: 50px auto;
   background-color: #fff;  /* White background */
-  border-radius: 15px;     /* Rounded corners 15px */
+  border-radius: 15px;     /* Rounded corners: 15px */
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   overflow: hidden;
 }
@@ -26,15 +26,16 @@ body {
 .chat-header h1 {
   margin: 0;
   font-size: 24px;
-  text-align: left; /* Align header text to the left */
+  font-family: 'Roboto Slab', serif; /* Use Roboto Slab for heading */
+  text-align: left;
 }
 
-/* Date divider styling placed at the top of chat area */
+/* Date divider styling */
 .date-divider {
   text-align: center;
   font-size: 14px;
   color: #666;
-  margin: 5px 0;
+  padding: 5px 0;
 }
 
 /* Chat container styling */
@@ -49,15 +50,15 @@ body {
 
 /* Chat bubble styling */
 .chat-bubble {
-  display: inline-block;  /* Size to fit text */
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 25px;    /* More rounded (circular) bubbles */
+  display: inline-block;
+  margin: 8px 0;
+  padding: 15px 20px;      /* Increased horizontal and vertical padding */
+  border-radius: 25px;     /* More rounded bubbles */
   word-wrap: break-word;
-  max-width: 75%;         /* Maximum width 75% of container */
+  max-width: 75%;          /* Maximum width is 75% of container */
 }
 
-/* Bot bubbles: background #E4E4E4, left-aligned */
+/* Bot bubbles: background #E4E4E4, left aligned */
 .chat-bubble.bot {
   background-color: #E4E4E4;
   color: #000;
@@ -72,41 +73,40 @@ body {
   text-align: left;
 }
 
-/* Chat controls container styling */
+/* Chat controls styling */
 #chatControls {
   display: flex;
   padding: 10px;
   background-color: #fff;
   align-items: center;
-  /* Removed border-top */
-  margin-bottom: 20px; /* Extra padding below chat controls */
+  margin-bottom: 20px; /* More padding under the chat controls */
 }
 
-/* Back button styling */
+/* Back button styling: rounded like bubbles */
 #backButton {
   padding: 10px 15px;
   border: none;
-  border-radius: 3px;
+  border-radius: 25px;
   background-color: #0084ff;
   color: #fff;
   cursor: pointer;
   margin-right: 10px;
 }
 
-/* Input wrapper: for positioning the send button inside the input field */
+/* Input wrapper to position the send button inside the input field */
 .input-wrapper {
   position: relative;
   flex-grow: 1;
 }
 
-/* Style for the input field to match a chat bubble and same as bot bubble color */
+/* Input field styled like a chat bubble, same color as bot bubbles */
 #userInput {
   width: 100%;
-  padding: 10px 50px 10px 10px; /* Extra right padding for send button */
+  padding: 15px 50px 15px 20px; /* Extra right padding for send button */
   border: 1px solid #ccc;
-  border-radius: 25px; /* Match the bubble style */
+  border-radius: 25px;
   font-size: 16px;
-  background-color: #E4E4E4; /* Same as bot bubble background */
+  background-color: #E4E4E4;
   color: #000;
 }
 
@@ -125,7 +125,7 @@ body {
   background-size: cover;
 }
 
-/* Additional info below the chat window */
+/* Additional info container below the chat window */
 .chat-info {
   width: 100%;
   max-width: 500px;
