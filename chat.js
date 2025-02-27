@@ -64,7 +64,8 @@ function fetchQuestions() {
 function appendBubble(text, type = 'bot') {
   const container = document.getElementById('chatContainer');
   const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble' + (type === 'user' ? ' user' : '');
+  // Append the class "bot" if the type is bot; if type is "user", add "user"
+  bubble.className = 'chat-bubble' + (type === 'user' ? ' user' : ' bot');
   bubble.textContent = text;
   container.appendChild(bubble);
   container.scrollTop = container.scrollHeight;
