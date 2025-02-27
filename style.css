@@ -1,17 +1,18 @@
-/* Basic CSS for the chat interface */
+/* Basic CSS for the page and chat interface */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: rgba(128, 128, 128, 0.5); /* 50% grey */
   margin: 0;
   padding: 0;
 }
 
+/* Chat container styling */
 .chat-container {
   width: 100%;
   max-width: 500px;
-  height: 400px; /* fixed height for scrolling */
+  height: 400px; /* Fixed height for scrolling */
   margin: 50px auto;
-  background-color: #fff;
+  background-color: rgba(128, 128, 128, 0.15); /* 15% grey */
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
@@ -19,21 +20,30 @@ body {
   overflow-y: auto;
 }
 
+/* Chat bubble styling */
 .chat-bubble {
+  display: inline-block;   /* Shrink to fit content */
+  max-width: 75%;          /* Maximum width is 75% of the container */
   margin: 10px 0;
   padding: 10px;
   border-radius: 15px;
-  background-color: #e0e0e0;
   word-wrap: break-word;
 }
 
+/* Bot bubbles: white background with black text */
+.chat-bubble.bot {
+  background-color: #fff;
+  color: #000;
+}
+
+/* Client bubbles: blue background with white text */
 .chat-bubble.user {
   background-color: #0084ff;
   color: #fff;
   text-align: right;
-  align-self: flex-end;
 }
 
+/* Chat controls styling */
 #chatControls {
   width: 100%;
   max-width: 500px;
@@ -64,4 +74,3 @@ body {
   color: #fff;
   cursor: pointer;
 }
-
