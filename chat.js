@@ -145,6 +145,13 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('userInput').value = "";
     }
   });
+  // Attach keydown event for Enter on userInput
+  document.getElementById('userInput').addEventListener('keydown', function(e) {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      e.preventDefault();
+      document.getElementById('sendButton').click();
+    }
+  });
 
   // Fetch questions when the DOM is ready
   fetchQuestions();
