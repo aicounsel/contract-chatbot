@@ -144,7 +144,7 @@ function submitAnswers() {
 
 // 7. Back button functionality
 document.addEventListener('DOMContentLoaded', function() {
-  // Attach event listener for backButton here:
+  // Attach back button event listener:
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
@@ -154,6 +154,22 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       appendBubble("You're already at the first question.", "bot");
     }
+  });
+
+  // Attach send button event listener (if not already wrapped):
+  document.getElementById('sendButton').addEventListener('click', function() {
+    const inputField = document.getElementById('userInput');
+    const userText = inputField.value.trim();
+    if (userText === "") return;
+    appendBubble(userText, 'user');
+    const currentQ = questions[currentQuestionIndex];
+    answers.push({
+      placeholder: currentQ.placeholder,
+      answer: userText
+    });
+    currentQuestionIndex++;
+    inputField.value = "";
+    setTimeout(showNextQuestion, 500);
   });
 
 // 8. On page load, call fetchQuestions to dynamically get the questions
