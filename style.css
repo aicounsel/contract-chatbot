@@ -18,28 +18,33 @@ body {
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column; /* Stack bubbles vertically */
 }
 
 /* Chat bubble styling */
 .chat-bubble {
-  display: inline-block;   /* Shrink to fit content */
-  max-width: 75%;          /* Maximum width is 75% of the container */
-  margin: 10px 0;
+  display: inline-block;    /* Size to content */
+  margin-bottom: 10px;      /* Spacing between bubbles */
   padding: 10px;
   border-radius: 15px;
+  background-color: #e0e0e0; /* Default background for client bubbles (will be overridden) */
   word-wrap: break-word;
+  max-width: 75%;           /* Maximum width is 75% of container */
 }
 
-/* Bot bubbles: white background with black text */
+/* Bot bubbles: white background, aligned left */
 .chat-bubble.bot {
   background-color: #fff;
   color: #000;
+  align-self: flex-start;
 }
 
-/* Client bubbles: blue background with white text */
+/* User bubbles: blue background, aligned right */
 .chat-bubble.user {
   background-color: #0084ff;
   color: #fff;
+  align-self: flex-end;
   text-align: right;
 }
 
