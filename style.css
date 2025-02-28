@@ -1,7 +1,7 @@
 /* Body styling */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #A7A7A7; /* 50% grey */
+  background-color: #E5E8F0; /* Page background updated */
   margin: 0;
   padding: 0;
 }
@@ -20,20 +20,19 @@ body {
 /* Chat header styling */
 .chat-header {
   background-color: #fff;
-  padding: 25px 15px; /* More padding above and below header text */
+  padding: 25px 15px;
   border-bottom: 1px solid #ccc;
 }
 .chat-header h1 {
   margin: 0;
   font-size: 24px;
   font-family: 'Roboto Slab', serif;
-  text-align: right;
+  text-align: left;
 }
 .chat-header .logo {
-  max-height: 100px; /* Adjust as needed */
+  max-height: 50px;
   margin-right: 10px;
   vertical-align: middle;
-  margin-left: 20px;
 }
 
 /* Date divider styling */
@@ -41,23 +40,22 @@ body {
   text-align: center;
   font-size: 14px;
   color: #666;
-  padding: 10px 0; /* Extra padding above the date */
+  padding: 10px 0;
 }
 
 /* Chat container styling */
 .chat-container {
   background-color: #fff;
   height: 300px;
-  padding: 20px;  /* More padding between edges and bubbles */
+  padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* Message wrapper for each message (contains label and bubble) */
+/* Message wrapper for each message */
 .message-wrapper {
   margin-bottom: 10px;
-  /* No fixed width needed; use text-align to align bubble */
   width: 100%;
 }
 .message-wrapper.bot {
@@ -67,7 +65,7 @@ body {
   text-align: right;
 }
 
-/* Message label styling (placed above bubbles) */
+/* Message label styling (placed above messages) */
 .message-label {
   font-size: 10px;
   margin-bottom: 3px;
@@ -76,32 +74,32 @@ body {
 
 /* Chat bubble styling */
 .chat-bubble {
-  display: inline-block; /* Only as wide as its content (up to max-width) */
-  padding: 15px 20px;  /* Increase padding for more white space inside */
-  border-radius: 25px; /* Round bubbles */
+  display: inline-block;
+  padding: 15px 20px;   /* Extra padding for better spacing */
+  border-radius: 25px;  /* More rounded bubbles */
   word-wrap: break-word;
   max-width: 75%;
 }
 
-/* Bot bubbles: background #E4E4E4, with top-left corner square */
+/* Bot bubbles: background set to updated grey (#F2F2F2) */
 .chat-bubble.bot {
-  background-color: #E4E4E4;
+  background-color: #F2F2F2; /* Grey replaced with F2F2F2 */
   color: #000;
   border-top-left-radius: 0;
 }
 
-/* User bubbles: blue background, with top-right corner square */
+/* User bubbles: background set to updated blue (#706DEB) */
 .chat-bubble.user {
-  background-color: #0084ff;
+  background-color: #706DEB; /* Blue replaced with 706DEB */
   color: #fff;
-  text-align: left; /* Text left-aligned inside bubble */
+  text-align: left;
   border-top-right-radius: 0;
 }
 
 /* Chat controls styling */
 #chatControls {
   display: flex;
-  padding: 15px 20px 50px; /* Extra bottom padding */
+  padding: 15px 10px 40px;  /* Extra bottom padding */
   background-color: #fff;
   align-items: center;
 }
@@ -109,12 +107,11 @@ body {
 /* Back control styling as text */
 #backButton {
   font-weight: bold;
-  color: #0084ff;
+  color: #706DEB; /* Updated blue */
   cursor: pointer;
-  margin-left: 20px;  /* Move BACK in from left edge */
+  margin-left: 20px;  /* Adjusted margin to align with bot bubbles */
   margin-right: 20px;
   user-select: none;
-  /* Rounded to match bubbles */
   border-radius: 25px;
   padding: 10px 15px;
 }
@@ -125,43 +122,43 @@ body {
   flex-grow: 1;
 }
 
-/* Input field styled like a bubble (no border) */
+/* Input field styled like a bubble */
 #userInput {
   width: 100%;
-  padding: 15px 20px 15px 20px; /* Increase right padding to 80px for alignment */
+  padding: 15px 80px 15px 20px;  /* Extra right padding for send button */
   border: none;
   border-radius: 25px;
   font-size: 16px;
-  background-color: #E4E4E4; /* Same as bot bubble */
+  background-color: #F2F2F2; /* Updated grey */
   color: #000;
   box-sizing: border-box;
 }
 
-/* Send button styled as a paper airplane icon, inside the input bubble */
+/* Send button styled as a paper airplane icon inside the input field */
 #sendButton {
   position: absolute;
   top: 50%;
-  right: 20px; /* Adjust to align with input field's right edge */
+  right: 20px; /* Adjusted to align with input field's right edge */
   transform: translateY(-50%);
   background: none;
   border: none;
   width: 24px;
   height: 24px;
   cursor: pointer;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%230084ff' d='M2.01 21l20.99-9L2.01 3v7l15 2-15 2z'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23706DEB' d='M2.01 21l20.99-9L2.01 3v7l15 2-15 2z'/></svg>");
   background-size: cover;
 }
 
-/* Chat info bubble styling: full width matching chat window */
+/* Chat info bubble styling: same width as chat window */
 .chat-info {
-  /* width: 100%; */
+  width: 100%;
   max-width: 500px;
   margin: 20px auto 50px;
   padding: 20px;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  text-align: left;
+  text-align: center;
 }
 .chat-info p {
   margin: 0;
