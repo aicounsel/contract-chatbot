@@ -8,7 +8,7 @@ body {
 
 /* Chat window container */
 .chat-window {
-  width: 100%;
+  width: 90%; /* MY CHANGE */
   max-width: 500px;
   margin: 50px auto;
   background-color: #fff;
