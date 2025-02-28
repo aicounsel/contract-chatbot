@@ -98,7 +98,7 @@ function showNextQuestion() {
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
-    appendBubble("Thank you! All questions answered.", "bot");
+    appendBubble("That was the last question! Please wait while we confirm your submission...", "bot");
     submitAnswers();
   }
 }
@@ -126,7 +126,7 @@ function submitAnswers() {
     return response.json();
   })
   .then(data => {
-    appendBubble("Submission successful: " + JSON.stringify(data), "bot");
+    appendBubble("Success! You can now close this page.", "bot");
   })
   .catch(error => {
     appendBubble("Error submitting answers.", "bot");
