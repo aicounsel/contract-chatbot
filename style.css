@@ -198,7 +198,7 @@ body {
   }
   
   #userInput {
-    padding: 10px 60px 10px 10px;
+    padding: 10px 60px 10px 20px; /*padding inc*/
     font-size: 16px;
   }
   
