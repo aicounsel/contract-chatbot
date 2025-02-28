@@ -1,4 +1,4 @@
-/* Basic styling for the page */
+/* Body styling */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #A7A7A7; /* 50% grey */
@@ -20,7 +20,7 @@ body {
 /* Chat header styling */
 .chat-header {
   background-color: #fff;
-  padding: 25px 15px;
+  padding: 25px 15px; /* More padding above and below header text */
   border-bottom: 1px solid #ccc;
 }
 .chat-header h1 {
@@ -35,36 +35,33 @@ body {
   text-align: center;
   font-size: 14px;
   color: #666;
-  padding: 10px 0;
+  padding: 10px 0; /* Extra padding above the date */
 }
 
 /* Chat container styling */
 .chat-container {
   background-color: #fff;
   height: 300px;
-  padding: 20px;
+  padding: 20px;  /* More padding between edges and bubbles */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* Message wrapper: full width, and adjust alignment based on message type */
+/* Message wrapper for each message (contains label and bubble) */
 .message-wrapper {
-  width: 100%;
   margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
+  /* No fixed width needed; use text-align to align bubble */
+  width: 100%;
 }
-
-/* For bot messages, align wrapper to left; for client messages, align wrapper to right */
 .message-wrapper.bot {
-  align-items: flex-start;
+  text-align: left;
 }
 .message-wrapper.user {
-  align-items: flex-end;
+  text-align: right;
 }
 
-/* Message label styling */
+/* Message label styling (placed above bubbles) */
 .message-label {
   font-size: 10px;
   margin-bottom: 3px;
@@ -73,9 +70,9 @@ body {
 
 /* Chat bubble styling */
 .chat-bubble {
-  display: inline-block;
-  padding: 15px 20px;
-  border-radius: 25px;
+  display: inline-block; /* Only as wide as its content (up to max-width) */
+  padding: 15px 20px;  /* Increase padding for more white space inside */
+  border-radius: 25px; /* Round bubbles */
   word-wrap: break-word;
   max-width: 75%;
 }
@@ -87,30 +84,33 @@ body {
   border-top-left-radius: 0;
 }
 
-/* User bubbles: blue background, text left aligned; top-right corner square */
+/* User bubbles: blue background, with top-right corner square */
 .chat-bubble.user {
   background-color: #0084ff;
   color: #fff;
-  text-align: left;
+  text-align: left; /* Text left-aligned inside bubble */
   border-top-right-radius: 0;
 }
 
 /* Chat controls styling */
 #chatControls {
   display: flex;
-  padding: 15px 10px 40px;  /* Extra bottom padding */
+  padding: 15px 10px 40px; /* Extra bottom padding */
   background-color: #fff;
   align-items: center;
 }
 
-/* Back button styling: now with extra left margin so it aligns with bot bubbles */
+/* Back control styling as text */
 #backButton {
   font-weight: bold;
   color: #0084ff;
   cursor: pointer;
-  margin-left: 20px; /* Increase this value to push it inward */
+  margin-left: 30px;  /* Move BACK in from left edge */
   margin-right: 20px;
   user-select: none;
+  /* Rounded to match bubbles */
+  border-radius: 25px;
+  padding: 10px 15px;
 }
 
 /* Input wrapper for positioning the send button inside */
@@ -119,10 +119,10 @@ body {
   flex-grow: 1;
 }
 
-/* Input field styled like a bubble */
+/* Input field styled like a bubble (no border) */
 #userInput {
   width: 100%;
-  padding: 15px 70px 15px 20px; /* Increase right padding to 70px */
+  padding: 15px 80px 15px 20px; /* Increase right padding to 80px for alignment */
   border: none;
   border-radius: 25px;
   font-size: 16px;
@@ -131,11 +131,11 @@ body {
   box-sizing: border-box;
 }
 
-/* Send button styled as a paper airplane icon inside the input field */
+/* Send button styled as a paper airplane icon, inside the input bubble */
 #sendButton {
   position: absolute;
   top: 50%;
-  right: 15px;
+  right: 20px; /* Adjust to align with input field's right edge */
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -146,7 +146,7 @@ body {
   background-size: cover;
 }
 
-/* Chat info bubble styling: same width as chat window */
+/* Chat info bubble styling: full width matching chat window */
 .chat-info {
   width: 100%;
   max-width: 500px;
