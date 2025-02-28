@@ -20,9 +20,9 @@ body {
 /* Chat header styling */
 .chat-header {
   
-  background-color: #706DEB; /*#fff*/
+  background-color: #fff;
   padding: 25px 15px;
-  /*border-bottom: 1px solid #ccc; my change*/
+  border-bottom: 1px solid #ccc;
 }
 .chat-header h1 {
   margin: 0;
