@@ -21,9 +21,7 @@ function fetchQuestions() {
     return;
   }
   
-  // Replace with your actual GetQuestions Flow endpoint URL
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
-
   const requestBody = { documentId: docId };
 
   fetch(endpoint, {
@@ -60,8 +58,8 @@ function fetchQuestions() {
   });
 }
 
-// 3. Function to append a chat bubble
-function appendBubble(text, type = 'bot') {
+// 3. Function to append a chat bubble (with label above)
+function appendBubble(text, type = 'bot', extraClass = '') {
   const container = document.getElementById('chatContainer');
 
   // Create a message wrapper
@@ -71,15 +69,11 @@ function appendBubble(text, type = 'bot') {
   // Create the label element
   const label = document.createElement('div');
   label.className = 'message-label';
-  if (type === 'user') {
-    label.textContent = "Client";
-  } else {
-    label.textContent = "Client Assistant";
-  }
+  label.textContent = type === 'user' ? "Client" : "Client Assistant";
 
   // Create the bubble element
   const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot');
+  bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot') + " " + extraClass;
   bubble.textContent = text;
 
   // Append label and bubble to the wrapper
@@ -91,16 +85,43 @@ function appendBubble(text, type = 'bot') {
   container.scrollTop = container.scrollHeight;
 }
 
-
 // 4. Function to show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
-    appendBubble("That was the last question! Please wait while we confirm your submission...", "bot");
+    appendBubble("That was the last question, please wait for confirmation of upload.", "bot");
     submitAnswers();
   }
+}
+
+// 5. Function to show the acknowledgement bubble
+function showAcknowledgement() {
+  // Append an outlined bubble as a prompt
+  const container = document.getElementById('chatContainer');
+  const messageWrapper = document.createElement('div');
+  messageWrapper.className = 'message-wrapper bot';
+  
+  const label = document.createElement('div');
+  label.className = 'message-label';
+  label.textContent = "Client Assistant";
+  
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble bot outline';
+  bubble.textContent = "Ready to move on?";
+  
+  // When clicked, remove this bubble and start the questions
+  bubble.addEventListener('click', function() {
+    container.removeChild(messageWrapper);
+    // Now fetch the questions from your flow
+    fetchQuestions();
+  });
+  
+  messageWrapper.appendChild(label);
+  messageWrapper.appendChild(bubble);
+  container.appendChild(messageWrapper);
+  container.scrollTop = container.scrollHeight;
 }
 
 // 6. Function to submit answers via AJAX
@@ -111,7 +132,6 @@ function submitAnswers() {
   };
 
   console.log("Submitting payload:", payload);
-
   const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
 
   fetch(endpoint, {
@@ -126,7 +146,7 @@ function submitAnswers() {
     return response.json();
   })
   .then(data => {
-    appendBubble("Success! You can now close this page.", "bot");
+    appendBubble("Upload confirmed! Your document has been updated.", "bot");
   })
   .catch(error => {
     appendBubble("Error submitting answers.", "bot");
@@ -137,8 +157,11 @@ function submitAnswers() {
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Display welcome message
-  appendBubble("Welcome to AI Counsel!\nYour input is essential to this process. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
+  appendBubble("Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
   
+  // Instead of immediately fetching questions, show the acknowledgement bubble
+  showAcknowledgement();
+
   // Attach the send button event listener
   document.getElementById('sendButton').addEventListener('click', function() {
     const inputField = document.getElementById('userInput');
@@ -155,10 +178,11 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(showNextQuestion, 500);
   });
 
-  // Attach the back button event listener with logging for debugging
+  // Attach the back button event listener
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
+      // Remove the last two chat bubbles (the user's answer and the question bubble)
       if (container.children.length >= 2) {
         container.removeChild(container.lastElementChild);
         container.removeChild(container.lastElementChild);
@@ -168,8 +192,10 @@ document.addEventListener('DOMContentLoaded', function() {
       currentQuestionIndex--;
       answers.splice(currentQuestionIndex, 1);
       document.getElementById('userInput').value = "";
+      appendBubble(questions[currentQuestionIndex].question, 'bot');
     }
   });
+
   // Attach keydown event for Enter on userInput
   document.getElementById('userInput').addEventListener('keydown', function(e) {
     if (e.key === "Enter" || e.keyCode === 13) {
@@ -177,7 +203,4 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('sendButton').click();
     }
   });
-
-  // Fetch questions when the DOM is ready
-  fetchQuestions();
 });
