@@ -30,13 +30,13 @@ body {
   font-size: 24px;
   font-family: 'Roboto', sans-serif;
   /*font-family: 'Roboto Slab', serif;*/
-  text-align: right; /* mychange */
-  margin-right: 20px; /* mychange */
+  text-align: center; /* mychange */
+  /* margin-right: 20px; mychange */
 }
 .chat-header .logo {
-  max-height: 100px;
-  margin-right: 10px;
-  margin-left: 20px; /* mychange */
+  display: block;
+  max-height: 90px;
+  margin: 0 auto;
   vertical-align: middle;
 }
 
@@ -223,5 +223,10 @@ body {
   #backButton {
     margin-left: 10px;
     margin-bottom: 10px;
+  }
+}
+@media (max-width: 600px) {
+  #chatControls {
+    flex-direction: row !important;
   }
 }
