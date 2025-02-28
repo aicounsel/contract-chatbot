@@ -148,14 +148,14 @@ body {
 
 /* Chat info bubble styling: full width matching chat window */
 .chat-info {
-  width: 100%;
+  /* width: 100%; */
   max-width: 500px;
   margin: 20px auto 50px;
   padding: 20px;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  text-align: center;
+  text-align: left;
 }
 .chat-info p {
   margin: 0;
