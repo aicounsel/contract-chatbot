@@ -24,16 +24,11 @@ body {
   border-bottom: 1px solid #ccc;
   text-align: center;
 }
-/*.chat-header h1 {
-  margin: 0;
-  font-size: 20px;
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
-} */
+
 .chat-header .logo {
   display: block;
-  max-height: 70px;      /* Smaller logo */
-  margin: 0 auto 20px;   /* Centered with 10px bottom margin */
+  max-height: 90px;      /* Smaller logo */
+  margin: 0 auto 10px;   /* Centered with 10px bottom margin */
   vertical-align: middle;
 }
 
@@ -186,7 +181,7 @@ body {
   }
   
   .chat-bubble {
-    padding: 10px 15px;
+    padding: 20px 15px; /*10 to 20*/
     font-size: 14px;
     max-width: 90%;
   }
@@ -195,7 +190,7 @@ body {
   #chatControls {
     flex-direction: row !important;
     align-items: center;
-    padding: 15px 10px 40px;
+    padding: 15px 10px 40px; 
   }
   
   .input-wrapper {
