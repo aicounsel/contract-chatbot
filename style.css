@@ -172,7 +172,7 @@ body {
   }
   
   .chat-container {
-    padding: 10px;
+    padding: 20px;
     height: 300px;
   }
   
@@ -181,7 +181,7 @@ body {
   }
   
   .chat-bubble {
-    padding: 20px 15px; /*10 to 20*/
+    padding: 10px 15px;
     font-size: 14px;
     max-width: 90%;
   }
