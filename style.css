@@ -24,13 +24,12 @@ body {
   border-bottom: 1px solid #ccc;
   text-align: center;
 }
-.chat-header h1 {
+/*.chat-header h1 {
   margin: 0;
   font-size: 20px;
-  /* font-family: 'Roboto Slab', serif; */
   font-family: 'Roboto', sans-serif;
   text-align: center;
-}
+} */
 .chat-header .logo {
   display: block;
   max-height: 70px;      /* Smaller logo */
