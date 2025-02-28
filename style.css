@@ -172,9 +172,9 @@ body {
 @media (max-width: 600px) {
   /* Make the chat window take full width on small screens */
   .chat-window {
-    width: 90%; /* Chat window takes 90% of screen width */
+    /* width: 90%; Chat window takes 90% of screen width */
     margin: 20px auto;
-    max-width: 100%;
+    max-width: 90%;
     border-radius: 10px; /* You may reduce the rounding on small screens */
   }
   
