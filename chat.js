@@ -137,7 +137,7 @@ function submitAnswers() {
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Display welcome message
-  appendBubble("Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
+  appendBubble("Welcome to AI Counsel!\nYour input is essential to this process. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
   
   // Attach the send button event listener
   document.getElementById('sendButton').addEventListener('click', function() {
