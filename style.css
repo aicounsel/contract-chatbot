@@ -95,7 +95,7 @@ body {
 /* Chat controls styling */
 #chatControls {
   display: flex;
-  padding: 15px 10px 40px; /* Extra bottom padding */
+  padding: 15px 20px 40px; /* Extra bottom padding */
   background-color: #fff;
   align-items: center;
 }
@@ -105,7 +105,7 @@ body {
   font-weight: bold;
   color: #0084ff;
   cursor: pointer;
-  margin-left: 30px;  /* Move BACK in from left edge */
+  margin-left: 20px;  /* Move BACK in from left edge */
   margin-right: 20px;
   user-select: none;
   /* Rounded to match bubbles */
@@ -122,7 +122,7 @@ body {
 /* Input field styled like a bubble (no border) */
 #userInput {
   width: 100%;
-  padding: 15px 80px 15px 20px; /* Increase right padding to 80px for alignment */
+  padding: 15px 20px 15px 20px; /* Increase right padding to 80px for alignment */
   border: none;
   border-radius: 25px;
   font-size: 16px;
