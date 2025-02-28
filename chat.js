@@ -99,27 +99,23 @@ function showNextQuestion() {
 // 5. Function to show the acknowledgement bubble
 function showAcknowledgement() {
   const container = document.getElementById('chatContainer');
+  
+  // Create a message wrapper with the 'acknowledgement' class
   const messageWrapper = document.createElement('div');
-  // Add both the default bot class and a custom 'acknowledgement' class
-  messageWrapper.className = 'message-wrapper bot acknowledgement';
+  messageWrapper.className = 'message-wrapper acknowledgement';
   
-  // Create the label element (you can optionally remove it if not needed)
-  const label = document.createElement('div');
-  label.className = 'message-label';
-  label.textContent = "Client Assistant";
-  
-  // Create the bubble element with the new outline style
+  // Create the bubble element using the outline class
   const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble outline';  // Use the outline class
+  bubble.className = 'chat-bubble outline';
   bubble.textContent = "Ready to move on?";
   
-  // When clicked, remove this bubble and fetch the questions
+  // When the bubble is clicked, remove it and fetch the questions
   bubble.addEventListener('click', function() {
     container.removeChild(messageWrapper);
     fetchQuestions();
   });
   
-  messageWrapper.appendChild(label);
+  // Append the bubble to the wrapper, and then the wrapper to the container
   messageWrapper.appendChild(bubble);
   container.appendChild(messageWrapper);
   container.scrollTop = container.scrollHeight;
