@@ -30,7 +30,7 @@ body {
   text-align: right;
 }
 .chat-header .logo {
-  max-height: 50px; /* Adjust as needed */
+  max-height: 100px; /* Adjust as needed */
   margin-right: 10px;
   vertical-align: middle;
   margin-left: 20px;
