@@ -1,4 +1,4 @@
-/* Body styling */
+/* Basic styling for the page */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #A7A7A7; /* 50% grey */
@@ -12,7 +12,7 @@ body {
   max-width: 500px;
   margin: 50px auto;
   background-color: #fff;
-  border-radius: 15px;  /* Rounded corners 15px */
+  border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   overflow: hidden;
 }
@@ -20,13 +20,13 @@ body {
 /* Chat header styling */
 .chat-header {
   background-color: #fff;
-  padding: 25px 15px;  /* More padding above and below header text */
+  padding: 25px 15px;
   border-bottom: 1px solid #ccc;
 }
 .chat-header h1 {
   margin: 0;
   font-size: 24px;
-  font-family: 'Roboto Slab', serif; /* Roboto Slab for heading */
+  font-family: 'Roboto Slab', serif;
   text-align: left;
 }
 
@@ -35,22 +35,33 @@ body {
   text-align: center;
   font-size: 14px;
   color: #666;
-  padding: 10px 0;  /* More padding above the date */
+  padding: 10px 0;
 }
 
 /* Chat container styling */
 .chat-container {
-  background-color: #fff; /* White background */
-  height: 300px;          /* Adjust as needed */
-  padding: 20px;          /* More padding between edges and bubbles */
+  background-color: #fff;
+  height: 300px;
+  padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* Wrapper for each message (label and bubble) */
+/* Message wrapper: full width, and adjust alignment based on message type */
 .message-wrapper {
+  width: 100%;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* For bot messages, align wrapper to left; for client messages, align wrapper to right */
+.message-wrapper.bot {
+  align-items: flex-start;
+}
+.message-wrapper.user {
+  align-items: flex-end;
 }
 
 /* Message label styling */
@@ -63,25 +74,23 @@ body {
 /* Chat bubble styling */
 .chat-bubble {
   display: inline-block;
-  padding: 15px 20px;  /* More padding inside bubbles */
+  padding: 15px 20px;
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
 }
 
-/* Bot bubbles: background #E4E4E4, left aligned; top-left corner square */
+/* Bot bubbles: background #E4E4E4, with top-left corner square */
 .chat-bubble.bot {
   background-color: #E4E4E4;
   color: #000;
-  align-self: flex-start;
   border-top-left-radius: 0;
 }
 
-/* Client bubbles: blue background, text left aligned; top-right corner square */
+/* User bubbles: blue background, text left aligned; top-right corner square */
 .chat-bubble.user {
   background-color: #0084ff;
   color: #fff;
-  align-self: flex-end;
   text-align: left;
   border-top-right-radius: 0;
 }
@@ -89,21 +98,22 @@ body {
 /* Chat controls styling */
 #chatControls {
   display: flex;
-  padding: 15px 10px 40px;  /* Increased bottom padding */
+  padding: 15px 10px 40px;  /* Extra bottom padding */
   background-color: #fff;
   align-items: center;
 }
 
-/* Back "button" styling as text */
+/* Back button styling: now with extra left margin so it aligns with bot bubbles */
 #backButton {
   font-weight: bold;
   color: #0084ff;
   cursor: pointer;
-  margin-right: 20px; /* More space between back and input */
+  margin-left: 20px; /* Increase this value to push it inward */
+  margin-right: 20px;
   user-select: none;
 }
 
-/* Input wrapper for positioning send button inside */
+/* Input wrapper for positioning the send button inside */
 .input-wrapper {
   position: relative;
   flex-grow: 1;
@@ -112,9 +122,9 @@ body {
 /* Input field styled like a bubble */
 #userInput {
   width: 100%;
-  padding: 15px 60px 15px 20px;  /* Extra right padding for send button */
+  padding: 15px 70px 15px 20px; /* Increase right padding to 70px */
   border: none;
-  border-radius: 25px;  /* Rounded like a bubble */
+  border-radius: 25px;
   font-size: 16px;
   background-color: #E4E4E4; /* Same as bot bubble */
   color: #000;
