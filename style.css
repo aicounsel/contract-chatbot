@@ -29,6 +29,11 @@ body {
   font-family: 'Roboto Slab', serif;
   text-align: left;
 }
+.chat-header .logo {
+  max-height: 100px; /* Adjust as needed */
+  margin-right: 10px;
+  vertical-align: middle;
+}
 
 /* Date divider styling */
 .date-divider {
