@@ -78,22 +78,23 @@ body {
   max-width: 75%;
 }
 
-/* New style for an outlined bubble */
-.chat-bubble.outline {
-  background-color: transparent;      /* Transparent background */
-  border: 2px solid #706DEB;            /* Blue border using your updated blue color */
-  color: #706DEB;                       /* Blue text */
-  border-radius: 25px;                  /* Same rounding as other bubbles */
-  padding: 15px 20px;                   /* Same padding as other bubbles */
-  max-width: 75%;                       /* Constrain width */
-  display: inline-block;                /* Size to content */
-  cursor: pointer;                      /* Pointer indicates clickable */
-}
-
-/* Center the acknowledgement bubble wrapper */
+/* New style for the acknowledgement message wrapper (centered) */
 .message-wrapper.acknowledgement {
   width: 100%;
-  text-align: center;   /* Center its content */
+  text-align: center;  /* Center the contents */
+  margin-bottom: 10px;
+}
+
+/* New style for an outlined bubble */
+.chat-bubble.outline {
+  display: inline-block;
+  padding: 15px 20px;
+  border-radius: 25px;
+  max-width: 75%;
+  border: 2px solid #706DEB;  /* Blue border using your updated blue color */
+  background-color: transparent; /* Transparent background */
+  color: #706DEB;             /* Blue text */
+  cursor: pointer;            /* Indicates it's clickable */
 }
 
 /* Bot bubbles: background set to updated grey (#F2F2F2) */
