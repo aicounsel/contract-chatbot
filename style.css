@@ -19,19 +19,23 @@ body {
 
 /* Chat header styling */
 .chat-header {
-  background-color: #fff;
+  
+  background-color: #706DEB; /*#fff*/
   padding: 25px 15px;
-  border-bottom: 1px solid #ccc;
+  /*border-bottom: 1px solid #ccc; my change*/
 }
 .chat-header h1 {
   margin: 0;
   font-size: 24px;
-  font-family: 'Roboto Slab', serif;
-  text-align: left;
+  font-family: 'Roboto', sans-serif;
+  /*font-family: 'Roboto Slab', serif;*/
+  text-align: right; /* mychange */
+  margin-right: 20px; /* mychange */
 }
 .chat-header .logo {
-  max-height: 50px;
+  max-height: 100px;
   margin-right: 10px;
+  margin-left: 20px; /* mychange */
   vertical-align: middle;
 }
 
