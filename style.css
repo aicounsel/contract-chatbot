@@ -169,3 +169,58 @@ body {
   font-size: 14px;
   color: #333;
 }
+@media (max-width: 600px) {
+  /* Make the chat window take full width on small screens */
+  .chat-window {
+    margin: 20px auto;
+    max-width: 100%;
+    border-radius: 10px; /* You may reduce the rounding on small screens */
+  }
+  
+  /* Reduce padding in the chat container */
+  .chat-container {
+    padding: 10px;
+    height: 300px;  /* Adjust height if needed */
+  }
+  
+  /* Adjust header font size */
+  .chat-header h1 {
+    font-size: 20px;
+  }
+  
+  /* Adjust chat bubble padding and font size */
+  .chat-bubble {
+    padding: 10px 15px;
+    font-size: 14px;
+    max-width: 90%;  /* Allow bubbles to use more of the screen if needed */
+  }
+  
+  /* Adjust the input area */
+  #chatControls {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  /* Full width input on mobile */
+  .input-wrapper {
+    width: 100%;
+  }
+  
+  #userInput {
+    padding: 10px 60px 10px 10px; /* Adjust right padding as needed */
+    font-size: 16px;
+  }
+  
+  /* Adjust send button size/position if necessary */
+  #sendButton {
+    right: 10px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Optionally adjust the back control spacing */
+  #backButton {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+}
