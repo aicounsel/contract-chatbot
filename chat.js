@@ -63,13 +63,36 @@ function fetchQuestions() {
 // 3. Function to append a chat bubble
 function appendBubble(text, type = 'bot') {
   const container = document.getElementById('chatContainer');
+  
+  // Create a wrapper for the label and bubble
+  const messageWrapper = document.createElement('div');
+  messageWrapper.className = 'message-wrapper';
+  
+  // Create a label element that goes above the bubble
+  const label = document.createElement('div');
+  label.className = 'message-label';
+  if (type === 'bot') {
+    label.textContent = "Client Assistant";
+    label.style.textAlign = "left";
+  } else {
+    label.textContent = "Client";
+    label.style.textAlign = "right";
+  }
+  
+  // Create the bubble element
   const bubble = document.createElement('div');
-  // Append the class "bot" if the type is bot; if type is "user", add "user"
-  bubble.className = 'chat-bubble' + (type === 'user' ? ' user' : ' bot');
+  bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot');
   bubble.textContent = text;
-  container.appendChild(bubble);
+  
+  // Append the label and bubble to the wrapper
+  messageWrapper.appendChild(label);
+  messageWrapper.appendChild(bubble);
+  
+  // Append the wrapper to the chat container
+  container.appendChild(messageWrapper);
   container.scrollTop = container.scrollHeight;
 }
+
 
 // 4. Function to show the next question
 function showNextQuestion() {
