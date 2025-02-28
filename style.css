@@ -1,8 +1,7 @@
-
 /* Body styling */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #E5E8F0; /* Page background updated */
+  background-color: #E5E8F0; /* Page background */
   margin: 0;
   padding: 0;
 }
@@ -20,23 +19,21 @@ body {
 
 /* Chat header styling */
 .chat-header {
-  
   background-color: #fff;
   padding: 25px 15px;
   border-bottom: 1px solid #ccc;
+  text-align: center;
 }
 .chat-header h1 {
   margin: 0;
   font-size: 24px;
-  font-family: 'Roboto', sans-serif;
-  /*font-family: 'Roboto Slab', serif;*/
-  text-align: center; /* mychange */
-  /* margin-right: 20px; mychange */
+  font-family: 'Roboto Slab', serif;
+  text-align: center;
 }
 .chat-header .logo {
   display: block;
-  max-height: 90px;
-  margin: 0 auto;
+  max-height: 60px;      /* Smaller logo */
+  margin: 0 auto 10px;   /* Centered with 10px bottom margin */
   vertical-align: middle;
 }
 
@@ -52,7 +49,7 @@ body {
 .chat-container {
   background-color: #fff;
   height: 300px;
-  padding: 20px;
+  padding: 20px;  /* Extra padding between edges and bubbles */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -79,26 +76,26 @@ body {
 
 /* Chat bubble styling */
 .chat-bubble {
-  display: inline-block;
-  padding: 15px 20px;   /* Extra padding for better spacing */
-  border-radius: 25px;  /* More rounded bubbles */
+  display: inline-block;   /* Only as wide as the text up to a max */
+  padding: 15px 20px;       /* Extra padding inside bubbles */
+  border-radius: 25px;      /* More rounded */
   word-wrap: break-word;
   max-width: 75%;
 }
 
 /* Bot bubbles: background set to updated grey (#F2F2F2) */
 .chat-bubble.bot {
-  background-color: #F2F2F2; /* Grey replaced with F2F2F2 */
+  background-color: #F2F2F2;
   color: #000;
-  border-top-left-radius: 0;
+  border-top-left-radius: 0;  /* Square top-left */
 }
 
 /* User bubbles: background set to updated blue (#706DEB) */
 .chat-bubble.user {
-  background-color: #706DEB; /* Blue replaced with 706DEB */
+  background-color: #706DEB;
   color: #fff;
   text-align: left;
-  border-top-right-radius: 0;
+  border-top-right-radius: 0;  /* Square top-right */
 }
 
 /* Chat controls styling */
@@ -112,12 +109,12 @@ body {
 /* Back control styling as text */
 #backButton {
   font-weight: bold;
-  color: #706DEB; /* Updated blue */
+  color: #706DEB;
   cursor: pointer;
-  margin-left: 20px;  /* Adjusted margin to align with bot bubbles */
+  margin-left: 20px;   /* Align with left edge of bot bubbles (matches container padding) */
   margin-right: 20px;
   user-select: none;
-  border-radius: 25px;
+  border-radius: 25px; /* Rounded like bubbles */
   padding: 10px 15px;
 }
 
@@ -134,16 +131,16 @@ body {
   border: none;
   border-radius: 25px;
   font-size: 16px;
-  background-color: #F2F2F2; /* Updated grey */
+  background-color: #F2F2F2;
   color: #000;
   box-sizing: border-box;
 }
 
-/* Send button styled as a paper airplane icon inside the input field */
+/* Send button styled as a paper airplane icon, positioned inside input */
 #sendButton {
   position: absolute;
   top: 50%;
-  right: 20px; /* Adjusted to align with input field's right edge */
+  right: 20px;  /* Adjusted to align with input field's right edge */
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -170,63 +167,54 @@ body {
   font-size: 14px;
   color: #333;
 }
+
+/* Mobile adjustments */
 @media (max-width: 600px) {
-  /* Make the chat window take full width on small screens */
   .chat-window {
     margin: 20px auto;
     max-width: 100%;
-    border-radius: 10px; /* You may reduce the rounding on small screens */
+    border-radius: 10px;
   }
   
-  /* Reduce padding in the chat container */
   .chat-container {
     padding: 10px;
-    height: 300px;  /* Adjust height if needed */
+    height: 300px;
   }
   
-  /* Adjust header font size */
   .chat-header h1 {
     font-size: 20px;
   }
   
-  /* Adjust chat bubble padding and font size */
   .chat-bubble {
     padding: 10px 15px;
     font-size: 14px;
-    max-width: 90%;  /* Allow bubbles to use more of the screen if needed */
+    max-width: 90%;
   }
   
-  /* Adjust the input area */
+  /* Ensure chat controls remain in a row on mobile */
   #chatControls {
-    flex-direction: column;
-    padding: 10px;
+    flex-direction: row !important;
+    align-items: center;
+    padding: 15px 10px 40px;
   }
   
-  /* Full width input on mobile */
   .input-wrapper {
     width: 100%;
   }
   
   #userInput {
-    padding: 10px 60px 10px 10px; /* Adjust right padding as needed */
+    padding: 10px 60px 10px 10px;
     font-size: 16px;
   }
   
-  /* Adjust send button size/position if necessary */
   #sendButton {
     right: 10px;
     width: 20px;
     height: 20px;
   }
   
-  /* Optionally adjust the back control spacing */
   #backButton {
     margin-left: 10px;
-    margin-bottom: 10px;
-  }
-}
-@media (max-width: 600px) {
-  #chatControls {
-    flex-direction: row !important;
+    margin-bottom: 0;
   }
 }
