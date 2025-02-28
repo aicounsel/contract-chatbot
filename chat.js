@@ -98,23 +98,24 @@ function showNextQuestion() {
 
 // 5. Function to show the acknowledgement bubble
 function showAcknowledgement() {
-  // Append an outlined bubble as a prompt
   const container = document.getElementById('chatContainer');
   const messageWrapper = document.createElement('div');
-  messageWrapper.className = 'message-wrapper bot';
+  // Add both the default bot class and a custom 'acknowledgement' class
+  messageWrapper.className = 'message-wrapper bot acknowledgement';
   
+  // Create the label element (you can optionally remove it if not needed)
   const label = document.createElement('div');
   label.className = 'message-label';
   label.textContent = "Client Assistant";
   
+  // Create the bubble element with the new outline style
   const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble bot outline';
+  bubble.className = 'chat-bubble outline';  // Use the outline class
   bubble.textContent = "Ready to move on?";
   
-  // When clicked, remove this bubble and start the questions
+  // When clicked, remove this bubble and fetch the questions
   bubble.addEventListener('click', function() {
     container.removeChild(messageWrapper);
-    // Now fetch the questions from your flow
     fetchQuestions();
   });
   
