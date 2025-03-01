@@ -193,7 +193,23 @@ function fetchQuestionsAndShowCount() {
     appendBubble("Error fetching questions. Please try again later.", "bot");
   });
 }
-
+function showQuestionCount() {
+  const count = questions.length;
+  showAcknowledgementStep(
+    "You have " + count + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
+    "Continue",
+    function() {
+      showAcknowledgementStep(
+        "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
+        "Let's begin",
+        function() {
+          showNextQuestion();
+        },
+        false // Keep the "Let's begin" button visible.
+      );
+    }
+  );
+}
 // 6. Function to submit answers via AJAX
 function submitAnswers() {
   const payload = {
@@ -316,7 +332,6 @@ function processSend() {
 
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // Chain the five explanatory acknowledgement steps:
   showAcknowledgementStep(
     "Welcome to your AI Counsel Client Assistant! This secure chatbot collects essential information for your project through AI-generated questions tailored to your specific needs. Please note:",
     "Continue",
@@ -329,21 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
             "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
             "Continue",
             function() {
-              let questionCount = questions.length || "[xx]";
-              showAcknowledgementStep(
-                "You have " + questionCount + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
-                "Continue",
-                function() {
-                  showAcknowledgementStep(
-                    "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
-                    "Let's begin",
-                    function() {
-                      showNextQuestion();
-                    },
-                    false
-                  );
-                }
-              );
+              // Fetch the questions and then show the question count message.
+              fetchQuestionsAndShowCount();
             }
           );
         }
