@@ -258,22 +258,27 @@ function submitAnswers() {
 
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  appendBubble("Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
-  
+  // Chain the four explanatory acknowledgement steps, including the welcome message:
   showAcknowledgementStep(
-    "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
+    "Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.",
     "Continue",
     function() {
       showAcknowledgementStep(
-        "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
-        "Confirmed",
+        "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
+        "Continue",
         function() {
           showAcknowledgementStep(
-            "Ready to continue?",
-            "Ready!",
+            "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
+            "Confirmed",
             function() {
-              // Instead of calling fetchQuestions() directly, call our new function.
-              fetchQuestionsAndShowCount();
+              showAcknowledgementStep(
+                "Ready to continue?",
+                "Ready!",
+                function() {
+                  // Instead of calling fetchQuestions() immediately, fetch questions and then show the question count message.
+                  fetchQuestionsAndShowCount();
+                }
+              );
             }
           );
         }
@@ -301,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
-      // Remove the last two message wrappers (user answer + corresponding question)
+      // Remove the last two message wrappers (user answer + question bubble)
       if (container.children.length >= 2) {
         container.removeChild(container.lastElementChild);
         container.removeChild(container.lastElementChild);
