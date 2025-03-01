@@ -245,3 +245,68 @@ body {
   background-color: #706DEB; /* Invert to blue background */
   color: #fff;               /* Invert to white text */
 }
+
+/* Review header styles */
+.review-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.review-header h2 {
+  font-family: 'Roboto Slab', serif;
+  font-size: 24px;
+  margin: 0;
+  font-weight: bold;
+}
+.review-header p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  margin: 5px 0 15px;
+}
+
+/* Review item styles */
+.review-item {
+  background-color: #F2F2F2;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 75%;
+}
+.review-item .chat-bubble.bot {
+  margin-bottom: 5px;
+}
+.review-item .chat-bubble.user {
+  margin-bottom: 5px;
+  text-align: left; /* Ensure client text is left aligned */
+}
+
+/* Edit button for review items */
+.edit-button {
+  background-color: #706DEB;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: block;
+  margin: 5px auto 0;
+}
+
+/* Final submit button styles */
+.review-submit-wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+.submit-button {
+  display: inline-block;
+  padding: 15px 20px;
+  border: 2px solid #706DEB;
+  border-radius: 25px;
+  background-color: transparent;
+  color: #706DEB;
+  cursor: pointer;
+}
+.submit-button:hover {
+  background-color: #706DEB;
+  color: #fff;
+}
