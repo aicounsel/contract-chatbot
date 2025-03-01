@@ -132,7 +132,7 @@ function showNextQuestion() {
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
-    appendBubble("That was the last question, please wait for confirmation of upload.", "bot");
+    appendBubble("Complete. Please wait for confirmation...", "bot");
     submitAnswers();
   }
 }
@@ -162,6 +162,70 @@ function showAcknowledgement() {
   container.scrollTop = container.scrollHeight;
 }
 
+//5b. Question Count
+function showQuestionCount() {
+  const count = questions.length;
+  showAcknowledgementStep(
+    "You have " + count + " questions to answer. Please answer carefully, as you cannot save and go back.",
+    "Let's begin",
+    function() {
+      // Now start the questions
+      showNextQuestion();
+    }
+  );
+}
+
+//5.c Count Questions
+
+function fetchQuestionsAndShowCount() {
+  const docId = getQueryParam('documentId');
+  if (!docId) {
+    console.error("No documentId found in URL");
+    appendBubble("Error: Document ID not provided.", "bot");
+    return;
+  }
+  
+  const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
+  const requestBody = { documentId: docId };
+
+  fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestBody)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok, status " + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    let fetchedQuestions;
+    if (typeof data.questions === "string") {
+      try {
+        fetchedQuestions = JSON.parse(data.questions);
+      } catch (e) {
+        console.error("Error parsing questions string:", e);
+        appendBubble("Error: Could not parse questions data.", "bot");
+        return;
+      }
+    } else {
+      fetchedQuestions = data.questions;
+    }
+    questions = fetchedQuestions;
+    currentQuestionIndex = 0;
+    // Instead of immediately showing the first question,
+    // call the new function to show the count message.
+    showQuestionCount();
+  })
+  .catch(error => {
+    console.error("Error fetching questions:", error);
+    appendBubble("Error fetching questions. Please try again later.", "bot");
+  });
+}
+
+
+
 // 6. Function to submit answers via AJAX
 function submitAnswers() {
   const payload = {
@@ -184,37 +248,32 @@ function submitAnswers() {
     return response.json();
   })
   .then(data => {
-    appendBubble("Upload confirmed! Your document has been updated.", "bot");
+    appendBubble("Success! You may close this window.", "bot");
   })
   .catch(error => {
-    appendBubble("Error submitting answers.", "bot");
+    appendBubble("Error submitting. Email info@aicounsel.co for instructions.", "bot");
     console.error(error);
   });
 }
 
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // Chain the four explanatory acknowledgement steps:
+  appendBubble("Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
+  
   showAcknowledgementStep(
-    "Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.",
+    "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
     "Continue",
     function() {
       showAcknowledgementStep(
-        "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
-        "Continue",
+        "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
+        "Confirmed",
         function() {
           showAcknowledgementStep(
-            "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
-            "Confirmed",
+            "Ready to continue?",
+            "Ready!",
             function() {
-              showAcknowledgementStep(
-                "Ready to continue?",
-                "Ready!",
-                function() {
-                  // Once all acknowledgement steps are done, fetch the questions.
-                  fetchQuestions();
-                }
-              );
+              // Instead of calling fetchQuestions() directly, call our new function.
+              fetchQuestionsAndShowCount();
             }
           );
         }
