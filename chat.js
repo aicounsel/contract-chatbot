@@ -9,13 +9,15 @@ let answers = [];
  * Displays an acknowledgement step.
  * It first appends a permanent explanatory message bubble,
  * then appends an outlined, clickable confirmation bubble.
- * When the confirmation bubble is clicked, it is removed and the callback is executed.
+ * When the confirmation bubble is clicked, if removeOnClick is true, it is removed and the callback is executed.
+ * If removeOnClick is false, the bubble remains visible.
  *
  * @param {string} message - The explanatory text to display.
  * @param {string} buttonLabel - The label for the confirmation button.
  * @param {Function} callback - A function to call once the confirmation bubble is clicked.
+ * @param {boolean} [removeOnClick=true] - Whether to remove the confirmation bubble when clicked.
  */
-function showAcknowledgementStep(message, buttonLabel, callback) {
+function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick = true) {
   const container = document.getElementById('chatContainer');
 
   // Append the explanatory message as a permanent bot bubble
@@ -23,9 +25,8 @@ function showAcknowledgementStep(message, buttonLabel, callback) {
 
   // Create a separate wrapper for the clickable confirmation bubble
   const buttonWrapper = document.createElement('div');
-  buttonWrapper.className = 'message-wrapper acknowledgement'; // Use a class for additional styling if needed
-  // We do not add a label here since we want it to appear exactly as a bot bubble's button
-
+  buttonWrapper.className = 'message-wrapper acknowledgement';
+  
   // Create the clickable bubble (outlined style)
   const buttonBubble = document.createElement('div');
   buttonBubble.className = 'chat-bubble outline';
@@ -36,14 +37,14 @@ function showAcknowledgementStep(message, buttonLabel, callback) {
   container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
 
-  // When the button bubble is clicked, remove only the button bubble (its wrapper) and call the callback
+  // When the button bubble is clicked, remove the wrapper (if desired) and call the callback
   buttonBubble.addEventListener('click', function() {
-    container.removeChild(buttonWrapper);
+    if (removeOnClick) {
+      container.removeChild(buttonWrapper);
+    }
     callback();
   });
 }
-
-
 
 
 // 1. Retrieve DocumentID from URL parameters
@@ -258,25 +259,37 @@ function submitAnswers() {
 
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // Chain the four explanatory acknowledgement steps, including the welcome message:
+  // Chain the five explanatory acknowledgement steps:
   showAcknowledgementStep(
-    "Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.",
+    "Welcome to your AI Counsel Client Assistant! This secure chatbot collects essential information for your project through AI-generated questions tailored to your specific needs. Please note:",
     "Continue",
     function() {
       showAcknowledgementStep(
-        "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
+        "This is a one-way collection tool, so it won't respond to questions.",
         "Continue",
         function() {
           showAcknowledgementStep(
-            "Your data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
-            "Confirmed",
+            "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
+            "Continue",
             function() {
+              // At this point, ideally you have already fetched your questions.
+              // If you want to show the actual count, ensure that 'questions' has been set.
+              // For this example, we'll assume 'questions' is already populated.
+              let questionCount = questions.length || "[xx]";
               showAcknowledgementStep(
-                "Ready to continue?",
-                "Ready!",
+                "You have " + questionCount + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
+                "Continue",
                 function() {
-                  // Instead of calling fetchQuestions() immediately, fetch questions and then show the question count message.
-                  fetchQuestionsAndShowCount();
+                  // Final step: this one does not remove the button so the user can see it.
+                  showAcknowledgementStep(
+                    "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
+                    "Let's begin",
+                    function() {
+                      // Now begin the questions.
+                      showNextQuestion();
+                    },
+                    false // Do not remove the "Let's begin" bubble on click.
+                  );
                 }
               );
             }
@@ -285,6 +298,35 @@ document.addEventListener('DOMContentLoaded', function() {
       );
     }
   );
+
+  // Attach the send button event listener
+  document.getElementById('sendButton').addEventListener('click', processSend);
+  document.getElementById('userInput').addEventListener('keydown', function(e) {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      e.preventDefault();
+      processSend();
+    }
+  });
+
+  // Attach the back button event listener
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0) {
+      const container = document.getElementById('chatContainer');
+      // Remove the last two message wrappers (user answer + question bubble)
+      if (container.children.length >= 2) {
+        container.removeChild(container.lastElementChild);
+        container.removeChild(container.lastElementChild);
+      } else if (container.children.length === 1) {
+        container.removeChild(container.lastElementChild);
+      }
+      currentQuestionIndex--;
+      answers.splice(currentQuestionIndex, 1);
+      document.getElementById('userInput').value = "";
+      appendBubble(questions[currentQuestionIndex].question, 'bot');
+    }
+  });
+});
+
 
   // Attach the send button event listener
   document.getElementById('sendButton').addEventListener('click', function() {
