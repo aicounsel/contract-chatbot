@@ -5,45 +5,44 @@ let questions = []; // Will hold an array of { placeholder, question }
 let currentQuestionIndex = 0;
 let answers = [];
 
-//a.1. Confirm Messages
 /**
- * Displays an acknowledgement step with a message and an outlined button.
- * When the button is clicked, it calls the provided callback.
- * @param {string} message - The explanatory text.
- * @param {string} buttonLabel - The label for the clickable outlined button.
- * @param {Function} callback - Function to call when the button is clicked.
+ * Displays an acknowledgement step.
+ * It first appends a permanent explanatory message bubble,
+ * then appends an outlined, clickable confirmation bubble.
+ * When the confirmation bubble is clicked, it is removed and the callback is executed.
+ *
+ * @param {string} message - The explanatory text to display.
+ * @param {string} buttonLabel - The label for the confirmation button.
+ * @param {Function} callback - A function to call once the confirmation bubble is clicked.
  */
 function showAcknowledgementStep(message, buttonLabel, callback) {
   const container = document.getElementById('chatContainer');
-  
-  // Create a message wrapper and assign a special class for acknowledgement
-  const messageWrapper = document.createElement('div');
-  messageWrapper.className = 'message-wrapper acknowledgement';
-  
-  // Create an element for the explanatory text
-  const textElem = document.createElement('div');
-  textElem.className = 'ack-text';
-  textElem.textContent = message;
-  
-  // Create the clickable bubble element with outline styling
-  const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble outline';
-  bubble.textContent = buttonLabel;
-  
-  // Append the text and bubble to the wrapper
-  messageWrapper.appendChild(textElem);
-  messageWrapper.appendChild(bubble);
-  
-  // Append the wrapper to the chat container and scroll to the bottom
-  container.appendChild(messageWrapper);
+
+  // Append the explanatory message as a permanent bot bubble
+  appendBubble(message, 'bot');
+
+  // Create a separate wrapper for the clickable confirmation bubble
+  const buttonWrapper = document.createElement('div');
+  buttonWrapper.className = 'message-wrapper acknowledgement'; // Use a class for additional styling if needed
+  // We do not add a label here since we want it to appear exactly as a bot bubble's button
+
+  // Create the clickable bubble (outlined style)
+  const buttonBubble = document.createElement('div');
+  buttonBubble.className = 'chat-bubble outline';
+  buttonBubble.textContent = buttonLabel;
+
+  // Append the clickable bubble to its wrapper, then add the wrapper to the container
+  buttonWrapper.appendChild(buttonBubble);
+  container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
-  
-  // When the bubble is clicked, remove the wrapper and run the callback
-  bubble.addEventListener('click', function() {
-    container.removeChild(messageWrapper);
+
+  // When the button bubble is clicked, remove only the button bubble (its wrapper) and call the callback
+  buttonBubble.addEventListener('click', function() {
+    container.removeChild(buttonWrapper);
     callback();
   });
 }
+
 
 
 
@@ -195,31 +194,34 @@ function submitAnswers() {
 
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // Display welcome message first
-  appendBubble("Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.", "bot");
-  
-  // Chain the acknowledgement steps in sequence
+  // Chain the four explanatory acknowledgement steps:
   showAcknowledgementStep(
-    "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
+    "Welcome to AI Counsel!\nYour input is essential to ensuring this contract fits your needs. Take your time—if you’re unsure about anything, just give your best answer. If we need clarification, we’ll follow up.",
     "Continue",
     function() {
       showAcknowledgementStep(
-        "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
-        "Confirmed",
+        "This chatbot securely collects the information needed for your contract. While AI generated the questions, you are not interacting with AI—this is simply a structured way to provide your answers.",
+        "Continue",
         function() {
           showAcknowledgementStep(
-            "Ready to continue?",
-            "Ready!",
+            "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
+            "Confirmed",
             function() {
-              // Once all acknowledgement steps are done, fetch questions.
-              fetchQuestions();
+              showAcknowledgementStep(
+                "Ready to continue?",
+                "Ready!",
+                function() {
+                  // Once all acknowledgement steps are done, fetch the questions.
+                  fetchQuestions();
+                }
+              );
             }
           );
         }
       );
     }
   );
-  
+
   // Attach the send button event listener
   document.getElementById('sendButton').addEventListener('click', function() {
     const inputField = document.getElementById('userInput');
@@ -240,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
-      // Remove the last two chat bubbles (the user's answer and the question bubble)
+      // Remove the last two message wrappers (user answer + corresponding question)
       if (container.children.length >= 2) {
         container.removeChild(container.lastElementChild);
         container.removeChild(container.lastElementChild);
