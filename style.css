@@ -97,6 +97,15 @@ body {
   cursor: pointer;            /* Indicates it's clickable */
 }
 
+/* New style for acknowledgement text above the outlined button */
+.ack-text {
+  font-size: 14px;
+  color: #706DEB;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+
 /* Bot bubbles: background set to updated grey (#F2F2F2) */
 .chat-bubble.bot {
   background-color: #F2F2F2;
