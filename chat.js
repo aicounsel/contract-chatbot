@@ -90,6 +90,52 @@ function fetchQuestions() {
 });
 
 }
+//2.b Fetch Questions and show count
+function fetchQuestionsAndShowCount() {
+  const docId = getQueryParam('documentId');
+  if (!docId) {
+    console.error("No documentId found in URL");
+    appendBubble("Error: Document ID not provided.", "bot");
+    return;
+  }
+  const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
+  const requestBody = { documentId: docId };
+
+  fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestBody)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok, status " + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    let fetchedQuestions;
+    if (typeof data.questions === "string") {
+      try {
+        fetchedQuestions = JSON.parse(data.questions);
+      } catch (e) {
+        console.error("Error parsing questions string:", e);
+        appendBubble("Error: Could not parse questions data.", "bot");
+        return;
+      }
+    } else {
+      fetchedQuestions = data.questions;
+    }
+    console.log("Fetched questions:", fetchedQuestions);
+    questions = fetchedQuestions;
+    currentQuestionIndex = 0;
+    showQuestionCount();
+  })
+  .catch(error => {
+    console.error("Error fetching questions:", error);
+    appendBubble("Error fetching questions. Please try again later.", "bot");
+  });
+}
+
 
 // 3. Append a chat bubble with label
 function appendBubble(text, type = 'bot', extraClass = '') {
