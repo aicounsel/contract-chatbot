@@ -1,10 +1,8 @@
-// chat.js
-
 // Global variables
-let questions = []; // Will hold an array of { placeholder, question }
+let questions = []; // Array of { placeholder, question }
 let currentQuestionIndex = 0;
-let answers = [];
-let editIndex = null;  // For review/edit mode if needed
+let answers = [];   // Array of { placeholder, question, answer }
+let editIndex = null;  // For review/edit mode
 
 /**
  * Displays an acknowledgement step.
@@ -13,32 +11,24 @@ let editIndex = null;  // For review/edit mode if needed
  * When the confirmation bubble is clicked, if removeOnClick is true, it is removed and the callback is executed.
  * If removeOnClick is false, the bubble remains visible.
  *
- * @param {string} message - The explanatory text to display.
+ * @param {string} message - The explanatory text.
  * @param {string} buttonLabel - The label for the confirmation button.
- * @param {Function} callback - A function to call once the confirmation bubble is clicked.
- * @param {boolean} [removeOnClick=true] - Whether to remove the confirmation bubble when clicked.
+ * @param {Function} callback - Function to call when the button is clicked.
+ * @param {boolean} [removeOnClick=true] - Whether to remove the confirmation bubble on click.
  */
 function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick = true) {
   const container = document.getElementById('chatContainer');
-
   // Append the explanatory message as a permanent bot bubble
   appendBubble(message, 'bot');
-
   // Create a wrapper for the clickable confirmation bubble
   const buttonWrapper = document.createElement('div');
   buttonWrapper.className = 'message-wrapper acknowledgement';
-  
-  // Create the clickable bubble (outlined style)
   const buttonBubble = document.createElement('div');
   buttonBubble.className = 'chat-bubble outline';
   buttonBubble.textContent = buttonLabel;
-
-  // Append the clickable bubble to its wrapper, then add the wrapper to the container
   buttonWrapper.appendChild(buttonBubble);
   container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
-
-  // When the button bubble is clicked, remove it (if desired) and call the callback
   buttonBubble.addEventListener('click', function() {
     if (removeOnClick) {
       container.removeChild(buttonWrapper);
@@ -54,7 +44,7 @@ function getQueryParam(param) {
 }
 const documentId = getQueryParam('documentId') || 'default-doc-id';
 
-// 2. Function to fetch questions from your GetQuestions endpoint
+// 2. Function to fetch questions from GetQuestions endpoint
 function fetchQuestions() {
   const docId = getQueryParam('documentId');
   if (!docId) {
@@ -62,10 +52,8 @@ function fetchQuestions() {
     appendBubble("Error: Document ID not provided.", "bot");
     return;
   }
-  
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
   const requestBody = { documentId: docId };
-
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -92,7 +80,8 @@ function fetchQuestions() {
     }
     questions = fetchedQuestions;
     currentQuestionIndex = 0;
-    showNextQuestion();
+    // Instead of directly showing the first question, show the review prompt bubble.
+    showReviewPrompt();
   })
   .catch(error => {
     console.error("Error fetching questions:", error);
@@ -100,33 +89,24 @@ function fetchQuestions() {
   });
 }
 
-// 3. Function to append a chat bubble (with label above)
+// 3. Append a chat bubble with label
 function appendBubble(text, type = 'bot', extraClass = '') {
   const container = document.getElementById('chatContainer');
-  // Create a message wrapper
   const messageWrapper = document.createElement('div');
   messageWrapper.className = 'message-wrapper ' + (type === 'user' ? 'user' : 'bot');
-
-  // Create the label element
   const label = document.createElement('div');
   label.className = 'message-label';
   label.textContent = type === 'user' ? "Client" : "Client Assistant";
-
-  // Create the bubble element
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot') + " " + extraClass;
   bubble.textContent = text;
-
-  // Append label and bubble to the wrapper
   messageWrapper.appendChild(label);
   messageWrapper.appendChild(bubble);
-
-  // Append the wrapper to the chat container
   container.appendChild(messageWrapper);
   container.scrollTop = container.scrollHeight;
 }
 
-// 4. Function to show the next question
+// 4. Show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     const questionObj = questions[currentQuestionIndex];
@@ -137,79 +117,26 @@ function showNextQuestion() {
   }
 }
 
-// 5b. Question Count: Show acknowledgement step with question count
-function showQuestionCount() {
-  const count = questions.length;
+// 5. After the last question, show review prompt
+function showReviewPrompt() {
+  // Display a final acknowledgement bubble prompting review
   showAcknowledgementStep(
-    "You have " + count + " questions to answer, ranging from basic information (names, dates) to more detailed questions about your business. Please answer carefully, as you cannot save and go back.",
-    "Continue",
+    "Thank you for completing these questions. Ready to review your answers?",
+    "Review Answers",
     function() {
-      showNextQuestion();
+      // Disable the back button (make it unclickable and invisible)
+      const backBtn = document.getElementById('backButton');
+      backBtn.style.pointerEvents = "none";
+      backBtn.style.color = "transparent"; // or match the background color
+      // Now show the review screen
+      showReviewScreen();
     }
   );
 }
 
-// 5.c: Function to fetch questions and then show count message
-function fetchQuestionsAndShowCount() {
-  const docId = getQueryParam('documentId');
-  if (!docId) {
-    console.error("No documentId found in URL");
-    appendBubble("Error: Document ID not provided.", "bot");
-    return;
-  }
-  const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
-  const requestBody = { documentId: docId };
+// 5b. Question Count (if you wish to include a question count step)
+// (You can remove this if not needed)
 
-  fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(requestBody)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok, status " + response.status);
-    }
-    return response.json();
-  })
-  .then(data => {
-    let fetchedQuestions;
-    if (typeof data.questions === "string") {
-      try {
-        fetchedQuestions = JSON.parse(data.questions);
-      } catch (e) {
-        console.error("Error parsing questions string:", e);
-        appendBubble("Error: Could not parse questions data.", "bot");
-        return;
-      }
-    } else {
-      fetchedQuestions = data.questions;
-    }
-    questions = fetchedQuestions;
-    currentQuestionIndex = 0;
-    showQuestionCount();
-  })
-  .catch(error => {
-    console.error("Error fetching questions:", error);
-    appendBubble("Error fetching questions. Please try again later.", "bot");
-  });
-}
-function showQuestionCount() {
-  const count = questions.length;
-  showAcknowledgementStep(
-    "You have " + count + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
-    "Continue",
-    function() {
-      showAcknowledgementStep(
-        "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
-        "Let's begin",
-        function() {
-          showNextQuestion();
-        },
-        false // Keep the "Let's begin" button visible.
-      );
-    }
-  );
-}
 // 6. Function to submit answers via AJAX
 function submitAnswers() {
   const payload = {
@@ -249,14 +176,16 @@ function appendReviewItem(item, index) {
   const reviewWrapper = document.createElement('div');
   reviewWrapper.className = 'review-item';
   
+  // Create elements for question and answer using existing bubble styling
   const questionElem = document.createElement('div');
-  questionElem.className = 'review-question';
+  questionElem.className = 'chat-bubble bot'; // Bot bubble style for question
   questionElem.textContent = item.question;
   
   const answerElem = document.createElement('div');
-  answerElem.className = 'review-answer';
+  answerElem.className = 'chat-bubble user'; // User bubble style for answer
   answerElem.textContent = item.answer;
   
+  // Create an Edit button (placed below the user answer, aligned right)
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
   editBtn.textContent = 'Edit';
@@ -270,13 +199,29 @@ function appendReviewItem(item, index) {
   container.appendChild(reviewWrapper);
 }
 
+function appendReviewHeader() {
+  const container = document.getElementById('chatContainer');
+  const headerWrapper = document.createElement('div');
+  headerWrapper.className = 'review-header';
+  
+  const header = document.createElement('h2');
+  header.textContent = "Review Your Answers";
+  headerWrapper.appendChild(header);
+  
+  const subheader = document.createElement('p');
+  subheader.textContent = "Please review and press 'Submit All Answers' at the bottom of the page.";
+  headerWrapper.appendChild(subheader);
+  
+  container.appendChild(headerWrapper);
+}
+
 function appendSubmitButton() {
   const container = document.getElementById('chatContainer');
   const submitWrapper = document.createElement('div');
   submitWrapper.className = 'review-submit-wrapper';
   
-  const submitBtn = document.createElement('button');
-  submitBtn.className = 'submit-button';
+  const submitBtn = document.createElement('div');
+  submitBtn.className = 'chat-bubble outline submit-button';
   submitBtn.textContent = 'Submit All Answers';
   submitBtn.addEventListener('click', function() {
     submitAnswers();
@@ -288,6 +233,7 @@ function appendSubmitButton() {
 
 function showReviewScreen() {
   clearChatContainer();
+  appendReviewHeader();
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
@@ -325,13 +271,31 @@ function processSend() {
     if (currentQuestionIndex < questions.length) {
       setTimeout(showNextQuestion, 500);
     } else {
-      setTimeout(showReviewScreen, 500);
+      // Instead of directly calling showReviewScreen,
+      // first show a confirmation bubble for review.
+      showReviewPrompt();
     }
   }
 }
 
+// New function: Review Prompt (after last question)
+function showReviewPrompt() {
+  showAcknowledgementStep(
+    "Thank you for completing these questions. Ready to review your answers?",
+    "Review Answers",
+    function() {
+      // Disable the back button when review begins
+      const backBtn = document.getElementById('backButton');
+      backBtn.style.pointerEvents = "none";
+      backBtn.style.color = "transparent"; // Hides it visually
+      showReviewScreen();
+    }
+  );
+}
+
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+  // Chain the four initial acknowledgement steps:
   showAcknowledgementStep(
     "Welcome to your AI Counsel Client Assistant! This secure chatbot collects essential information for your project through AI-generated questions tailored to your specific needs. Please note:",
     "Continue",
@@ -344,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
             "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
             "Continue",
             function() {
-              // Fetch the questions and then show the question count message.
+              // At this point, fetch the questions and then show the question count step
               fetchQuestionsAndShowCount();
             }
           );
@@ -353,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   );
 
-  // Attach event listeners for send, enter, and back
+  // Attach event listeners for send and Enter key
   document.getElementById('sendButton').addEventListener('click', processSend);
   document.getElementById('userInput').addEventListener('keydown', function(e) {
     if (e.key === "Enter" || e.keyCode === 13) {
@@ -361,6 +325,8 @@ document.addEventListener('DOMContentLoaded', function() {
       processSend();
     }
   });
+
+  // Attach event listener for back button (active only until review starts)
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
