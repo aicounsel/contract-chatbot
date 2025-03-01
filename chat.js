@@ -4,6 +4,7 @@
 let questions = []; // Will hold an array of { placeholder, question }
 let currentQuestionIndex = 0;
 let answers = [];
+let editIndex = null;  // For review/edit mode if needed
 
 /**
  * Displays an acknowledgement step.
@@ -23,7 +24,7 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
   // Append the explanatory message as a permanent bot bubble
   appendBubble(message, 'bot');
 
-  // Create a separate wrapper for the clickable confirmation bubble
+  // Create a wrapper for the clickable confirmation bubble
   const buttonWrapper = document.createElement('div');
   buttonWrapper.className = 'message-wrapper acknowledgement';
   
@@ -37,7 +38,7 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
   container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
 
-  // When the button bubble is clicked, remove the wrapper (if desired) and call the callback
+  // When the button bubble is clicked, remove it (if desired) and call the callback
   buttonBubble.addEventListener('click', function() {
     if (removeOnClick) {
       container.removeChild(buttonWrapper);
@@ -45,7 +46,6 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
     callback();
   });
 }
-
 
 // 1. Retrieve DocumentID from URL parameters
 function getQueryParam(param) {
@@ -103,7 +103,6 @@ function fetchQuestions() {
 // 3. Function to append a chat bubble (with label above)
 function appendBubble(text, type = 'bot', extraClass = '') {
   const container = document.getElementById('chatContainer');
-
   // Create a message wrapper
   const messageWrapper = document.createElement('div');
   messageWrapper.className = 'message-wrapper ' + (type === 'user' ? 'user' : 'bot');
@@ -122,7 +121,7 @@ function appendBubble(text, type = 'bot', extraClass = '') {
   messageWrapper.appendChild(label);
   messageWrapper.appendChild(bubble);
 
-  // Append the message wrapper to the chat container
+  // Append the wrapper to the chat container
   container.appendChild(messageWrapper);
   container.scrollTop = container.scrollHeight;
 }
@@ -138,46 +137,19 @@ function showNextQuestion() {
   }
 }
 
-// 5. Function to show the acknowledgement bubble
-function showAcknowledgement() {
-  const container = document.getElementById('chatContainer');
-  
-  // Create a message wrapper with the 'acknowledgement' class
-  const messageWrapper = document.createElement('div');
-  messageWrapper.className = 'message-wrapper acknowledgement';
-  
-  // Create the bubble element using the outline class
-  const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble outline';
-  bubble.textContent = "Ready to move on?";
-  
-  // When the bubble is clicked, remove it and fetch the questions
-  bubble.addEventListener('click', function() {
-    container.removeChild(messageWrapper);
-    fetchQuestions();
-  });
-  
-  // Append the bubble to the wrapper, and then the wrapper to the container
-  messageWrapper.appendChild(bubble);
-  container.appendChild(messageWrapper);
-  container.scrollTop = container.scrollHeight;
-}
-
-//5b. Question Count
+// 5b. Question Count: Show acknowledgement step with question count
 function showQuestionCount() {
   const count = questions.length;
   showAcknowledgementStep(
-    "You have " + count + " questions to answer. Please answer carefully, as you cannot save and go back.",
-    "Let's begin",
+    "You have " + count + " questions to answer, ranging from basic information (names, dates) to more detailed questions about your business. Please answer carefully, as you cannot save and go back.",
+    "Continue",
     function() {
-      // Now start the questions
       showNextQuestion();
     }
   );
 }
 
-//5.c Count Questions
-
+// 5.c: Function to fetch questions and then show count message
 function fetchQuestionsAndShowCount() {
   const docId = getQueryParam('documentId');
   if (!docId) {
@@ -185,7 +157,6 @@ function fetchQuestionsAndShowCount() {
     appendBubble("Error: Document ID not provided.", "bot");
     return;
   }
-  
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
   const requestBody = { documentId: docId };
 
@@ -215,8 +186,6 @@ function fetchQuestionsAndShowCount() {
     }
     questions = fetchedQuestions;
     currentQuestionIndex = 0;
-    // Instead of immediately showing the first question,
-    // call the new function to show the count message.
     showQuestionCount();
   })
   .catch(error => {
@@ -225,18 +194,14 @@ function fetchQuestionsAndShowCount() {
   });
 }
 
-
-
 // 6. Function to submit answers via AJAX
 function submitAnswers() {
   const payload = {
     documentId: documentId,
     answers: answers
   };
-
   console.log("Submitting payload:", payload);
   const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
-
   fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -257,6 +222,98 @@ function submitAnswers() {
   });
 }
 
+// 7. Review and Edit Section functions
+
+function clearChatContainer() {
+  document.getElementById('chatContainer').innerHTML = '';
+}
+
+function appendReviewItem(item, index) {
+  const container = document.getElementById('chatContainer');
+  const reviewWrapper = document.createElement('div');
+  reviewWrapper.className = 'review-item';
+  
+  const questionElem = document.createElement('div');
+  questionElem.className = 'review-question';
+  questionElem.textContent = item.question;
+  
+  const answerElem = document.createElement('div');
+  answerElem.className = 'review-answer';
+  answerElem.textContent = item.answer;
+  
+  const editBtn = document.createElement('button');
+  editBtn.className = 'edit-button';
+  editBtn.textContent = 'Edit';
+  editBtn.addEventListener('click', function() {
+    editAnswer(index);
+  });
+  
+  reviewWrapper.appendChild(questionElem);
+  reviewWrapper.appendChild(answerElem);
+  reviewWrapper.appendChild(editBtn);
+  container.appendChild(reviewWrapper);
+}
+
+function appendSubmitButton() {
+  const container = document.getElementById('chatContainer');
+  const submitWrapper = document.createElement('div');
+  submitWrapper.className = 'review-submit-wrapper';
+  
+  const submitBtn = document.createElement('button');
+  submitBtn.className = 'submit-button';
+  submitBtn.textContent = 'Submit All Answers';
+  submitBtn.addEventListener('click', function() {
+    submitAnswers();
+  });
+  
+  submitWrapper.appendChild(submitBtn);
+  container.appendChild(submitWrapper);
+}
+
+function showReviewScreen() {
+  clearChatContainer();
+  answers.forEach((item, index) => {
+    appendReviewItem(item, index);
+  });
+  appendSubmitButton();
+}
+
+function editAnswer(index) {
+  editIndex = index;
+  document.getElementById('userInput').value = answers[index].answer;
+  document.getElementById('userInput').focus();
+  clearChatContainer();
+  appendBubble(questions[index].question, 'bot');
+}
+
+function processSend() {
+  const inputField = document.getElementById('userInput');
+  const userText = inputField.value.trim();
+  if (userText === "") return;
+  
+  if (editIndex !== null) {
+    answers[editIndex].answer = userText;
+    appendBubble(userText, 'user');
+    editIndex = null;
+    setTimeout(showReviewScreen, 500);
+  } else {
+    appendBubble(userText, 'user');
+    const currentQ = questions[currentQuestionIndex];
+    answers.push({
+      placeholder: currentQ.placeholder,
+      question: currentQ.question,
+      answer: userText
+    });
+    currentQuestionIndex++;
+    inputField.value = "";
+    if (currentQuestionIndex < questions.length) {
+      setTimeout(showNextQuestion, 500);
+    } else {
+      setTimeout(showReviewScreen, 500);
+    }
+  }
+}
+
 // Attach event listeners once the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Chain the five explanatory acknowledgement steps:
@@ -272,23 +329,18 @@ document.addEventListener('DOMContentLoaded', function() {
             "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
             "Continue",
             function() {
-              // At this point, ideally you have already fetched your questions.
-              // If you want to show the actual count, ensure that 'questions' has been set.
-              // For this example, we'll assume 'questions' is already populated.
               let questionCount = questions.length || "[xx]";
               showAcknowledgementStep(
                 "You have " + questionCount + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
                 "Continue",
                 function() {
-                  // Final step: this one does not remove the button so the user can see it.
                   showAcknowledgementStep(
                     "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
                     "Let's begin",
                     function() {
-                      // Now begin the questions.
                       showNextQuestion();
                     },
-                    false // Do not remove the "Let's begin" bubble on click.
+                    false
                   );
                 }
               );
@@ -299,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   );
 
-  // Attach the send button event listener
+  // Attach event listeners for send, enter, and back
   document.getElementById('sendButton').addEventListener('click', processSend);
   document.getElementById('userInput').addEventListener('keydown', function(e) {
     if (e.key === "Enter" || e.keyCode === 13) {
@@ -307,12 +359,9 @@ document.addEventListener('DOMContentLoaded', function() {
       processSend();
     }
   });
-
-  // Attach the back button event listener
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
-      // Remove the last two message wrappers (user answer + question bubble)
       if (container.children.length >= 2) {
         container.removeChild(container.lastElementChild);
         container.removeChild(container.lastElementChild);
@@ -323,50 +372,6 @@ document.addEventListener('DOMContentLoaded', function() {
       answers.splice(currentQuestionIndex, 1);
       document.getElementById('userInput').value = "";
       appendBubble(questions[currentQuestionIndex].question, 'bot');
-    }
-  });
-});
-
-
-  // Attach the send button event listener
-  document.getElementById('sendButton').addEventListener('click', function() {
-    const inputField = document.getElementById('userInput');
-    const userText = inputField.value.trim();
-    if (userText === "") return;
-    appendBubble(userText, 'user');
-    const currentQ = questions[currentQuestionIndex];
-    answers.push({
-      placeholder: currentQ.placeholder,
-      answer: userText
-    });
-    currentQuestionIndex++;
-    inputField.value = "";
-    setTimeout(showNextQuestion, 500);
-  });
-
-  // Attach the back button event listener
-  document.getElementById('backButton').addEventListener('click', function() {
-    if (currentQuestionIndex > 0) {
-      const container = document.getElementById('chatContainer');
-      // Remove the last two message wrappers (user answer + question bubble)
-      if (container.children.length >= 2) {
-        container.removeChild(container.lastElementChild);
-        container.removeChild(container.lastElementChild);
-      } else if (container.children.length === 1) {
-        container.removeChild(container.lastElementChild);
-      }
-      currentQuestionIndex--;
-      answers.splice(currentQuestionIndex, 1);
-      document.getElementById('userInput').value = "";
-      appendBubble(questions[currentQuestionIndex].question, 'bot');
-    }
-  });
-
-  // Attach keydown event for Enter on userInput
-  document.getElementById('userInput').addEventListener('keydown', function(e) {
-    if (e.key === "Enter" || e.keyCode === 13) {
-      e.preventDefault();
-      document.getElementById('sendButton').click();
     }
   });
 });
