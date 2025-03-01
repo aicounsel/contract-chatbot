@@ -65,28 +65,30 @@ function fetchQuestions() {
     }
     return response.json();
   })
-  .then(data => {
-    let fetchedQuestions;
-    if (typeof data.questions === "string") {
-      try {
-        fetchedQuestions = JSON.parse(data.questions);
-      } catch (e) {
-        console.error("Error parsing questions string:", e);
-        appendBubble("Error: Could not parse questions data.", "bot");
-        return;
-      }
-    } else {
-      fetchedQuestions = data.questions;
+.then(data => {
+  let fetchedQuestions;
+  if (typeof data.questions === "string") {
+    try {
+      fetchedQuestions = JSON.parse(data.questions);
+    } catch (e) {
+      console.error("Error parsing questions string:", e);
+      appendBubble("Error: Could not parse questions data.", "bot");
+      return;
     }
-    questions = fetchedQuestions;
-    currentQuestionIndex = 0;
-    // Instead of directly showing the first question, show the review prompt bubble.
-    showReviewPrompt();
-  })
-  .catch(error => {
-    console.error("Error fetching questions:", error);
-    appendBubble("Error fetching questions. Please try again later.", "bot");
-  });
+  } else {
+    fetchedQuestions = data.questions;
+  }
+  console.log("Fetched questions:", fetchedQuestions);  // Debug log added here
+  questions = fetchedQuestions;
+  currentQuestionIndex = 0;
+  // Instead of directly showing the first question, show the review prompt bubble.
+  showReviewPrompt();
+})
+.catch(error => {
+  console.error("Error fetching questions:", error);
+  appendBubble("Error fetching questions. Please try again later.", "bot");
+});
+
 }
 
 // 3. Append a chat bubble with label
