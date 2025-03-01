@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "Continue",
         function() {
           showAcknowledgementStep(
-            "Our data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
+            "Your data is protected. The chatbot does not store any information. Each response is securely transmitted to a Microsoft-encrypted system in real time.",
             "Confirmed",
             function() {
               showAcknowledgementStep(
