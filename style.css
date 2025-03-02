@@ -254,33 +254,35 @@ body {
   margin-top: 20px;
 }
 
-/* Submit All Answers button styling */
+/* ===== Submit All Answers Button Styles ===== */
 .submit-button {
-  background-color: #322C5E;
+  background-color: #EB6DBB; /* At rest */
   color: #fff;
   border: none;
   border-radius: 25px;
   padding: 15px 20px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
-  display: inline-block;
   text-align: center;
+  display: inline-block;
 }
 
 .submit-button:hover {
-  background-color: #2b2452;
+  background-color: #BC6DEB; /* On hover */
 }
 
 .submit-button:active,
 .submit-button.pressed {
-  background-color: #1f193f;
-  transform: scale(0.98);
+  background-color: #322C5E; /* On press */
+  transform: scale(0.95);   /* Shrink a little */
 }
 
-.submit-button:disabled {
-  pointer-events: none;
-  opacity: 0.7;
+/* Success state for the button */
+.submit-button.success {
+  background-color: #6DDBEB; /* After success */
+  transform: none;           /* Reset any scale transform */
 }
+
 
 /* ============================================================================
    Mobile Adjustments
