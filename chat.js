@@ -361,19 +361,20 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Attach event listener for back button (active only until review starts)
-  document.getElementById('backButton').addEventListener('click', function() {
-    if (currentQuestionIndex > 0) {
-      const container = document.getElementById('chatContainer');
-      if (container.children.length >= 2) {
-        container.removeChild(container.lastElementChild);
-        container.removeChild(container.lastElementChild);
-      } else if (container.children.length === 1) {
-        container.removeChild(container.lastElementChild);
-      }
-      currentQuestionIndex--;
-      answers.splice(currentQuestionIndex, 1);
-      document.getElementById('userInput').value = "";
-      appendBubble(questions[currentQuestionIndex].question, 'bot');
+document.getElementById('backButton').addEventListener('click', function() {
+  if (currentQuestionIndex > 0) {
+    const container = document.getElementById('chatContainer');
+    // Remove the last two message wrappers:
+    if (container.children.length >= 2) {
+      container.removeChild(container.lastElementChild); // Remove the pending question bubble
+      container.removeChild(container.lastElementChild); // Remove the user's answer bubble
     }
-  });
+    // Update global state:
+    currentQuestionIndex--;
+    answers.splice(currentQuestionIndex, 1);
+    // Clear the input field
+    document.getElementById('userInput').value = "";
+  }
+});
+
 });
