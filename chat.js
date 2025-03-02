@@ -326,6 +326,7 @@ function processSend() {
     answers[editIndex].answer = userText;
     appendBubble(userText, 'user');
     editIndex = null;
+    inputField.value = "";  // Clear the input field after editing
     setTimeout(showReviewScreen, 500);
   } else {
     appendBubble(userText, 'user');
