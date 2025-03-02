@@ -20,22 +20,35 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
   const container = document.getElementById('chatContainer');
   // Append the explanatory message as a permanent bot bubble
   appendBubble(message, 'bot');
+
   // Create a wrapper for the clickable confirmation bubble
   const buttonWrapper = document.createElement('div');
   buttonWrapper.className = 'message-wrapper acknowledgement';
+
   const buttonBubble = document.createElement('div');
   buttonBubble.className = 'chat-bubble outline';
   buttonBubble.textContent = buttonLabel;
+
   buttonWrapper.appendChild(buttonBubble);
   container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
+
+  // Flag to ensure the click callback only fires once.
+  let clicked = false;
   buttonBubble.addEventListener('click', function() {
+    if (clicked) return; // Ignore subsequent clicks
+    clicked = true;
     if (removeOnClick) {
       container.removeChild(buttonWrapper);
+    } else {
+      // If not removing, visually disable the button so it can't be clicked again.
+      buttonBubble.style.pointerEvents = 'none';
+      buttonBubble.style.opacity = '0.5';
     }
     callback();
   });
 }
+
 
 // 1. Retrieve DocumentID from URL parameters
 function getQueryParam(param) {
