@@ -142,14 +142,15 @@ function showQuestionCount() {
     "You have " + count + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
     "Continue",
     function() {
-      showAcknowledgementStep(
-        "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
-        "Let's begin",
-        function() {
-          showNextQuestion();
-        },
-        false // Keep the "Let's begin" button visible
-      );
+     showAcknowledgementStep(
+  "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
+  "Let's begin",
+  function() {
+    showNextQuestion();
+  },
+  false // Keep the button visible and disable further clicks after the first click
+);
+
     }
   );
 }
