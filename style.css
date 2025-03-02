@@ -73,6 +73,9 @@ body {
 .message-wrapper.user {
   text-align: right;
 }
+.message-wrapper.acknowledgement {
+  text-align: center;
+}
 
 /* Message label styling (appears above each bubble) */
 .message-label {
