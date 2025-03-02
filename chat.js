@@ -237,23 +237,34 @@ function appendSubmitButton() {
   const container = document.getElementById('chatContainer');
   const submitWrapper = document.createElement('div');
   submitWrapper.className = 'review-submit-wrapper';
+  
   const submitBtn = document.createElement('div');
   submitBtn.className = 'chat-bubble outline submit-button';
   submitBtn.textContent = 'Submit All Answers';
-
+  
   submitBtn.addEventListener('click', function() {
+    // If already disabled, do nothing.
     if (submitBtn.disabled) return;
-    // Mark the button as pressed and disable it
+    
+    // Change text to "Please wait..." and add pressed state.
+    submitBtn.textContent = "Please wait...";
     submitBtn.classList.add('pressed');
     submitBtn.disabled = true;
+    
+    // Call the submission function.
     submitAnswers().then(data => {
-      submitBtn.textContent = 'Success!';
+      // On success, remove the pressed class, add success class, and update text.
+      submitBtn.classList.remove('pressed');
+      submitBtn.classList.add('success');
+      submitBtn.textContent = "Success!";
     }).catch(error => {
+      // On error, re-enable the button and revert text and style.
       submitBtn.disabled = false;
       submitBtn.classList.remove('pressed');
-      submitBtn.textContent = 'Submit All Answers';
+      submitBtn.textContent = "Submit All Answers";
     });
   });
+  
   submitWrapper.appendChild(submitBtn);
   container.appendChild(submitWrapper);
 }
