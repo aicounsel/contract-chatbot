@@ -65,32 +65,32 @@ function fetchQuestions() {
     }
     return response.json();
   })
-.then(data => {
-  let fetchedQuestions;
-  if (typeof data.questions === "string") {
-    try {
-      fetchedQuestions = JSON.parse(data.questions);
-    } catch (e) {
-      console.error("Error parsing questions string:", e);
-      appendBubble("Error: Could not parse questions data.", "bot");
-      return;
+  .then(data => {
+    let fetchedQuestions;
+    if (typeof data.questions === "string") {
+      try {
+        fetchedQuestions = JSON.parse(data.questions);
+      } catch (e) {
+        console.error("Error parsing questions string:", e);
+        appendBubble("Error: Could not parse questions data.", "bot");
+        return;
+      }
+    } else {
+      fetchedQuestions = data.questions;
     }
-  } else {
-    fetchedQuestions = data.questions;
-  }
-  console.log("Fetched questions:", fetchedQuestions);  // Debug log added here
-  questions = fetchedQuestions;
-  currentQuestionIndex = 0;
-  // Instead of directly showing the first question, show the review prompt bubble.
-  showReviewPrompt();
-})
-.catch(error => {
-  console.error("Error fetching questions:", error);
-  appendBubble("Error fetching questions. Please try again later.", "bot");
-});
-
+    console.log("Fetched questions:", fetchedQuestions);
+    questions = fetchedQuestions;
+    currentQuestionIndex = 0;
+    // Instead of directly showing the first question, show the review prompt bubble.
+    showReviewPrompt();
+  })
+  .catch(error => {
+    console.error("Error fetching questions:", error);
+    appendBubble("Error fetching questions. Please try again later.", "bot");
+  });
 }
-//2.b Fetch Questions and show count
+
+// 2.b: Function to fetch questions and then show question count
 function fetchQuestionsAndShowCount() {
   const docId = getQueryParam('documentId');
   if (!docId) {
@@ -100,7 +100,6 @@ function fetchQuestionsAndShowCount() {
   }
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
   const requestBody = { documentId: docId };
-
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -136,7 +135,7 @@ function fetchQuestionsAndShowCount() {
   });
 }
 
-//2.c Fetch Question Count
+// 2.c: Function to show question count and chain final acknowledgement steps
 function showQuestionCount() {
   const count = questions.length;
   showAcknowledgementStep(
@@ -155,8 +154,7 @@ function showQuestionCount() {
   );
 }
 
-
-// 3. Append a chat bubble with label
+// 3. Function to append a chat bubble with a label above it
 function appendBubble(text, type = 'bot', extraClass = '') {
   const container = document.getElementById('chatContainer');
   const messageWrapper = document.createElement('div');
@@ -173,7 +171,7 @@ function appendBubble(text, type = 'bot', extraClass = '') {
   container.scrollTop = container.scrollHeight;
 }
 
-// 4. Show the next question
+// 4. Function to show the next question
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     const questionObj = questions[currentQuestionIndex];
@@ -184,25 +182,20 @@ function showNextQuestion() {
   }
 }
 
-// 5. After the last question, show review prompt
+// 5. Function to show review prompt after last question
 function showReviewPrompt() {
-  // Display a final acknowledgement bubble prompting review
   showAcknowledgementStep(
     "Thank you for completing these questions. Ready to review your answers?",
     "Review Answers",
     function() {
-      // Disable the back button (make it unclickable and invisible)
+      // Disable the back button when review begins
       const backBtn = document.getElementById('backButton');
       backBtn.style.pointerEvents = "none";
-      backBtn.style.color = "transparent"; // or match the background color
-      // Now show the review screen
+      backBtn.style.color = "transparent";
       showReviewScreen();
     }
   );
 }
-
-// 5b. Question Count (if you wish to include a question count step)
-// (You can remove this if not needed)
 
 // 6. Function to submit answers via AJAX
 function submitAnswers() {
@@ -233,26 +226,22 @@ function submitAnswers() {
 }
 
 // 7. Review and Edit Section functions
-
 function clearChatContainer() {
   document.getElementById('chatContainer').innerHTML = '';
 }
-
 function appendReviewItem(item, index) {
   const container = document.getElementById('chatContainer');
   const reviewWrapper = document.createElement('div');
   reviewWrapper.className = 'review-item';
   
-  // Create elements for question and answer using existing bubble styling
   const questionElem = document.createElement('div');
-  questionElem.className = 'chat-bubble bot'; // Bot bubble style for question
+  questionElem.className = 'chat-bubble bot';
   questionElem.textContent = item.question;
   
   const answerElem = document.createElement('div');
-  answerElem.className = 'chat-bubble user'; // User bubble style for answer
+  answerElem.className = 'chat-bubble user';
   answerElem.textContent = item.answer;
   
-  // Create an Edit button (placed below the user answer, aligned right)
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
   editBtn.textContent = 'Edit';
@@ -265,7 +254,6 @@ function appendReviewItem(item, index) {
   reviewWrapper.appendChild(editBtn);
   container.appendChild(reviewWrapper);
 }
-
 function appendReviewHeader() {
   const container = document.getElementById('chatContainer');
   const headerWrapper = document.createElement('div');
@@ -281,7 +269,6 @@ function appendReviewHeader() {
   
   container.appendChild(headerWrapper);
 }
-
 function appendSubmitButton() {
   const container = document.getElementById('chatContainer');
   const submitWrapper = document.createElement('div');
@@ -297,7 +284,6 @@ function appendSubmitButton() {
   submitWrapper.appendChild(submitBtn);
   container.appendChild(submitWrapper);
 }
-
 function showReviewScreen() {
   clearChatContainer();
   appendReviewHeader();
@@ -306,7 +292,6 @@ function showReviewScreen() {
   });
   appendSubmitButton();
 }
-
 function editAnswer(index) {
   editIndex = index;
   document.getElementById('userInput').value = answers[index].answer;
@@ -314,7 +299,6 @@ function editAnswer(index) {
   clearChatContainer();
   appendBubble(questions[index].question, 'bot');
 }
-
 function processSend() {
   const inputField = document.getElementById('userInput');
   const userText = inputField.value.trim();
@@ -338,26 +322,9 @@ function processSend() {
     if (currentQuestionIndex < questions.length) {
       setTimeout(showNextQuestion, 500);
     } else {
-      // Instead of directly calling showReviewScreen,
-      // first show a confirmation bubble for review.
       showReviewPrompt();
     }
   }
-}
-
-// New function: Review Prompt (after last question)
-function showReviewPrompt() {
-  showAcknowledgementStep(
-    "Thank you for completing these questions. Ready to review your answers?",
-    "Review Answers",
-    function() {
-      // Disable the back button when review begins
-      const backBtn = document.getElementById('backButton');
-      backBtn.style.pointerEvents = "none";
-      backBtn.style.color = "transparent"; // Hides it visually
-      showReviewScreen();
-    }
-  );
 }
 
 // Attach event listeners once the DOM is loaded
@@ -394,32 +361,19 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Attach event listener for back button (active only until review starts)
-document.getElementById('backButton').addEventListener('click', function() {
-  if (currentQuestionIndex > 0) {
-    const container = document.getElementById('chatContainer');
-    
-    // Remove the last two message wrappers (if they exist)
-    if (container.children.length >= 2) {
-      container.removeChild(container.lastElementChild); // Remove last message (presumed user answer)
-      container.removeChild(container.lastElementChild); // Remove its corresponding question bubble
-    } else if (container.children.length === 1) {
-      container.removeChild(container.lastElementChild);
-    }
-    
-    // Decrement the question index and remove the corresponding answer
-    currentQuestionIndex--;
-    answers.splice(currentQuestionIndex, 1);
-    document.getElementById('userInput').value = "";
-    
-    // Check if the last message already shows the previous question.
-    let lastWrapper = container.lastElementChild;
-    let previousQuestion = questions[currentQuestionIndex].question.trim();
-    let lastBubbleText = lastWrapper && lastWrapper.querySelector('.chat-bubble') 
-                          ? lastWrapper.querySelector('.chat-bubble').textContent.trim() 
-                          : "";
-    if (lastBubbleText !== previousQuestion) {
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0) {
+      const container = document.getElementById('chatContainer');
+      if (container.children.length >= 2) {
+        container.removeChild(container.lastElementChild);
+        container.removeChild(container.lastElementChild);
+      } else if (container.children.length === 1) {
+        container.removeChild(container.lastElementChild);
+      }
+      currentQuestionIndex--;
+      answers.splice(currentQuestionIndex, 1);
+      document.getElementById('userInput').value = "";
       appendBubble(questions[currentQuestionIndex].question, 'bot');
     }
-  }
+  });
 });
-
