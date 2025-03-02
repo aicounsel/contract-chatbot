@@ -280,16 +280,19 @@ function showReviewScreen() {
 // Edit a specific answer in review mode
 function editAnswer(index) {
   editIndex = index;
-  // Re-enable input controls for editing
+  // Re-enable input field and show the send button for editing
   document.getElementById('userInput').disabled = false;
   document.getElementById('sendButton').style.display = 'block';
-  // Optionally re-enable back button (if you wish to allow editing via back navigation)
+  
+  // Disable the back button in edit mode
   const backBtn = document.getElementById('backButton');
-  backBtn.style.pointerEvents = "auto";
-  backBtn.style.color = "";
-  // Load the current answer into the input field
+  backBtn.style.pointerEvents = "none";
+  backBtn.style.color = "transparent"; // or you can hide it completely with display: none
+  
+  // Load the current answer into the input field for editing
   document.getElementById('userInput').value = answers[index].answer;
   document.getElementById('userInput').focus();
+  
   // Clear the review screen and show the corresponding question bubble for editing
   clearChatContainer();
   appendBubble(questions[index].question, 'bot');
