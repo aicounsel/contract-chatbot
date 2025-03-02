@@ -185,7 +185,7 @@ body {
 
 /* Review header at the top of the review screen */
 .review-header {
-  width: calc(100% - 20px);  /* Same as review-item width */
+  width: calc(100% - 20px);  /* Container width with horizontal margins */
   margin: 10px auto 20px;
   text-align: center;
 }
@@ -202,12 +202,12 @@ body {
 }
 
 /* Review question wrapper:
-   - Spans full width minus 10px left/right margins.
-   - Has 20px padding from the top and left (adjustable).
-   - 5px vertical margin between boxes.
+   - Spans full width of container (with 10px margin on each side).
+   - Has 20px padding at the top and left for the question text.
+   - Minimal padding on the right so the grey box's right edge is the standard.
 */
 .review-question-wrapper {
-  width: calc(100% - 20px); /* 10px left + 10px right */
+  width: calc(100% - 20px); /* 10px left + 10px right margin */
   margin: 5px auto;
   padding: 20px 10px 10px 20px;  /* top:20px, right:10px, bottom:10px, left:20px */
   box-sizing: border-box;
@@ -215,55 +215,67 @@ body {
   border-radius: 15px;
 }
 
+/* Optional: Style the question text inside the grey box.
+   This ensures the text starts 20px from the left and 20px from the top.
+   (You can adjust these values here if needed.)
+*/
+.review-question {
+  margin: 0;
+  padding-top: 20px;
+  padding-left: 20px;
+  text-align: left;
+}
+
 /* Review answer wrapper:
-   - Spans full width with the same horizontal margins.
-   - Answer bubble will be placed below the question text.
-   - 10px gap from the question and extra 10px top padding.
+   - Spans the full width (same horizontal margins as the grey box).
+   - Has minimal vertical padding (so the answer bubble sits just below the question text).
+   - The answer bubble inside is right-aligned.
 */
 .review-answer-wrapper {
   width: calc(100% - 20px);
   margin: 5px auto;
-  padding: 10px;             /* Adjust as needed */
-  text-align: right;         /* Right-align the answer bubble */
+  padding: 5px 0;
+  text-align: right;
   box-sizing: border-box;
 }
 
 /* Styling for the client answer bubble within the review-answer-wrapper */
 .review-answer-wrapper .chat-bubble.user {
   display: inline-block;
-  padding: 8px 12px;         /* Less padding than Q&A bubbles */
+  padding: 5px 10px;         /* Less padding so it's just as wide as the text */
   border-radius: 15px;
   background-color: #706DEB;
   color: #fff;
-  text-align: left;          /* Internal text remains left-aligned */
-  max-width: 100%;
+  text-align: left;          /* Internal text remains left aligned */
+  max-width: auto;           /* Shrink to fit content */
+  margin-right: 20px;        /* Align its right edge with the grey box */
 }
 
-/* Edit button styling for review items */
+/* Edit button styling for review items:
+   - Placed below the answer bubble.
+   - Aligned to the right using auto left margin and fixed right margin.
+*/
 .edit-button {
   display: block;
-  margin: 5px 0 10px auto; /* auto left margin pushes the button to the right */
+  margin: 5px 20px 10px auto; /* auto left margin pushes button to the right; 20px right margin */
   padding: 5px 10px;
   background-color: #fff;
   color: #000;
   border: 1px solid #000;
   border-radius: 10px;
   cursor: pointer;
+  text-align: right;
 }
 
+/* Submit All Answers button wrapper (centered) */
 .review-submit-wrapper {
   text-align: center;
   margin-top: 20px;
 }
 
-.review-submit-wrapper .submit-button {
-  display: inline-block;  /* or block if you want */
-  margin: 0 auto;
-}
-
-/* Target the submit button inside the review-submit-wrapper */
+/* Submit All Answers button styling */
 .review-submit-wrapper .chat-bubble.submit-button {
-  background-color: #EB6DBB !important;
+  background-color: #EB6DBB !important; /* At rest */
   color: #fff !important;
   border: none !important;
   border-radius: 25px !important;
@@ -273,19 +285,16 @@ body {
   text-align: center !important;
   display: inline-block !important;
 }
-
 .review-submit-wrapper .chat-bubble.submit-button:hover {
-  background-color: #BC6DEB !important;
+  background-color: #BC6DEB !important; /* Hover */
 }
-
 .review-submit-wrapper .chat-bubble.submit-button:active,
 .review-submit-wrapper .chat-bubble.submit-button.pressed {
-  background-color: #322C5E !important;
+  background-color: #322C5E !important; /* Press */
   transform: scale(0.95) !important;
 }
-
 .review-submit-wrapper .chat-bubble.submit-button.success {
-  background-color: #706DEB !important;
+  background-color: #6DDBEB !important; /* Success state */
   color: #fff !important;
   border: none !important;
   transform: none !important;
