@@ -245,11 +245,61 @@ body {
   background-color: #706DEB; /* Invert to blue background */
   color: #fff;               /* Invert to white text */
 }
+/* ===== Review Page Styles ===== */
 
-/* Review header styles */
+/* Make each review item span the width of the chat window, minus 20px padding on each side.
+   Also, add 10px margin between each review item. */
+.review-item {
+  position: relative;             /* Enables absolute positioning for inner elements */
+  width: calc(100% - 40px);         /* 20px left and right padding (total 40px) */
+  margin: 10px auto;              /* 10px vertical margin and centered horizontally */
+  padding: 20px;                  /* Internal padding for content */
+  background-color: #F2F2F2;        /* Grey background */
+  border-radius: 15px;            /* Rounded corners */
+  box-sizing: border-box;         /* Ensures padding is included in the width */
+}
+
+/* The question bubble inside the review item:
+   - It remains at the top left (default document flow)
+   - Uses the bot bubble styling but you can adjust the padding if needed */
+.review-item .chat-bubble.bot {
+  margin: 0 0 10px 0;             /* Bottom margin to separate from answer/edit area */
+  padding: 10px 15px;             /* Slightly smaller padding than in the chat */
+  text-align: left;
+}
+
+/* The answer bubble (client answer) should be anchored to the bottom right.
+   We set it as absolute within the review item.
+   Use less padding than the main chat bubbles. */
+.review-item .chat-bubble.user {
+  position: absolute;
+  bottom: 20px;                   /* 20px from the bottom of the review item */
+  right: 20px;                    /* 20px from the right side */
+  margin: 0;
+  padding: 5px 10px;              /* Less padding */
+  text-align: left;
+  border-radius: 15px;            /* Fully rounded */
+}
+
+/* The edit button should be anchored to the bottom left of the review item.
+   Its padding should align with the 20px margins. */
+.review-item .edit-button {
+  position: absolute;
+  bottom: 20px;                   /* 20px from the bottom */
+  left: 20px;                     /* 20px from the left */
+  padding: 5px 10px;
+  background-color: #706DEB;      /* Blue (or your chosen color) */
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Review header styling at the top of the review screen */
 .review-header {
+  width: calc(100% - 40px);       /* Same width as review items */
+  margin: 10px auto 20px;         /* Some margin above and below */
   text-align: center;
-  margin-bottom: 15px;
 }
 .review-header h2 {
   font-family: 'Roboto Slab', serif;
@@ -260,53 +310,10 @@ body {
 .review-header p {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-  margin: 5px 0 15px;
+  margin: 5px 0 0;
 }
 
-/* Review item styles */
-.review-item {
-  background-color: #F2F2F2;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  padding: 10px;
-  margin: 10px auto;
-  max-width: 75%;
-}
-.review-item .chat-bubble.bot {
-  margin-bottom: 5px;
-}
-.review-item .chat-bubble.user {
-  margin-bottom: 5px;
-  text-align: left; /* Ensure client text is left aligned */
-}
-
-/* Edit button for review items */
-.edit-button {
-  background-color: #706DEB;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-  display: block;
-  margin: 5px auto 0;
-}
-
-/* Final submit button styles */
-.review-submit-wrapper {
-  text-align: center;
-  margin-top: 20px;
-}
-.submit-button {
-  display: inline-block;
-  padding: 15px 20px;
-  border: 2px solid #706DEB;
-  border-radius: 25px;
-  background-color: transparent;
-  color: #706DEB;
-  cursor: pointer;
-}
-.submit-button:hover {
-  background-color: #706DEB;
-  color: #fff;
+/* Ensure that when the review screen loads, the chat container scrolls to the top */
+.review-container {
+  scroll-behavior: smooth;
 }
