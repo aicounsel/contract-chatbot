@@ -218,9 +218,11 @@ function submitAnswers() {
     documentId: documentId,
     answers: answers
   };
+
   console.log("Submitting payload:", payload);
   const endpoint = "https://prod-167.westus.logic.azure.com:443/workflows/2e53afbe6c614ab59242a6a9078560e9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FzgeCCHQZRloueUUzI_2RjRTLeRKbkKyey39u_kSUyI";
-  fetch(endpoint, {
+
+  return fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
@@ -233,12 +235,15 @@ function submitAnswers() {
   })
   .then(data => {
     appendBubble("Success! You may close this window.", "bot");
+    return data;
   })
   .catch(error => {
-    appendBubble("Error submitting. Email info@aicounsel.co for instructions.", "bot");
+    appendBubble("Error submitting answers. Email info@aicounsel.co for instructions.", "bot");
     console.error(error);
+    throw error;
   });
 }
+
 
 // 7. Review and Edit Section functions
 function clearChatContainer() {
