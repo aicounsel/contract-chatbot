@@ -297,13 +297,30 @@ function appendSubmitButton() {
   const submitBtn = document.createElement('div');
   submitBtn.className = 'chat-bubble outline submit-button';
   submitBtn.textContent = 'Submit All Answers';
+  
   submitBtn.addEventListener('click', function() {
-    submitAnswers();
+    // If already disabled, do nothing
+    if (submitBtn.disabled) return;
+    
+    // Mark button as pressed and disable it
+    submitBtn.classList.add('pressed');
+    submitBtn.disabled = true;
+    
+    // Call submitAnswers() and then update the button text on success
+    submitAnswers().then(data => {
+      submitBtn.textContent = 'Success!';
+    }).catch(error => {
+      // Optionally, you might want to re-enable the button on error so the user can try again
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('pressed');
+      submitBtn.textContent = 'Submit All Answers';
+    });
   });
   
   submitWrapper.appendChild(submitBtn);
   container.appendChild(submitWrapper);
 }
+
 function showReviewScreen() {
   clearChatContainer();
   
