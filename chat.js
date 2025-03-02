@@ -333,11 +333,11 @@ function processSend() {
     });
     currentQuestionIndex++;
     inputField.value = "";
-    if (currentQuestionIndex < questions.length) {
-      setTimeout(showNextQuestion, 500);
-    } else {
-      showReviewPrompt();
-    }
+   if (currentQuestionIndex < questions.length) {
+  setTimeout(showNextQuestion, 500);
+} else {
+  setTimeout(showReviewPrompt, 2000);
+}
   }
 }
 
