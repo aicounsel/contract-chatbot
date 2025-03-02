@@ -243,27 +243,33 @@ function appendSubmitButton() {
   submitBtn.textContent = 'Submit All Answers';
   
   submitBtn.addEventListener('click', function() {
-    // If already disabled, do nothing.
-    if (submitBtn.disabled) return;
-    
-    // Change text to "Please wait..." and add pressed state.
-    submitBtn.textContent = "Please wait...";
-    submitBtn.classList.add('pressed');
-    submitBtn.disabled = true;
-    
-    // Call the submission function.
-    submitAnswers().then(data => {
-      // On success, remove the pressed class, add success class, and update text.
-      submitBtn.classList.remove('pressed');
-      submitBtn.classList.add('success');
-      submitBtn.textContent = "Success!";
-    }).catch(error => {
-      // On error, re-enable the button and revert text and style.
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('pressed');
-      submitBtn.textContent = "Submit All Answers";
-    });
+  if (submitBtn.disabled) return;
+  
+  // Disable all edit buttons so the client cannot re-edit during submission.
+  const editBtns = document.querySelectorAll('.edit-button');
+  editBtns.forEach(function(btn) {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.5';
   });
+  
+  // Change text to "Please wait..." and add pressed state.
+  submitBtn.textContent = "Please wait...";
+  submitBtn.classList.add('pressed');
+  submitBtn.disabled = true;
+  
+  // Call the submission function.
+  submitAnswers().then(data => {
+    submitBtn.classList.remove('pressed');
+    submitBtn.classList.add('success');
+    submitBtn.textContent = "Success!";
+  }).catch(error => {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('pressed');
+    submitBtn.textContent = "Submit All Answers";
+  });
+});
+
   
   submitWrapper.appendChild(submitBtn);
   container.appendChild(submitWrapper);
