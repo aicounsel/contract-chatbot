@@ -234,9 +234,10 @@ body {
 .review-answer-wrapper {
   width: calc(100% - 20px);
   margin: 5px auto;
-  padding: 10px 0; /*10 0*/
+  padding: 10px 10px 10px 10px;
   text-align: right;
   box-sizing: border-box;
+  margin-right: 10px;
 }
 
 /* Styling for the client answer bubble within the review-answer-wrapper */
@@ -248,7 +249,6 @@ body {
   color: #fff;
   text-align: left;          /* Internal text remains left aligned */
   max-width: auto;           /* Shrink to fit content */
-  margin-right: 10px;        /* Align its right edge with the grey box */ /*20*/
 }
 
 /* Edit button styling for review items:
