@@ -386,7 +386,7 @@ function submitAnswers() {
     return response.json();
   })
   .then(data => {
-    appendBubble("Success! You may close this window.", "bot");
+    appendBubble("Success! You may close this window. If you have any questions, email info@aicounsel.co", "bot");
     return data;
   })
   .catch(error => {
