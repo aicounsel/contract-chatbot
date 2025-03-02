@@ -251,29 +251,35 @@ function clearChatContainer() {
 }
 function appendReviewItem(item, index) {
   const container = document.getElementById('chatContainer');
-  const reviewWrapper = document.createElement('div');
-  reviewWrapper.className = 'review-item';
-  
+
+  // Create a wrapper for the question
+  const questionWrapper = document.createElement('div');
+  questionWrapper.className = 'review-question-wrapper';
   const questionElem = document.createElement('div');
   questionElem.className = 'chat-bubble bot';
   questionElem.textContent = item.question;
-  
+  questionWrapper.appendChild(questionElem);
+  container.appendChild(questionWrapper);
+
+  // Create a wrapper for the answer, ensuring it is right-aligned
+  const answerWrapper = document.createElement('div');
+  answerWrapper.className = 'review-answer-wrapper';
   const answerElem = document.createElement('div');
   answerElem.className = 'chat-bubble user';
   answerElem.textContent = item.answer;
-  
+  answerWrapper.appendChild(answerElem);
+  container.appendChild(answerWrapper);
+
+  // Create an edit button that is outside the answer bubble (below it)
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
   editBtn.textContent = 'Edit';
   editBtn.addEventListener('click', function() {
     editAnswer(index);
   });
-  
-  reviewWrapper.appendChild(questionElem);
-  reviewWrapper.appendChild(answerElem);
-  reviewWrapper.appendChild(editBtn);
-  container.appendChild(reviewWrapper);
+  container.appendChild(editBtn);
 }
+
 function appendReviewHeader() {
   const container = document.getElementById('chatContainer');
   const headerWrapper = document.createElement('div');
