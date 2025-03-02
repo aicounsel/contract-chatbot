@@ -248,39 +248,32 @@ body {
   cursor: pointer;
 }
 
-/* Submit All Answers button wrapper (centered) */
-.review-submit-wrapper {
-  text-align: center;
-  margin-top: 20px;
+/* Target the submit button inside the review-submit-wrapper */
+.review-submit-wrapper .chat-bubble.submit-button {
+  background-color: #EB6DBB !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 15px 20px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s, transform 0.1s !important;
+  text-align: center !important;
+  display: inline-block !important;
 }
 
-/* ===== Submit All Answers Button Styles ===== */
-.submit-button {
-  background-color: #EB6DBB; /* At rest */
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.1s;
-  text-align: center;
-  display: inline-block;
+.review-submit-wrapper .chat-bubble.submit-button:hover {
+  background-color: #BC6DEB !important;
 }
 
-.submit-button:hover {
-  background-color: #BC6DEB; /* On hover */
+.review-submit-wrapper .chat-bubble.submit-button:active,
+.review-submit-wrapper .chat-bubble.submit-button.pressed {
+  background-color: #322C5E !important;
+  transform: scale(0.95) !important;
 }
 
-.submit-button:active,
-.submit-button.pressed {
-  background-color: #322C5E; /* On press */
-  transform: scale(0.95);   /* Shrink a little */
-}
-
-/* Success state for the button */
-.submit-button.success {
-  background-color: #6DDBEB; /* After success */
-  transform: none;           /* Reset any scale transform */
+.review-submit-wrapper .chat-bubble.submit-button.success {
+  background-color: #6DDBEB !important;
+  transform: none !important;
 }
 
 
