@@ -301,22 +301,44 @@ function appendSubmitButton() {
 }
 function showReviewScreen() {
   clearChatContainer();
-  const container = document.getElementById('chatContainer');
-  container.scrollTop = 0; // Scroll to the top
+  
+  // Disable input and hide send button on review screen
+  document.getElementById('userInput').disabled = true;
+  document.getElementById('sendButton').style.display = 'none';
+  
+  // Optionally, also disable the back button so nothing can be typed or undone
+  document.getElementById('backButton').style.pointerEvents = "none";
+  document.getElementById('backButton').style.color = "transparent";
+  
   appendReviewHeader();
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
   appendSubmitButton();
+  
+  // Scroll to the top of the container so the header is visible
+  document.getElementById('chatContainer').scrollTop = 0;
 }
 
 function editAnswer(index) {
   editIndex = index;
+  // Re-enable the input field and show the send button for editing
+  document.getElementById('userInput').disabled = false;
+  document.getElementById('sendButton').style.display = 'block';
+  // Optionally re-enable the back button if needed for edit mode:
+  const backBtn = document.getElementById('backButton');
+  backBtn.style.pointerEvents = "auto";
+  backBtn.style.color = ""; // Reset the color to its default
+
+  // Load the current answer into the input field for editing
   document.getElementById('userInput').value = answers[index].answer;
   document.getElementById('userInput').focus();
+  // Clear the review screen so the user can see the input area
   clearChatContainer();
+  // Display the corresponding question bubble so the user knows what they're editing
   appendBubble(questions[index].question, 'bot');
 }
+
 function processSend() {
   const inputField = document.getElementById('userInput');
   const userText = inputField.value.trim();
