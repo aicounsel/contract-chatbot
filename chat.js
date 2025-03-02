@@ -394,19 +394,32 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Attach event listener for back button (active only until review starts)
-  document.getElementById('backButton').addEventListener('click', function() {
-    if (currentQuestionIndex > 0) {
-      const container = document.getElementById('chatContainer');
-      if (container.children.length >= 2) {
-        container.removeChild(container.lastElementChild);
-        container.removeChild(container.lastElementChild);
-      } else if (container.children.length === 1) {
-        container.removeChild(container.lastElementChild);
-      }
-      currentQuestionIndex--;
-      answers.splice(currentQuestionIndex, 1);
-      document.getElementById('userInput').value = "";
+document.getElementById('backButton').addEventListener('click', function() {
+  if (currentQuestionIndex > 0) {
+    const container = document.getElementById('chatContainer');
+    
+    // Remove the last two message wrappers (if they exist)
+    if (container.children.length >= 2) {
+      container.removeChild(container.lastElementChild); // Remove last message (presumed user answer)
+      container.removeChild(container.lastElementChild); // Remove its corresponding question bubble
+    } else if (container.children.length === 1) {
+      container.removeChild(container.lastElementChild);
+    }
+    
+    // Decrement the question index and remove the corresponding answer
+    currentQuestionIndex--;
+    answers.splice(currentQuestionIndex, 1);
+    document.getElementById('userInput').value = "";
+    
+    // Check if the last message already shows the previous question.
+    let lastWrapper = container.lastElementChild;
+    let previousQuestion = questions[currentQuestionIndex].question.trim();
+    let lastBubbleText = lastWrapper && lastWrapper.querySelector('.chat-bubble') 
+                          ? lastWrapper.querySelector('.chat-bubble').textContent.trim() 
+                          : "";
+    if (lastBubbleText !== previousQuestion) {
       appendBubble(questions[currentQuestionIndex].question, 'bot');
     }
-  });
+  }
 });
+
