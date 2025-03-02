@@ -242,13 +242,23 @@ body {
 /* Edit button styling for review items */
 .edit-button {
   display: block;
-  margin: 5px auto 10px;
+  margin: 5px 0 10px auto; /* auto left margin pushes the button to the right */
   padding: 5px 10px;
   background-color: #fff;
   color: #000;
   border: 1px solid #000;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.review-submit-wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.review-submit-wrapper .submit-button {
+  display: inline-block;  /* or block if you want */
+  margin: 0 auto;
 }
 
 /* Target the submit button inside the review-submit-wrapper */
@@ -275,8 +285,8 @@ body {
 }
 
 .review-submit-wrapper .chat-bubble.submit-button.success {
-  background-color: #6DDBEB !important;
-   color: #fff !important;
+  background-color: #706DEB !important;
+  color: #fff !important;
   border: none !important;
   transform: none !important;
 }
