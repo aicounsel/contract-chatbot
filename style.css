@@ -1,10 +1,18 @@
+/* ============================================================================
+   Global Styles
+============================================================================ */
+
 /* Body styling */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #E5E8F0; /* Page background */
+  background-color: #E5E8F0;  /* Page background */
   margin: 0;
   padding: 0;
 }
+
+/* ============================================================================
+   Chat Window Container & Header
+============================================================================ */
 
 /* Chat window container */
 .chat-window {
@@ -13,11 +21,11 @@ body {
   margin: 50px auto;
   background-color: #fff;
   border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
-/* Chat header styling */
+/* Chat header */
 .chat-header {
   background-color: #fff;
   padding: 25px 15px;
@@ -27,12 +35,12 @@ body {
 
 .chat-header .logo {
   display: block;
-  max-height: 90px;      /* Smaller logo */
-  margin: 0 auto 10px;   /* Centered with 10px bottom margin */
+  max-height: 90px;         /* Smaller logo */
+  margin: 0 auto 10px;      /* Centered with bottom margin */
   vertical-align: middle;
 }
 
-/* Date divider styling */
+/* Date divider (inside chat window) */
 .date-divider {
   text-align: center;
   font-size: 14px;
@@ -40,11 +48,15 @@ body {
   padding: 10px 0;
 }
 
-/* Chat container styling */
+/* ============================================================================
+   Chat Container & Controls (Q&A Section)
+============================================================================ */
+
+/* Chat container for messages */
 .chat-container {
   background-color: #fff;
   height: 400px;
-  padding: 20px;  /* Extra padding between edges and bubbles */
+  padding: 20px;           /* Space between container edges and bubbles */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -52,7 +64,7 @@ body {
 
 /* Message wrapper for each message */
 .message-wrapper {
-  margin-bottom: 10px;
+  margin-bottom: 10px;  /* Spacing between messages */
   width: 100%;
 }
 .message-wrapper.bot {
@@ -62,66 +74,56 @@ body {
   text-align: right;
 }
 
-/* Message label styling (placed above messages) */
+/* Message label styling (appears above each bubble) */
 .message-label {
   font-size: 10px;
   margin-bottom: 3px;
   color: #666;
 }
 
-/* Chat bubble styling */
+/* Chat bubble base style */
 .chat-bubble {
-  display: inline-block;   /* Only as wide as the text up to a max */
-  padding: 15px 20px;       /* Extra padding inside bubbles */
-  border-radius: 25px;      /* More rounded */
+  display: inline-block;       /* Only as wide as the content up to a max */
+  padding: 15px 20px;           /* Default padding; adjust as needed */
+  border-radius: 25px;          /* Fully rounded by default */
   word-wrap: break-word;
   max-width: 75%;
 }
 
-/* New style for the acknowledgement message wrapper (centered) */
-.message-wrapper.acknowledgement {
-  width: 100%;
-  text-align: center;  /* Center the contents */
-  margin-bottom: 10px;
+/* Bot bubble modifications */
+.chat-bubble.bot {
+  background-color: #F2F2F2;    /* Updated grey */
+  color: #000;
+  border-top-left-radius: 0;    /* Square top-left */
 }
 
-/* New style for an outlined bubble */
+/* User bubble modifications */
+.chat-bubble.user {
+  background-color: #706DEB;    /* Updated blue */
+  color: #fff;
+  text-align: left;             /* Text inside remains left-aligned */
+  border-top-right-radius: 0;   /* Square top-right */
+}
+
+/* Outlined bubble for acknowledgement steps */
 .chat-bubble.outline {
   display: inline-block;
   padding: 15px 20px;
   border-radius: 25px;
   max-width: 75%;
-  border: 2px solid #706DEB;  /* Blue border using your updated blue color */
-  background-color: transparent; /* Transparent background */
-  color: #706DEB;             /* Blue text */
-  cursor: pointer;            /* Indicates it's clickable */
-}
-
-/* New style for acknowledgement text above the outlined button */
-.ack-text {
-  font-size: 14px;
+  border: 2px solid #706DEB;    /* Blue border */
+  background-color: transparent;
   color: #706DEB;
-  text-align: center;
-  margin-bottom: 10px;
+  cursor: pointer;
 }
 
-
-/* Bot bubbles: background set to updated grey (#F2F2F2) */
-.chat-bubble.bot {
-  background-color: #F2F2F2;
-  color: #000;
-  border-top-left-radius: 0;  /* Square top-left */
-}
-
-/* User bubbles: background set to updated blue (#706DEB) */
-.chat-bubble.user {
+/* Hover state for outlined bubbles */
+.chat-bubble.outline:hover {
   background-color: #706DEB;
   color: #fff;
-  text-align: left;
-  border-top-right-radius: 0;  /* Square top-right */
 }
 
-/* Chat controls styling */
+/* Chat controls container */
 #chatControls {
   display: flex;
   padding: 15px 20px 40px;  /* Extra bottom padding */
@@ -129,19 +131,19 @@ body {
   align-items: center;
 }
 
-/* Back control styling as text */
+/* Back button styling as text */
 #backButton {
   font-weight: bold;
   color: #706DEB;
   cursor: pointer;
-  margin-left: 20px;   /* Align with left edge of bot bubbles (matches container padding) */
+  margin-left: 20px;   /* Align with left edge (matches container padding) */
   margin-right: 20px;
   user-select: none;
-  border-radius: 25px; /* Rounded like bubbles */
+  border-radius: 25px;
   padding: 10px 15px;
 }
 
-/* Input wrapper for positioning the send button inside */
+/* Input wrapper to position send button inside */
 .input-wrapper {
   position: relative;
   flex-grow: 1;
@@ -159,11 +161,11 @@ body {
   box-sizing: border-box;
 }
 
-/* Send button styled as a paper airplane icon, positioned inside input */
+/* Send button (paper airplane icon) inside input */
 #sendButton {
   position: absolute;
   top: 50%;
-  right: 20px;  /* Adjusted to align with input field's right edge */
+  right: 20px;                /* Aligns with input field's right edge */
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -174,24 +176,115 @@ body {
   background-size: cover;
 }
 
-/* Chat info bubble styling: same width as chat window */
-.chat-info {
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto 50px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+/* ============================================================================
+   Review Page Styles
+============================================================================ */
+
+/* Review header at the top of the review screen */
+.review-header {
+  width: calc(100% - 20px);  /* Same as review-item width */
+  margin: 10px auto 20px;
   text-align: center;
 }
-.chat-info p {
+.review-header h2 {
+  font-family: 'Roboto Slab', serif;
+  font-size: 24px;
   margin: 0;
-  font-size: 14px;
-  color: #333;
+  font-weight: bold;
+}
+.review-header p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  margin: 5px 0 0;
 }
 
-/* Mobile adjustments */
+/* Review question wrapper:
+   - Spans full width minus 10px left/right margins.
+   - Has 20px padding from the top and left (adjustable).
+   - 5px vertical margin between boxes.
+*/
+.review-question-wrapper {
+  width: calc(100% - 20px); /* 10px left + 10px right */
+  margin: 5px auto;
+  padding: 20px 10px 10px 20px;  /* top:20px, right:10px, bottom:10px, left:20px */
+  box-sizing: border-box;
+  background-color: #F2F2F2;
+  border-radius: 15px;
+}
+
+/* Review answer wrapper:
+   - Spans full width with the same horizontal margins.
+   - Answer bubble will be placed below the question text.
+   - 10px gap from the question and extra 10px top padding.
+*/
+.review-answer-wrapper {
+  width: calc(100% - 20px);
+  margin: 5px auto;
+  padding: 10px;             /* Adjust as needed */
+  text-align: right;         /* Right-align the answer bubble */
+  box-sizing: border-box;
+}
+
+/* Styling for the client answer bubble within the review-answer-wrapper */
+.review-answer-wrapper .chat-bubble.user {
+  display: inline-block;
+  padding: 8px 12px;         /* Less padding than Q&A bubbles */
+  border-radius: 15px;
+  background-color: #706DEB;
+  color: #fff;
+  text-align: left;          /* Internal text remains left-aligned */
+  max-width: 100%;
+}
+
+/* Edit button styling for review items */
+.edit-button {
+  display: block;
+  margin: 5px auto 10px;
+  padding: 5px 10px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Submit All Answers button wrapper (centered) */
+.review-submit-wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Submit All Answers button styling */
+.submit-button {
+  background-color: #322C5E;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  display: inline-block;
+  text-align: center;
+}
+
+.submit-button:hover {
+  background-color: #2b2452;
+}
+
+.submit-button:active,
+.submit-button.pressed {
+  background-color: #1f193f;
+  transform: scale(0.98);
+}
+
+.submit-button:disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ============================================================================
+   Mobile Adjustments
+============================================================================ */
 @media (max-width: 600px) {
   .chat-window {
     margin: 20px auto;
@@ -214,11 +307,10 @@ body {
     max-width: 90%;
   }
   
-  /* Ensure chat controls remain in a row on mobile */
   #chatControls {
     flex-direction: row !important;
     align-items: center;
-    padding: 15px 20px 40px; 
+    padding: 15px 20px 40px;
   }
   
   .input-wrapper {
@@ -226,7 +318,7 @@ body {
   }
   
   #userInput {
-    padding: 10px 60px 10px 20px; 
+    padding: 10px 60px 10px 20px;
     font-size: 16px;
   }
   
@@ -240,119 +332,4 @@ body {
     margin-left: 10px;
     margin-bottom: 0;
   }
-}
-.chat-bubble.outline:hover {
-  background-color: #706DEB; /* Invert to blue background */
-  color: #fff;               /* Invert to white text */
-}
-/* ===== Review Page Styles ===== */
-
-/* Review Question Wrapper:
-   - Spans the full width of the chat window minus 10px on each side.
-   - Has 20px padding from the top and left (adjustable via variables or comments).
-*/
-.review-question-wrapper {
-  width: calc(100% - 20px); /* 10px left + 10px right margin */
-  margin: 5px auto;         /* 5px vertical margin between boxes */
-  padding: 20px 10px 10px 20px;  /* top:20px, right:10px, bottom:10px, left:20px */
-  box-sizing: border-box;
-  background-color: #F2F2F2;  /* Grey background */
-  border-radius: 15px;
-}
-
-/* Review Answer Wrapper:
-   - Spans the full width of the chat window with the same horizontal margins.
-   - The answer bubble inside is right-aligned.
-   - Has a 10px gap from the question (margin-bottom) and extra 10px top padding.
-*/
-.review-answer-wrapper {
-  width: calc(100% - 20px);
-  margin: 5px auto;
-  padding: 10px;              /* Adjust padding as needed */
-  text-align: right;          /* Right-align the answer bubble */
-  box-sizing: border-box;
-}
-
-/* Styling for the client answer bubble within the review-answer-wrapper */
-.review-answer-wrapper .chat-bubble.user {
-  display: inline-block;
-  padding: 8px 12px;         /* Less padding than during Q&A */
-  border-radius: 15px;
-  background-color: #706DEB;  /* Client bubble blue */
-  color: #fff;
-  text-align: left;          /* Text inside remains left aligned */
-  max-width: 100%;
-}
-
-/* Edit Button:
-   - Placed below the answer wrapper.
-   - White background with black text and border.
-*/
-.edit-button {
-  display: block;
-  margin: 5px auto 10px;      /* Centered and with vertical spacing */
-  padding: 5px 10px;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #000;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-/* Review header (if not already defined) */
-.review-header {
-  width: calc(100% - 20px);
-  margin: 10px auto 20px;
-  text-align: center;
-}
-.review-header h2 {
-  font-family: 'Roboto Slab', serif;
-  font-size: 24px;
-  margin: 0;
-  font-weight: bold;
-}
-.review-header p {
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  margin: 5px 0 0;
-}
-
-
-/* Submit All Answers button:
-   - Centered on the screen.
-   - Styled as an outlined bubble (blue outline).
-*/
-.review-submit-wrapper {
-  text-align: center;
-  margin-top: 20px;
-}
-/* ===== Submit Button Styles ===== */
-.submit-button {
-  background-color: #322C5E; /* Solid background */
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.1s;
-  text-align: center;
-  display: inline-block;
-}
-
-/* Hover state: slightly darker background */
-.submit-button:hover {
-  background-color: #2b2452;
-}
-
-/* Active/Pressed state: even darker with a slight scale-down effect */
-.submit-button:active,
-.submit-button.pressed {
-  background-color: #1f193f;
-  transform: scale(0.98);
-}
-
-/* Disabled state: lower opacity and no pointer events */
-.submit-button:disabled {
-  pointer-events: none;
-  opacity: 0.7;
 }
