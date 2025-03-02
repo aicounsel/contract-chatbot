@@ -245,59 +245,52 @@ body {
   background-color: #706DEB; /* Invert to blue background */
   color: #fff;               /* Invert to white text */
 }
-/* ===== Review Page Styles (Updated) ===== */
+/* ===== Review Page Styles ===== */
 
-/* Each review item (grey box)
-   - Spans the width of the chat window minus 10px padding on left and right (i.e. 10px each side).
-   - Has 5px vertical margin between boxes.
+/* Review Question Wrapper:
+   - Spans the full width of the chat window minus 10px on each side.
+   - Has 20px padding from the top and left (adjustable via variables or comments).
 */
-.review-item {
-  width: calc(100% - 20px);  /* 10px left + 10px right = 20px total */
-  margin: 5px auto;          /* 5px between boxes, centered horizontally */
-  padding: 0;                /* We'll manage inner padding for individual elements */
-  background-color: #F2F2F2;
-  border-radius: 15px;
-  box-sizing: border-box;
-  position: relative;
-}
-
-/* The question text inside the grey box:
-   - Should have 20px padding from the top and left.
-   - (You can adjust right and bottom as needed.)
-*/
-.review-item .review-question {
+.review-question-wrapper {
+  width: calc(100% - 20px); /* 10px left + 10px right margin */
+  margin: 5px auto;         /* 5px vertical margin between boxes */
   padding: 20px 10px 10px 20px;  /* top:20px, right:10px, bottom:10px, left:20px */
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
-  color: #000;
+  box-sizing: border-box;
+  background-color: #F2F2F2;  /* Grey background */
+  border-radius: 15px;
 }
 
-/* The answer bubble:
-   - Placed as a separate block below the question.
-   - Has a 10px margin-top (i.e. 10px space from the question).
-   - Is right aligned (using margin-left: auto).
-   - Uses less padding than the question bubble.
+/* Review Answer Wrapper:
+   - Spans the full width of the chat window with the same horizontal margins.
+   - The answer bubble inside is right-aligned.
+   - Has a 10px gap from the question (margin-bottom) and extra 10px top padding.
 */
-.review-item .review-answer {
-  display: block;
-  margin-top: 10px;
-  padding: 10px;  /* Adjust as needed */
-  text-align: right;
+.review-answer-wrapper {
+  width: calc(100% - 20px);
+  margin: 5px auto;
+  padding: 10px;              /* Adjust padding as needed */
+  text-align: right;          /* Right-align the answer bubble */
+  box-sizing: border-box;
+}
+
+/* Styling for the client answer bubble within the review-answer-wrapper */
+.review-answer-wrapper .chat-bubble.user {
+  display: inline-block;
+  padding: 8px 12px;         /* Less padding than during Q&A */
+  border-radius: 15px;
   background-color: #706DEB;  /* Client bubble blue */
   color: #fff;
-  border-radius: 15px;
-  margin-left: auto;  /* Push it to the right */
+  text-align: left;          /* Text inside remains left aligned */
   max-width: 100%;
 }
 
-/* The edit button:
-   - Should appear below the answer bubble.
-   - Is aligned to the lower left of the grey box.
-   - Has a white background, black text, and a black outline.
+/* Edit Button:
+   - Placed below the answer wrapper.
+   - White background with black text and border.
 */
-.review-item .edit-button {
-  display: inline-block;
-  margin-top: 10px;
+.edit-button {
+  display: block;
+  margin: 5px auto 10px;      /* Centered and with vertical spacing */
   padding: 5px 10px;
   background-color: #fff;
   color: #000;
@@ -306,23 +299,24 @@ body {
   cursor: pointer;
 }
 
-/* Review header styling (placed at the top of the review screen) */
+/* Review header (if not already defined) */
 .review-header {
-  width: calc(100% - 20px);  /* Same as review-item width */
-  margin: 5px auto 10px;
+  width: calc(100% - 20px);
+  margin: 10px auto 20px;
   text-align: center;
 }
 .review-header h2 {
   font-family: 'Roboto Slab', serif;
   font-size: 24px;
-  font-weight: bold;
   margin: 0;
+  font-weight: bold;
 }
 .review-header p {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   margin: 5px 0 0;
 }
+
 
 /* Submit All Answers button:
    - Centered on the screen.
