@@ -1,3 +1,4 @@
+
 // Global variables
 let questions = []; // Array of { placeholder, question }
 let currentQuestionIndex = 0;
@@ -310,7 +311,7 @@ function showReviewScreen() {
 }
 
 function editAnswer(index) {
-   = index;
+  editIndex = index;
   document.getElementById('userInput').value = answers[index].answer;
   document.getElementById('userInput').focus();
   clearChatContainer();
@@ -321,13 +322,12 @@ function processSend() {
   const userText = inputField.value.trim();
   if (userText === "") return;
   
-if (editIndex !== null) {
-  answers[editIndex].answer = userText;
-  appendBubble(userText, 'user');
-  editIndex = null;
-  inputField.value = "";  // Clear the input field after editing
-  setTimeout(showReviewScreen, 500);
-} else {
+  if (editIndex !== null) {
+    answers[editIndex].answer = userText;
+    appendBubble(userText, 'user');
+    editIndex = null;
+    setTimeout(showReviewScreen, 500);
+  } else {
     appendBubble(userText, 'user');
     const currentQ = questions[currentQuestionIndex];
     answers.push({
