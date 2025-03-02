@@ -300,12 +300,15 @@ function appendSubmitButton() {
 }
 function showReviewScreen() {
   clearChatContainer();
+  const container = document.getElementById('chatContainer');
+  container.scrollTop = 0; // Scroll to the top
   appendReviewHeader();
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
   appendSubmitButton();
 }
+
 function editAnswer(index) {
   editIndex = index;
   document.getElementById('userInput').value = answers[index].answer;
