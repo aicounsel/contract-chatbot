@@ -1,5 +1,3 @@
-
-
 /******************************************************
  * Chatbot Script (chat.js)
  * 
@@ -18,8 +16,7 @@ let questions = [];          // Array of objects: { placeholder, question }
 let currentQuestionIndex = 0;
 let answers = [];            // Array of objects: { placeholder, question, answer }
 let editIndex = null;        // For review/edit mode
-let savedScrollPos = 0;      // Added this missing variable
-let editScrollPos = null;  // To store the review scroll position before editing
+let editScrollPos = null;    // To store the review scroll position before editing
 
 /* -------------------------
    Acknowledgement Step Function
@@ -441,7 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Begin the session by fetching questions and then showing the single welcome message
   fetchQuestionsAndShowCount();
-});
 
   // Attach send button and Enter key event listener
   document.getElementById('sendButton').addEventListener('click', processSend);
@@ -452,38 +448,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Fixed back button event listener
-document.getElementById('backButton').addEventListener('click', function() {
-  if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
-    const container = document.getElementById('chatContainer');
-    
-    // Find all message wrappers
-    const messageWrappers = container.querySelectorAll('.message-wrapper');
-    const messageCount = messageWrappers.length;
-    
-    if (messageCount >= 1) {
-      // Remove the current question (which is the last message bubble)
-      container.removeChild(messageWrappers[messageCount - 1]);
+  // Back button event listener
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
+      const container = document.getElementById('chatContainer');
       
-      // If there's a user answer for the current question, remove it too
-      if (messageCount >= 2 && messageWrappers[messageCount - 2].classList.contains('user')) {
-        container.removeChild(messageWrappers[messageCount - 2]);
+      // Find all message wrappers
+      const messageWrappers = container.querySelectorAll('.message-wrapper');
+      const messageCount = messageWrappers.length;
+      
+      if (messageCount >= 1) {
+        // Remove the current question (which is the last message bubble)
+        container.removeChild(messageWrappers[messageCount - 1]);
+        
+        // If there's a user answer for the current question, remove it too
+        if (messageCount >= 2 && messageWrappers[messageCount - 2].classList.contains('user')) {
+          container.removeChild(messageWrappers[messageCount - 2]);
+        }
       }
+      
+      // Decrement the question index
+      currentQuestionIndex--;
+      
+      // Remove the last answer from our answers array if it exists
+      if (answers.length > currentQuestionIndex) {
+        answers.pop();
+      }
+      
+      // Clear the input field
+      document.getElementById('userInput').value = "";
     }
-    
-    // Decrement the question index
-    currentQuestionIndex--;
-    
-    // Remove the last answer from our answers array if it exists
-    if (answers.length > currentQuestionIndex) {
-      answers.pop();
-    }
-    
-    // Clear the input field
-    document.getElementById('userInput').value = "";
-    
-    // Important: We do NOT call showNextQuestion() here as that would
-    // add the previous question again
-  }
-});
+  });
 });
