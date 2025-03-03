@@ -301,32 +301,37 @@ function showReviewScreen() {
 // When editing an answer, disable the back button so no new answers are added
 function editAnswer(index) {
   editIndex = index;
+  
   // Remove the submit button wrapper from the chat controls, if it exists.
   const submitWrapper = document.querySelector('.review-submit-wrapper');
   if (submitWrapper) {
     submitWrapper.parentNode.removeChild(submitWrapper);
   }
 
+  // Ensure the chat controls container is visible.
+  document.getElementById('chatControls').style.display = 'flex';
+  
   // Re-enable the input field and show the send button for editing.
   const userInput = document.getElementById('userInput');
   userInput.disabled = false;
+  userInput.style.display = 'block'; // Ensure it's visible.
   document.getElementById('sendButton').style.display = 'block';
 
-  // Optionally, re-enable the back button for editing (or hide it if desired)
+  // Disable the back button in edit mode.
   const backBtn = document.getElementById('backButton');
-  backBtn.style.pointerEvents = "auto";
-  backBtn.style.color = ""; // Reset to default color
+  backBtn.style.pointerEvents = "none";
+  backBtn.style.color = "transparent"; // Hides it visually.
 
-  // Load the existing answer into the input field for editing.
+  // Load the existing answer into the input field.
   userInput.value = answers[index].answer;
   userInput.focus();
 
-  // Clear the review screen (but do not clear the chat controls)
+  // Clear the review screen so the user can see the input area.
   clearChatContainer();
-  // Show the corresponding question bubble so the user knows which question they are editing.
+
+  // Display the corresponding question bubble for context.
   appendBubble(questions[index].question, 'bot');
 }
-
 
 // Process send button press (handles both new answers and edits)
 function processSend() {
