@@ -367,7 +367,10 @@ body {
     width: 100%;
      text-align: center;
   }
-  
+  .review-info-bubble {
+  font-size: 14px;
+}
+   
   #userInput {
     padding: 10px 60px 10px 20px;
     font-size: 16px;
