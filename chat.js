@@ -131,6 +131,10 @@ function showQuestionCount() {
         "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
         "Let's begin",
         function() {
+          // Enable the input controls here once the user is ready
+          document.getElementById('userInput').disabled = false;
+          document.getElementById('sendButton').style.display = 'block';
+          // Now start the Q&A by showing the first question
           showNextQuestion();
         },
         false // Keep the "Let's begin" button visible but disable further clicks
@@ -138,6 +142,7 @@ function showQuestionCount() {
     }
   );
 }
+
 
 /* -------------------------
    Chat Message Functions (Q&A Mode)
@@ -416,7 +421,11 @@ function submitAnswers() {
    Event Listeners
 ------------------------- */
 document.addEventListener('DOMContentLoaded', function() {
-  // Chain the four initial acknowledgement steps:
+  // Disable the input field and send button initially
+  document.getElementById('userInput').disabled = true;
+  document.getElementById('sendButton').style.display = 'none';
+  
+  // Continue with the chained acknowledgement steps...
   showAcknowledgementStep(
     "Welcome to your AI Counsel Client Assistant! This secure chatbot collects essential information for your project through AI-generated questions tailored to your specific needs. Please note:",
     "Continue",
@@ -429,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
             "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
             "Continue",
             function() {
-              // After initial notices, fetch questions and show question count prompt
+              // After the initial notices, fetch the questions and then show the question count prompt
               fetchQuestionsAndShowCount();
             }
           );
