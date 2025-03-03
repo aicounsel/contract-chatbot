@@ -214,11 +214,11 @@ body {
 
 /*-------QUESTION--------*/ 
 .review-question-wrapper {
-  margin-bottom: 5px; /*changed from 10*/
+  margin-bottom: 5px;
 }
 .review-question {
   display: inline-block;
-  padding: 15px 20px;   /* changed from 10 10 */        
+  padding: 15px 20px;           
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
@@ -228,12 +228,12 @@ body {
 
 /*-------ANSWER--------*/ 
 .review-answer-wrapper {
-  margin-bottom: 5px; /*changed from 10*/
+  margin-bottom: 0px; /* negative test - was 5*/
   text-align: right;
 }
 .review-answer {
   display: inline-block;    
-  padding: 15px 20px; /* changed from 10 10 */       
+  padding: 15px 20px;       
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
@@ -255,13 +255,13 @@ body {
   border-radius: 25px;
   cursor: pointer;
   text-align: center;
-  margin-top: 0px;
+  margin-top: -10px; /* negative test - was 0*/
   margin-bottom: 20px;
   margin-left: auto;
   user-select: none;
 }
 
-/*SUBMIT ALL BUTTON*/
+/*--------SUBMIT ALL BUTTON----------*/
 
 /* Submit All Answers button wrapper (centered) */
 .review-submit-wrapper {
