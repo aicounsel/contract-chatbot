@@ -212,44 +212,34 @@ body {
   box-sizing: border-box;
 }
 
+/*-------QUESTION--------*/ 
 .review-question-wrapper {
-  margin-bottom: 10px; /* Adjust as needed */
+  margin-bottom: 5px; /*changed from 10*/
 }
-
-/* Review question bubble (grey) – same as bot bubble values */
 .review-question {
   display: inline-block;
-  padding: 10px 10px;         /* Same padding as .chat-bubble 15px 20px;*/
+  padding: 10px 10px;         
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
-  background-color: #F2F2F2;  /* #F2F2F2 Grey background */
+  background-color: #F2F2F2;  
   color: #000;
-  /*border-top-left-radius: 0;  /* Square top-left corner */*/
 }
 
-/* Review answer bubble (blue) – same as user bubble values */
-/* Ensure the review-answer wrapper right-aligns its content */
+/*-------ANSWER--------*/ 
 .review-answer-wrapper {
-  width: calc(100% - 20px); /* Full width minus margins */
-  margin: 5px auto;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: right;        /* Right-align inline content */
-  box-sizing: border-box;
+  margin-bottom: 5px; /*changed from 10*/
+  text-align: right;
 }
-
-/* Make the review answer bubble shrink to fit its text */
 .review-answer {
-  display: inline-block;    /* Shrink-to-fit content */
-  padding: 10px 10px;        /*Adjust padding as needed */
+  display: inline-block;    
+  padding: 10px 10px;        
   border-radius: 25px;
+  word-wrap: break-word;
   max-width: 75%;
   background-color: #706DEB;
   color: #fff;
-  text-align: left;         /* Internal text alignment */
-  /* Remove margin-left and margin-right to avoid extra space */
-  margin: 0;
+  text-align: left;        
 }
 
 /* Edit button for review items – aligned to the right */
@@ -257,7 +247,8 @@ body {
   display: inline-block;
   /*margin: 5px auto 10px auto; Centered horizontally if desired, or use auto on left only
   Alternatively, to force right alignment, you could use: */
-  margin-left: auto; margin-right: 20px;
+  margin-left: auto; 
+  margin-right: 20px;
   padding: 10px 10px;
   background-color: #fff;
   color: #000;
