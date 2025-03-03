@@ -438,26 +438,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Disable the input field and send button initially
   document.getElementById('userInput').disabled = true;
   document.getElementById('sendButton').style.display = 'none';
-  
-  // Continue with the chained acknowledgement steps...
+
+  // Single opening message with line breaks as specified.
   showAcknowledgementStep(
-    "Welcome to your AI Counsel Client Assistant! This secure chatbot collects essential information for your project through AI-generated questions tailored to your specific needs. Please note:",
-    "Continue",
+    "Welcome to AI Counsel! 👋 I'm your Client Assistant and I'll help collect the information we need for your project. A few quick notes:\n• This is a secure information collection tool\n• Please complete all questions in one session\n• Your best guess is fine if you're unsure about any answers\n• AI has pulled [XX] items that need your attention\nReady to get started?",
+    "Start answering",
     function() {
-      showAcknowledgementStep(
-        "This is a one-way collection tool, so it won't respond to questions.",
-        "Continue",
-        function() {
-          showAcknowledgementStep(
-            "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
-            "Continue",
-            function() {
-              // After the initial notices, fetch the questions and then show the question count prompt
-              fetchQuestionsAndShowCount();
-            }
-          );
-        }
-      );
+      // Once the user clicks the button, begin fetching the questions.
+      fetchQuestionsAndShowCount();
     }
   );
 
