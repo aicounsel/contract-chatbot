@@ -247,11 +247,12 @@ body {
 #chatContainer .edit-button {
   display: inline-block;
   padding: 5px 10px;
-  background-color: #80ADA0;
-  color: #000;
+  background-color: #FFFFFF;
+  color: #706DEB;
   font-weight: bold;
-  border: 1px solid #000;
-  border-radius: 10px;
+  text-transform: uppercase;
+  border: 1px solid #706DEB;
+  border-radius: 25px;
   cursor: pointer;
   text-align: center;
   margin-top: 0px;
@@ -269,30 +270,30 @@ body {
 }
 
 /* Submit All Answers button styling */
-.review-submit-wrapper .chat-bubble.submit-button {
-  background-color: #EB6DBB !important; /* At rest */
-  color: #fff !important;
-  border: none !important;
-  border-radius: 25px !important;
-  padding: 15px 20px !important;
-  cursor: pointer !important;
-  transition: background-color 0.3s, transform 0.1s !important;
-  text-align: center !important;
-  display: inline-block !important;
+#submitAllAnswers {
+  background-color: #EB6DBB; /* At rest */
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  text-align: center;
+  display: inline-block;
 }
-.review-submit-wrapper .chat-bubble.submit-button:hover {
-  background-color: #BC6DEB !important; /* Hover */
+#submitAllAnswers:hover {
+  background-color: #BC6DEB; /* Hover */
 }
-.review-submit-wrapper .chat-bubble.submit-button:active,
-.review-submit-wrapper .chat-bubble.submit-button.pressed {
-  background-color: #322C5E !important; /* Press */
-  transform: scale(0.95) !important;
+#submitAllAnswers:active,
+#submitAllAnswers.pressed {
+  background-color: #322C5E; /* Press */
+  transform: scale(0.95);
 }
-.review-submit-wrapper .chat-bubble.submit-button.success {
-  background-color: #6DDBEB !important; /* Success state */
-  color: #fff !important;
-  border: none !important;
-  transform: none !important;
+#submitAllAnswers.success {
+  background-color: #6DDBEB; /* Success state */
+  color: #fff;
+  border: none;
+  transform: none;
 }
 
 
