@@ -344,6 +344,10 @@ body {
     font-size: 14px;
     max-width: 90%;
   }
+   
+   .chat-bubble.review-info-bubble {
+    font-size: 14px !important;
+  }
   
   #chatControls {
     flex-direction: row !important;
