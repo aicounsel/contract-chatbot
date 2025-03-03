@@ -246,40 +246,19 @@ body {
 
 #chatContainer .edit-button {
   display: inline-block;
-  padding: 10px 10px;
-  background-color: #80ADA0 !important;
-  color: #000 !important;
-  border: 1px solid #000 !important;
-  border-radius: 10px !important;
-  cursor: pointer;
-  text-align: right;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-/*#edit-button {
-  font-weight: bold;
-  color: #706DEB;
-  cursor: pointer;
-  margin-left: 20px;   /* Align with left edge (matches container padding) */
-  margin-right: 20px;
-  user-select: none;
-  border-radius: 25px;
-  padding: 10px 15px;
-}*/
-
-/*.review-item .edit-button {
-  display: inline-block;
-  padding: 10px 10px;
-  background-color: #80ADA0 !important;
+  padding: 5px 10px;
+  background-color: #80ADA0;
   color: #000;
+  font-weight: bold;
   border: 1px solid #000;
   border-radius: 10px;
   cursor: pointer;
-  text-align: right;
-  margin-top: 10px; /* Adjust as needed */
-  margin-bottom: 10px; /* Optionally, for extra spacing below */
-}*/
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  user-select: none;
+}
 
 /*SUBMIT ALL BUTTON*/
 
