@@ -478,3 +478,4 @@ document.getElementById('backButton').addEventListener('click', function() {
     document.getElementById('userInput').value = "";
   }
 });
+});
