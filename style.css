@@ -201,63 +201,50 @@ body {
   margin: 5px 0 0;
 }
 
-/* Review question wrapper:
-   - Spans full width of container (with 10px margin on each side).
-   - Has 20px padding at the top and left for the question text.
-   - Minimal padding on the right so the grey box's right edge is the standard.
-*/
-.review-question-wrapper {
-  width: calc(100% - 20px); /* 10px left + 10px right margin */
-  margin: 5px auto;
-  padding: 10px 10px 10px 10px;  /* top:20px, right:10px, bottom:10px, left:20px */
+/* =========================
+   Review Page Bubble Styles
+========================= */
+
+/* Wrapper for each review item (question and its answer) */
+.review-item {
+  width: calc(100% - 20px);   /* Full width of chat window minus 10px margin each side */
+  margin: 5px auto;           /* 5px vertical margin */
   box-sizing: border-box;
-  background-color: #F2F2F2;
-  border-radius: 15px;
 }
 
-/* Optional: Style the question text inside the grey box.
-   This ensures the text starts 20px from the left and 20px from the top.
-   (You can adjust these values here if needed.)
-*/
+/* Review question bubble (grey) – same as bot bubble values */
 .review-question {
-  margin: 0;
-  padding-top: 10px; /*20*/
-  padding-left: 10px; /*20*/
-  text-align: left;
-}
-
-/* Review answer wrapper:
-   - Spans the full width (same horizontal margins as the grey box).
-   - Has minimal vertical padding (so the answer bubble sits just below the question text).
-   - The answer bubble inside is right-aligned.
-*/
-.review-answer-wrapper {
-  width: calc(100% - 20px);
-  margin: 5px auto;
-  padding: 10px 10px 10px 10px;
-  text-align: right;
-  box-sizing: border-box;
-  margin-right: 10px;
-}
-
-/* Styling for the client answer bubble within the review-answer-wrapper */
-.review-answer-wrapper .chat-bubble.user {
   display: inline-block;
-  padding: 10px 10px;         /* 5px 10pxLess padding so it's just as wide as the text */
-  border-radius: 15px;
-  background-color: #706DEB;
-  color: #fff;
-  text-align: left;          /* Internal text remains left aligned */
-  max-width: auto;           /* Shrink to fit content */
+  padding: 15px 20px;         /* Same padding as .chat-bubble */
+  border-radius: 25px;
+  word-wrap: break-word;
+  max-width: 75%;
+  background-color: #F2F2F2;  /* Grey background */
+  color: #000;
+  border-top-left-radius: 0;  /* Square top-left corner */
 }
 
-/* Edit button styling for review items:
-   - Placed below the answer bubble.
-   - Aligned to the right using auto left margin and fixed right margin.
-*/
-.edit-button {
+/* Review answer bubble (blue) – same as user bubble values */
+.review-answer {
+  display: inline-block;
+  padding: 15px 20px;         /* Same padding as .chat-bubble */
+  border-radius: 25px;
+  word-wrap: break-word;
+  max-width: 75%;
+  background-color: #706DEB;  /* Blue background */
+  color: #fff;
+  text-align: left;
+  border-top-right-radius: 0; /* Square top-right corner */
+  margin-left: auto;         /* Right-align the bubble */
+  margin-right: 20px;         /* Match right margin of container */
+}
+
+/* Edit button for review items – aligned to the right */
+.review-item .edit-button {
   display: block;
-  margin: 5px 10px 10px auto; /* auto left margin pushes button to the right; 20px right margin */
+  margin: 5px auto 10px auto; /* Centered horizontally if desired, or use auto on left only */
+  /* Alternatively, to force right alignment, you could use: */
+  /* margin-left: auto; margin-right: 20px; */
   padding: 5px 10px;
   background-color: #fff;
   color: #000;
@@ -266,6 +253,8 @@ body {
   cursor: pointer;
   text-align: right;
 }
+
+/*SUBMIT ALL BUTTON*/
 
 /* Submit All Answers button wrapper (centered) */
 .review-submit-wrapper {
