@@ -287,12 +287,12 @@ function showReviewScreen() {
   // Clear the chat container (review items)
   clearChatContainer();
   const container = document.getElementById('chatContainer');
-  container.scrollTop = 0;
   appendReviewHeader();
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
-  
+  container.scrollTop = savedScrollPos;
+   
   // Hide the input controls and back button:
   document.getElementById('userInput').style.display = 'none';
   document.getElementById('sendButton').style.display = 'none';
@@ -301,7 +301,6 @@ function showReviewScreen() {
   // Append the submit button to the chatControls container:
   appendSubmitButtonToControls();
 }
-
 
 // When editing an answer, disable the back button so no new answers are added
 function editAnswer(index) {
@@ -460,19 +459,22 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('backButton').addEventListener('click', function() {
   if (currentQuestionIndex > 0) {
     const container = document.getElementById('chatContainer');
-    // Remove the last two message wrappers (assumed: first the user's answer, then the question bubble that was added for the next question)
-    if (container.children.length >= 2) {
-      container.removeChild(container.lastElementChild); // remove the last message (user's answer)
-      container.removeChild(container.lastElementChild); // remove the following message (next question bubble)
-    } else if (container.children.length === 1) {
-      container.removeChild(container.lastElementChild);
+    try {
+      // Check if there are at least two message wrappers to remove.
+      if (container.children.length >= 2) {
+        // Remove the last two message wrappers (assumed to be the user's answer and the next question bubble)
+        container.removeChild(container.lastElementChild);
+        container.removeChild(container.lastElementChild);
+      } else if (container.children.length === 1) {
+        container.removeChild(container.lastElementChild);
+      }
+    } catch (error) {
+      console.error("Error in back button handler:", error);
     }
     // Decrement the question index and remove the corresponding answer
     currentQuestionIndex--;
     answers.splice(currentQuestionIndex, 1);
     // Clear the input field
     document.getElementById('userInput').value = "";
-    // Do NOT append the previous question bubble again—let it remain from before.
   }
 });
-
