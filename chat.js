@@ -458,37 +458,37 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Fixed back button event listener
-  document.getElementById('backButton').addEventListener('click', function() {
-    if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
-      const container = document.getElementById('chatContainer');
+document.getElementById('backButton').addEventListener('click', function() {
+  if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
+    const container = document.getElementById('chatContainer');
+    
+    // Find all message wrappers
+    const messageWrappers = container.querySelectorAll('.message-wrapper');
+    const messageCount = messageWrappers.length;
+    
+    if (messageCount >= 1) {
+      // Remove the current question (which is the last message bubble)
+      container.removeChild(messageWrappers[messageCount - 1]);
       
-      // Find the last two message wrappers (user's answer and the current question)
-      const messageWrappers = container.querySelectorAll('.message-wrapper');
-      const messageCount = messageWrappers.length;
-      
-      if (messageCount >= 2) {
-        // Remove the last question (current question)
-        container.removeChild(messageWrappers[messageCount - 1]);
-        
-        // Remove the last answer (user's previous answer)
-        if (messageCount >= 3) {
-          container.removeChild(messageWrappers[messageCount - 2]);
-        }
+      // If there's a user answer for the current question, remove it too
+      if (messageCount >= 2 && messageWrappers[messageCount - 2].classList.contains('user')) {
+        container.removeChild(messageWrappers[messageCount - 2]);
       }
-      
-      // Decrement the question index and remove the corresponding answer
-      currentQuestionIndex--;
-      if (answers.length > 0) {
-        answers.pop(); // Remove the last answer
-      }
-      
-      // Show the previous question again
-      if (currentQuestionIndex < questions.length) {
-        showNextQuestion();
-      }
-      
-      // Clear the input field
-      document.getElementById('userInput').value = "";
     }
-  });
+    
+    // Decrement the question index
+    currentQuestionIndex--;
+    
+    // Remove the last answer from our answers array if it exists
+    if (answers.length > currentQuestionIndex) {
+      answers.pop();
+    }
+    
+    // Clear the input field
+    document.getElementById('userInput').value = "";
+    
+    // Important: We do NOT call showNextQuestion() here as that would
+    // add the previous question again
+  }
+});
 });
