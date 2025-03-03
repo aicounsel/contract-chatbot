@@ -243,7 +243,19 @@ body {
 }
 
 /*--------EDIT---------*/
-.review-item .edit-button {
+
+#edit-button {
+  font-weight: bold;
+  color: #706DEB;
+  cursor: pointer;
+  margin-left: 20px;   /* Align with left edge (matches container padding) */
+  margin-right: 20px;
+  user-select: none;
+  border-radius: 25px;
+  padding: 10px 15px;
+}
+
+/*.review-item .edit-button {
   display: inline-block;
   padding: 10px 10px;
   background-color: #80ADA0 !important;
@@ -254,7 +266,7 @@ body {
   text-align: right;
   margin-top: 10px; /* Adjust as needed */
   margin-bottom: 10px; /* Optionally, for extra spacing below */
-}
+}*/
 
 /*SUBMIT ALL BUTTON*/
 
