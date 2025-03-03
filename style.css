@@ -191,6 +191,10 @@ body {
 ============================================================================ */
 
 /* Review header at the top of the review screen */
+
+.review-info-bubble {
+  font-size: 16px; /* Adjust this value to match your question bubble text size */
+}
 .review-header {
   width: calc(100% - 20px);  /* Container width with horizontal margins */
   margin: 10px auto 20px;
@@ -347,8 +351,9 @@ body {
     padding: 15px 20px 40px;
   }
   
-   #chatControls.review-mode {
-    padding: 10px !important;
+  #chatControls.review-mode {
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
   }
    
