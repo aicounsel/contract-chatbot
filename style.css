@@ -221,6 +221,7 @@ body {
 /*-------QUESTION--------*/ 
 .review-question-wrapper {
   margin-bottom: 5px;
+  border-top-left-radius: 0;
 }
 .review-question {
   display: inline-block;
@@ -236,6 +237,7 @@ body {
 .review-answer-wrapper {
   margin-bottom: 0px; /* negative test - was 5*/
   text-align: right;
+  border-top-right-radius: 0;
 }
 .review-answer {
   display: inline-block;    
