@@ -35,19 +35,19 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
   const container = document.getElementById('chatContainer');
   // Append the explanatory message as a permanent bot bubble
   appendBubble(message, 'bot');
-
+  
   // Create a wrapper for the clickable confirmation bubble
   const buttonWrapper = document.createElement('div');
   buttonWrapper.className = 'message-wrapper acknowledgement';
-
+  
   const buttonBubble = document.createElement('div');
   buttonBubble.className = 'chat-bubble outline';
   buttonBubble.textContent = buttonLabel;
-
+  
   buttonWrapper.appendChild(buttonBubble);
   container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
-
+  
   // Ensure the click callback fires only once
   let clicked = false;
   buttonBubble.addEventListener('click', function() {
@@ -85,7 +85,7 @@ function fetchQuestionsAndShowCount() {
   }
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
   const requestBody = { documentId: docId };
-
+  
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -130,7 +130,7 @@ function showQuestionCount() {
 • Your best guess is fine if you're unsure about any answers
 • AI has pulled ${count} items that need your attention
 Ready to get started?`;
-
+  
   showAcknowledgementStep(
     message,
     "Start answering",
@@ -148,19 +148,23 @@ Ready to get started?`;
    Chat Message Functions (Q&A Mode)
 ------------------------- */
 // Append a chat bubble (with label above)
-function appendBubble(text, type = 'bot', extraClass = '') {
+function appendBubble(text, type = 'bot', extraClass = '', labelText = null) {
   const container = document.getElementById('chatContainer');
   const messageWrapper = document.createElement('div');
   messageWrapper.className = 'message-wrapper ' + (type === 'user' ? 'user' : 'bot');
-
+  
   const label = document.createElement('div');
   label.className = 'message-label';
-  label.textContent = type === 'user' ? "Client" : "Client Assistant";
-
+  if (labelText) {
+    label.textContent = labelText;
+  } else {
+    label.textContent = (type === 'user') ? "You" : "Client Assistant";
+  }
+  
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot') + " " + extraClass;
   bubble.textContent = text;
-
+  
   messageWrapper.appendChild(label);
   messageWrapper.appendChild(bubble);
   container.appendChild(messageWrapper);
@@ -171,7 +175,12 @@ function appendBubble(text, type = 'bot', extraClass = '') {
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     const questionObj = questions[currentQuestionIndex];
-    appendBubble(questionObj.question, 'bot');
+    appendBubble(
+      questionObj.question, 
+      'bot', 
+      '', 
+      `Client Assistant - Question ${currentQuestionIndex + 1} of ${questions.length}`
+    );
   } else {
     // All questions answered – wait 2 seconds then show review prompt
     appendBubble("Complete. Please wait for confirmation...", "bot");
@@ -192,40 +201,52 @@ function appendReviewHeader() {
   const container = document.getElementById('chatContainer');
   const headerWrapper = document.createElement('div');
   headerWrapper.className = 'review-header';
-
+  
   const header = document.createElement('h2');
-  header.textContent = "Review Your Answers";
+  header.textContent = "Almost done! Please review your answers.";
   headerWrapper.appendChild(header);
-
+  
   const subheader = document.createElement('p');
-  subheader.textContent = "Please review and press 'Submit All Answers' at the bottom of the page.";
+  subheader.textContent = 'You can edit any response by clicking the "Edit" button. When you\'re satisfied with all answers, click "Submit All Answers" at the bottom.';
   headerWrapper.appendChild(subheader);
-
+  
   container.appendChild(headerWrapper);
 }
 
 // Append a review item (question and answer) for each Q&A pair
 function appendReviewItem(item, index) {
   const container = document.getElementById('chatContainer');
-
+  
   // Create a wrapper for the question (grey box) using review-question classes
   const questionWrapper = document.createElement('div');
   questionWrapper.className = 'review-question-wrapper';
+  
+  const questionLabel = document.createElement('div');
+  questionLabel.className = 'message-label';
+  questionLabel.textContent = `Client Assistant - Question ${index + 1} of ${questions.length}`;
+  questionWrapper.appendChild(questionLabel);
+  
   const questionElem = document.createElement('div');
   questionElem.className = 'review-question';
   questionElem.textContent = item.question;
   questionWrapper.appendChild(questionElem);
   container.appendChild(questionWrapper);
-
+  
   // Create a wrapper for the answer (blue bubble) using review-answer classes
   const answerWrapper = document.createElement('div');
   answerWrapper.className = 'review-answer-wrapper';
+  
+  const answerLabel = document.createElement('div');
+  answerLabel.className = 'message-label';
+  answerLabel.textContent = "You";
+  answerWrapper.appendChild(answerLabel);
+  
   const answerElem = document.createElement('div');
   answerElem.className = 'review-answer';
   answerElem.textContent = item.answer;
   answerWrapper.appendChild(answerElem);
   container.appendChild(answerWrapper);
-
+  
   // Create an edit button, placed below the answer wrapper, aligned to the right
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
@@ -241,17 +262,17 @@ function appendSubmitButtonToControls() {
   const controls = document.getElementById('chatControls');
   // Clear any existing controls inside chatControls if needed:
   // controls.innerHTML = '';  // Uncomment if you want to remove all existing elements
-
+  
   // Create a wrapper for the submit button (optional styling wrapper)
   const submitWrapper = document.createElement('div');
   submitWrapper.className = 'review-submit-wrapper';
-
+  
   // Create the submit button (assigning an ID helps with specificity)
   const submitBtn = document.createElement('div');
   submitBtn.id = 'submitAllAnswers';
   submitBtn.className = 'chat-bubble outline submit-button';
   submitBtn.textContent = 'Submit All Answers';
-
+  
   submitBtn.addEventListener('click', function() {
     if (submitBtn.disabled) return; // Prevent multiple submissions
     // Disable any edit buttons on the review page
@@ -264,7 +285,7 @@ function appendSubmitButtonToControls() {
     submitBtn.textContent = 'Please wait...';
     submitBtn.classList.add('pressed');
     submitBtn.disabled = true;
-
+    
     submitAnswers().then(data => {
       submitBtn.classList.remove('pressed');
       submitBtn.classList.add('success');
@@ -276,7 +297,7 @@ function appendSubmitButtonToControls() {
       submitBtn.textContent = 'Submit All Answers';
     });
   });
-
+  
   submitWrapper.appendChild(submitBtn);
   // Append the wrapper to the chat controls container so it's always visible
   controls.appendChild(submitWrapper);
@@ -344,7 +365,12 @@ function editAnswer(index) {
   clearChatContainer();
   
   // Display the corresponding question bubble for context.
-  appendBubble(questions[index].question, 'bot');
+  appendBubble(
+    questions[index].question, 
+    'bot', 
+    '', 
+    `Client Assistant - Question ${index + 1} of ${questions.length}`
+  );
 }
 
 // Process send button press (handles both new answers and edits)
@@ -386,12 +412,12 @@ function processSend() {
 // After all questions answered, show a review prompt acknowledgement
 function showReviewPrompt() {
   showAcknowledgementStep(
-    "Thank you for completing these questions. Ready to review your answers?",
-    "Review Answers",
+    "Great work! You've completed all the questions. Now let's make sure everything is accurate before we submit.",
+    "Check my answers",
     function() {
       // Disable back button when review begins
       const backBtn = document.getElementById('backButton');
-      backBtn.style.display = 'none'; // Hide completely instead of making transparent
+      backBtn.style.display = 'none'; // Hide completely instead of making it transparent
       showReviewScreen();
     }
   );
@@ -435,10 +461,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Disable the input field and send button initially
   document.getElementById('userInput').disabled = true;
   document.getElementById('sendButton').style.display = 'none';
-
+  
   // Begin the session by fetching questions and then showing the single welcome message
   fetchQuestionsAndShowCount();
-
+  
   // Attach send button and Enter key event listener
   document.getElementById('sendButton').addEventListener('click', processSend);
   document.getElementById('userInput').addEventListener('keydown', function(e) {
@@ -447,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function() {
       processSend();
     }
   });
-
+  
   // Back button event listener
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
