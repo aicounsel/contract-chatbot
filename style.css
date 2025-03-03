@@ -242,15 +242,14 @@ body {
 /* Make the review answer bubble shrink to fit its text */
 .review-answer {
   display: inline-block;    /* Shrink-to-fit content */
-  padding: 10px 10px;        /* Adjust padding as needed */
+  /* padding: 10px 10px;        I think this is duplicative - Adjust padding as needed */
   border-radius: 25px;
+  max-width: 75%;
   background-color: #706DEB;
   color: #fff;
   text-align: left;         /* Internal text alignment */
   /* Remove margin-left and margin-right to avoid extra space */
   margin: 0;
-  /* Remove or adjust max-width if not needed */
-  max-width: none;
 }
 
 /* Edit button for review items – aligned to the right */
