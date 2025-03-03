@@ -241,11 +241,11 @@ body {
 
 /* Edit button for review items – aligned to the right */
 .review-item .edit-button {
-  display: block;
-  margin: 5px auto 10px auto; /* Centered horizontally if desired, or use auto on left only */
-  /* Alternatively, to force right alignment, you could use: */
-  /* margin-left: auto; margin-right: 20px; */
-  padding: 5px 10px;
+  display: inline-block;
+  /*margin: 5px auto 10px auto; Centered horizontally if desired, or use auto on left only
+  Alternatively, to force right alignment, you could use: */
+  margin-left: auto; margin-right: 20px;
+  padding: 10px 10px;
   background-color: #fff;
   color: #000;
   border: 1px solid #000;
