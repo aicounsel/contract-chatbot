@@ -232,50 +232,54 @@ function appendReviewItem(item, index) {
 }
 
 // Append the "Submit All Answers" button (centered)
-function appendSubmitButton() {
-  const container = document.getElementById('chatContainer');
+function appendSubmitButtonToControls() {
+  const controls = document.getElementById('chatControls');
+  // Clear any existing controls inside chatControls if needed:
+  // controls.innerHTML = '';  // Uncomment if you want to remove all existing elements
+
+  // Create a wrapper for the submit button (optional styling wrapper)
   const submitWrapper = document.createElement('div');
   submitWrapper.className = 'review-submit-wrapper';
-  
-const submitBtn = document.createElement('div');
-submitBtn.id = 'submitAllAnswers';
-submitBtn.className = 'chat-bubble outline submit-button';
+
+  // Create the submit button (assigning an ID helps with specificity)
+  const submitBtn = document.createElement('div');
+  submitBtn.id = 'submitAllAnswers';
+  submitBtn.className = 'chat-bubble outline submit-button';
   submitBtn.textContent = 'Submit All Answers';
-  
+
   submitBtn.addEventListener('click', function() {
-    if (submitBtn.disabled) return;
-    
-    // Disable all edit buttons so the client cannot re-edit during submission
+    if (submitBtn.disabled) return; // Prevent multiple submissions
+    // Disable any edit buttons on the review page
     const editBtns = document.querySelectorAll('.edit-button');
     editBtns.forEach(function(btn) {
       btn.disabled = true;
       btn.style.pointerEvents = 'none';
       btn.style.opacity = '0.5';
     });
-    
-    // Change button to "Please wait..." state and disable it
-    submitBtn.textContent = "Please wait...";
+    submitBtn.textContent = 'Please wait...';
     submitBtn.classList.add('pressed');
     submitBtn.disabled = true;
-    
-    // Call the submission function
+
     submitAnswers().then(data => {
       submitBtn.classList.remove('pressed');
       submitBtn.classList.add('success');
-      submitBtn.textContent = "Success!";
+      submitBtn.textContent = 'Success!';
     }).catch(error => {
+      // Optionally, re-enable on error
       submitBtn.disabled = false;
       submitBtn.classList.remove('pressed');
-      submitBtn.textContent = "Submit All Answers";
+      submitBtn.textContent = 'Submit All Answers';
     });
   });
-  
+
   submitWrapper.appendChild(submitBtn);
-  container.appendChild(submitWrapper);
+  // Append the wrapper to the chat controls container so it's always visible
+  controls.appendChild(submitWrapper);
 }
 
 // Show the review screen – disable input controls so no new text can be added
 function showReviewScreen() {
+  // Clear the chat container (review items)
   clearChatContainer();
   const container = document.getElementById('chatContainer');
   container.scrollTop = 0;
@@ -283,15 +287,16 @@ function showReviewScreen() {
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
-  appendSubmitButton();
-
-  // Disable input controls on review screen
-  document.getElementById('userInput').disabled = true;
+  
+  // Hide the input controls and back button:
+  document.getElementById('userInput').style.display = 'none';
   document.getElementById('sendButton').style.display = 'none';
-  const backBtn = document.getElementById('backButton');
-  backBtn.style.pointerEvents = "none";
-  backBtn.style.color = "transparent";
+  document.getElementById('backButton').style.display = 'none';
+
+  // Append the submit button to the chatControls container:
+  appendSubmitButtonToControls();
 }
+
 
 // When editing an answer, disable the back button so no new answers are added
 function editAnswer(index) {
