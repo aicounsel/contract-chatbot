@@ -1,4 +1,5 @@
 
+
 /******************************************************
  * Chatbot Script (chat.js)
  * 
@@ -123,29 +124,28 @@ function fetchQuestionsAndShowCount() {
   });
 }
 
-// Show a prompt that displays the number of questions to answer
+// Show a prompt that displays the number of questions to answer in one message
 function showQuestionCount() {
   const count = questions.length;
+  const message = `Welcome to AI Counsel! 👋 I'm your Client Assistant and I'll help collect the information we need for your project. A few quick notes:
+• This is a secure information collection tool
+• Please complete all questions in one session
+• Your best guess is fine if you're unsure about any answers
+• AI has pulled ${count} items that need your attention
+Ready to get started?`;
+
   showAcknowledgementStep(
-    "You have " + count + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
-    "Continue",
+    message,
+    "Start answering",
     function() {
-      showAcknowledgementStep(
-        "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
-        "Let's begin",
-        function() {
-          // Enable the input controls here once the user is ready
-          document.getElementById('userInput').disabled = false;
-          document.getElementById('sendButton').style.display = 'block';
-          // Now start the Q&A by showing the first question
-          showNextQuestion();
-        },
-        false // Keep the "Let's begin" button visible but disable further clicks
-      );
+      // Enable the input controls once the user is ready
+      document.getElementById('userInput').disabled = false;
+      document.getElementById('sendButton').style.display = 'block';
+      // Now start the Q&A by showing the first question
+      showNextQuestion();
     }
   );
 }
-
 
 /* -------------------------
    Chat Message Functions (Q&A Mode)
@@ -439,15 +439,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('userInput').disabled = true;
   document.getElementById('sendButton').style.display = 'none';
 
-  // Single opening message with line breaks as specified.
-  showAcknowledgementStep(
-    "Welcome to AI Counsel! 👋 I'm your Client Assistant and I'll help collect the information we need for your project. A few quick notes:\n• This is a secure information collection tool\n• Please complete all questions in one session\n• Your best guess is fine if you're unsure about any answers\n• AI has pulled [XX] items that need your attention\nReady to get started?",
-    "Start answering",
-    function() {
-      // Once the user clicks the button, begin fetching the questions.
-      fetchQuestionsAndShowCount();
-    }
-  );
+  // Begin the session by fetching questions and then showing the single welcome message
+  fetchQuestionsAndShowCount();
+});
 
   // Attach send button and Enter key event listener
   document.getElementById('sendButton').addEventListener('click', processSend);
