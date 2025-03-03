@@ -165,6 +165,9 @@ function appendBubble(text, type = 'bot', extraClass = '', labelText = null) {
   bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot') + " " + extraClass;
   bubble.textContent = text;
   
+  // Add this line to preserve newlines:
+  bubble.style.whiteSpace = 'pre-wrap';
+  
   messageWrapper.appendChild(label);
   messageWrapper.appendChild(bubble);
   container.appendChild(messageWrapper);
