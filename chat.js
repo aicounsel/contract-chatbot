@@ -301,22 +301,32 @@ function showReviewScreen() {
 // When editing an answer, disable the back button so no new answers are added
 function editAnswer(index) {
   editIndex = index;
-  // Re-enable input and send button for editing
-  document.getElementById('userInput').disabled = false;
+  // Remove the submit button wrapper from the chat controls, if it exists.
+  const submitWrapper = document.querySelector('.review-submit-wrapper');
+  if (submitWrapper) {
+    submitWrapper.parentNode.removeChild(submitWrapper);
+  }
+
+  // Re-enable the input field and show the send button for editing.
+  const userInput = document.getElementById('userInput');
+  userInput.disabled = false;
   document.getElementById('sendButton').style.display = 'block';
-  // Disable back button in edit mode
+
+  // Optionally, re-enable the back button for editing (or hide it if desired)
   const backBtn = document.getElementById('backButton');
-  backBtn.style.pointerEvents = "none";
-  backBtn.style.color = "transparent";
+  backBtn.style.pointerEvents = "auto";
+  backBtn.style.color = ""; // Reset to default color
 
-  // Load the selected answer into the input field for editing
-  document.getElementById('userInput').value = answers[index].answer;
-  document.getElementById('userInput').focus();
+  // Load the existing answer into the input field for editing.
+  userInput.value = answers[index].answer;
+  userInput.focus();
 
-  // Clear the review screen and show only the corresponding question bubble for editing
+  // Clear the review screen (but do not clear the chat controls)
   clearChatContainer();
+  // Show the corresponding question bubble so the user knows which question they are editing.
   appendBubble(questions[index].question, 'bot');
 }
+
 
 // Process send button press (handles both new answers and edits)
 function processSend() {
