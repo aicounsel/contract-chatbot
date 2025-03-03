@@ -16,6 +16,7 @@ let questions = [];          // Array of objects: { placeholder, question }
 let currentQuestionIndex = 0;
 let answers = [];            // Array of objects: { placeholder, question, answer }
 let editIndex = null;        // For review/edit mode
+let savedScrollPos = 0;      // Added this missing variable
 
 /* -------------------------
    Acknowledgement Step Function
@@ -284,6 +285,9 @@ function appendSubmitButtonToControls() {
 
 // Show the review screen – disable input controls so no new text can be added
 function showReviewScreen() {
+  // Save the current scroll position before clearing
+  savedScrollPos = document.getElementById('chatContainer').scrollTop;
+  
   // Clear the chat container (review items)
   clearChatContainer();
   const container = document.getElementById('chatContainer');
@@ -291,7 +295,7 @@ function showReviewScreen() {
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
-  container.scrollTop = savedScrollPos;
+  container.scrollTop = 0; // Start at the top of the review screen
    
   // Hide the input controls and back button:
   document.getElementById('userInput').style.display = 'none';
@@ -323,8 +327,7 @@ function editAnswer(index) {
 
   // Disable the back button in edit mode.
   const backBtn = document.getElementById('backButton');
-  backBtn.style.pointerEvents = "none";
-  backBtn.style.color = "transparent"; // Hides it visually.
+  backBtn.style.display = 'none'; // Hide it completely rather than making it transparent
 
   // Load the existing answer into the input field.
   userInput.value = answers[index].answer;
@@ -378,8 +381,7 @@ function showReviewPrompt() {
     function() {
       // Disable back button when review begins
       const backBtn = document.getElementById('backButton');
-      backBtn.style.pointerEvents = "none";
-      backBtn.style.color = "transparent";
+      backBtn.style.display = 'none'; // Hide completely instead of making transparent
       showReviewScreen();
     }
   );
@@ -455,27 +457,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Attach back button event listener (active only in Q&A mode)
-document.getElementById('backButton').addEventListener('click', function() {
-  if (currentQuestionIndex > 0) {
-    const container = document.getElementById('chatContainer');
-    try {
-      // Check if there are at least two message wrappers to remove.
-      if (container.children.length >= 2) {
-        // Remove the last two message wrappers (assumed to be the user's answer and the next question bubble)
-        container.removeChild(container.lastElementChild);
-        container.removeChild(container.lastElementChild);
-      } else if (container.children.length === 1) {
-        container.removeChild(container.lastElementChild);
+  // Fixed back button event listener
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
+      const container = document.getElementById('chatContainer');
+      
+      // Find the last two message wrappers (user's answer and the current question)
+      const messageWrappers = container.querySelectorAll('.message-wrapper');
+      const messageCount = messageWrappers.length;
+      
+      if (messageCount >= 2) {
+        // Remove the last question (current question)
+        container.removeChild(messageWrappers[messageCount - 1]);
+        
+        // Remove the last answer (user's previous answer)
+        if (messageCount >= 3) {
+          container.removeChild(messageWrappers[messageCount - 2]);
+        }
       }
-    } catch (error) {
-      console.error("Error in back button handler:", error);
+      
+      // Decrement the question index and remove the corresponding answer
+      currentQuestionIndex--;
+      if (answers.length > 0) {
+        answers.pop(); // Remove the last answer
+      }
+      
+      // Show the previous question again
+      if (currentQuestionIndex < questions.length) {
+        showNextQuestion();
+      }
+      
+      // Clear the input field
+      document.getElementById('userInput').value = "";
     }
-    // Decrement the question index and remove the corresponding answer
-    currentQuestionIndex--;
-    answers.splice(currentQuestionIndex, 1);
-    // Clear the input field
-    document.getElementById('userInput').value = "";
-  }
-});
+  });
 });
