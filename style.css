@@ -226,17 +226,16 @@ body {
 
 /* Review answer bubble (blue) – same as user bubble values */
 .review-answer {
-  display: inline-block;
-  padding: 10px 10px;         /* Same padding as .chat-bubble 15px 20px;*/
+  display: block;               /* Changed from inline-block to block */
+  padding: 10px 10px;           
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
-  background-color: #706DEB;  /* Blue background */
+  background-color: #706DEB;
   color: #fff;
   text-align: left;
-  /*border-top-right-radius: 0;  /* Square top-right corner */
-  margin-left: auto;         /* Right-align the bubble */
-  margin-right: 20px;         /* Match right margin of container */
+  margin-left: auto;           /* This pushes it to the right */
+  margin-right: 20px;           /* Consistent right margin */
 }
 
 /* Edit button for review items – aligned to the right */
