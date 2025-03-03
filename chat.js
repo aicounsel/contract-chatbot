@@ -457,19 +457,22 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Attach back button event listener (active only in Q&A mode)
-  document.getElementById('backButton').addEventListener('click', function() {
-    if (currentQuestionIndex > 0) {
-      const container = document.getElementById('chatContainer');
-      // Remove the last two message wrappers (assumed: one for the user's answer and one for the subsequent question bubble)
-      if (container.children.length >= 2) {
-        container.removeChild(container.lastElementChild);
-        container.removeChild(container.lastElementChild);
-      }
-      currentQuestionIndex--;
-      answers.splice(currentQuestionIndex, 1);
-      document.getElementById('userInput').value = "";
-      // Optionally, show the previous question bubble again for clarity:
-      appendBubble(questions[currentQuestionIndex].question, 'bot');
+document.getElementById('backButton').addEventListener('click', function() {
+  if (currentQuestionIndex > 0) {
+    const container = document.getElementById('chatContainer');
+    // Remove the last two message wrappers (assumed: first the user's answer, then the question bubble that was added for the next question)
+    if (container.children.length >= 2) {
+      container.removeChild(container.lastElementChild); // remove the last message (user's answer)
+      container.removeChild(container.lastElementChild); // remove the following message (next question bubble)
+    } else if (container.children.length === 1) {
+      container.removeChild(container.lastElementChild);
     }
-  });
+    // Decrement the question index and remove the corresponding answer
+    currentQuestionIndex--;
+    answers.splice(currentQuestionIndex, 1);
+    // Clear the input field
+    document.getElementById('userInput').value = "";
+    // Do NOT append the previous question bubble again—let it remain from before.
+  }
 });
+
