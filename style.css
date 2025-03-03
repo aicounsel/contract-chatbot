@@ -352,13 +352,19 @@ body {
   }
   
   #chatControls.review-mode {
-    flex-direction: column;
+    flex-direction: column !important;
     align-items: center;
     justify-content: center;
   }
    
+   .review-submit-wrapper {
+  width: 100%;
+  text-align: center;
+}
+   
   .input-wrapper {
     width: 100%;
+     text-align: center;
   }
   
   #userInput {
