@@ -243,12 +243,11 @@ body {
 .review-answer-wrapper {
   margin-bottom: 0px; /* negative test - was 5*/
   text-align: right;
-  border-top-right-radius: 0;
 }
 .review-answer {
   display: inline-block;    
   padding: 15px 20px;       
-  border-radius: 25px 25px 0 25px;
+  border-radius: 25px 0 25px 25px;
   word-wrap: break-word;
   max-width: 75%;
   background-color: #706DEB;
