@@ -212,6 +212,10 @@ body {
   box-sizing: border-box;
 }
 
+.review-question-wrapper {
+  margin-bottom: 10px; /* Adjust as needed */
+}
+
 /* Review question bubble (grey) – same as bot bubble values */
 .review-question {
   display: inline-block;
@@ -230,6 +234,7 @@ body {
   width: calc(100% - 20px); /* Full width minus margins */
   margin: 5px auto;
   padding: 10px;
+  margin-bottom: 10px;
   text-align: right;        /* Right-align inline content */
   box-sizing: border-box;
 }
@@ -261,6 +266,8 @@ body {
   border-radius: 10px;
   cursor: pointer;
   text-align: right;
+  margin-top: 10px; /* Adjust as needed */
+  margin-bottom: 10px; /* Optionally, for extra spacing below */
 }
 
 /*SUBMIT ALL BUTTON*/
