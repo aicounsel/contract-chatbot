@@ -237,8 +237,9 @@ function appendSubmitButton() {
   const submitWrapper = document.createElement('div');
   submitWrapper.className = 'review-submit-wrapper';
   
-  const submitBtn = document.createElement('div');
-  submitBtn.className = 'chat-bubble outline submit-button';
+const submitBtn = document.createElement('div');
+submitBtn.id = 'submitAllAnswers';
+submitBtn.className = 'chat-bubble outline submit-button';
   submitBtn.textContent = 'Submit All Answers';
   
   submitBtn.addEventListener('click', function() {
