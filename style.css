@@ -215,26 +215,26 @@ body {
 /* Review question bubble (grey) – same as bot bubble values */
 .review-question {
   display: inline-block;
-  padding: 15px 20px;         /* Same padding as .chat-bubble */
+  padding: 10px 10px;         /* Same padding as .chat-bubble 15px 20px;*/
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
   background-color: #F2F2F2;  /* Grey background */
   color: #000;
-  border-top-left-radius: 0;  /* Square top-left corner */
+  /*border-top-left-radius: 0;  /* Square top-left corner */*/
 }
 
 /* Review answer bubble (blue) – same as user bubble values */
 .review-answer {
   display: inline-block;
-  padding: 15px 20px;         /* Same padding as .chat-bubble */
+  padding: 10px 10px;         /* Same padding as .chat-bubble 15px 20px;*/
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
   background-color: #706DEB;  /* Blue background */
   color: #fff;
   text-align: left;
-  border-top-right-radius: 0; /* Square top-right corner */
+  /*border-top-right-radius: 0;  /* Square top-right corner */
   margin-left: auto;         /* Right-align the bubble */
   margin-right: 20px;         /* Match right margin of container */
 }
