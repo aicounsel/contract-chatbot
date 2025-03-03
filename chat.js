@@ -302,6 +302,9 @@ function showReviewScreen(scrollPos = 0) {
   document.getElementById('sendButton').style.display = 'none';
   document.getElementById('backButton').style.display = 'none';
   
+  // Add review-mode class to chatControls for specific styling on review screen
+  document.getElementById('chatControls').classList.add('review-mode');
+  
   // Append the submit button to the chatControls container:
   appendSubmitButtonToControls();
 }
@@ -312,6 +315,9 @@ function editAnswer(index) {
   
   // Capture the current scroll position in the review screen.
   editScrollPos = document.getElementById('chatContainer').scrollTop;
+  
+  // Remove the review-mode class when leaving review screen
+  document.getElementById('chatControls').classList.remove('review-mode');
   
   // Remove the submit button wrapper from the chat controls, if it exists.
   const submitWrapper = document.querySelector('.review-submit-wrapper');
