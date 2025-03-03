@@ -226,12 +226,12 @@ body {
 /*-------QUESTION--------*/ 
 .review-question-wrapper {
   margin-bottom: 5px;
-  border-top-left-radius: 0;
+  
 }
 .review-question {
   display: inline-block;
   padding: 15px 20px;           
-  border-radius: 25px;
+  border-radius: 0 25px 25px 25px;
   word-wrap: break-word;
   max-width: 75%;
   background-color: #F2F2F2;  
@@ -247,7 +247,7 @@ body {
 .review-answer {
   display: inline-block;    
   padding: 15px 20px;       
-  border-radius: 25px;
+  border-radius: 25px 25px 0 25px;
   word-wrap: break-word;
   max-width: 75%;
   background-color: #706DEB;
