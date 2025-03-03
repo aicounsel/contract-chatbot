@@ -214,7 +214,7 @@ function appendReviewInfoBubbles() {
   label1.textContent = "Client Assistant";
   
   const bubble1 = document.createElement('div');
-  bubble1.className = 'chat-bubble bot';
+  bubble1.className = 'chat-bubble bot review-info-bubble';
   // Using innerHTML to allow bold formatting:
   bubble1.innerHTML = "<strong>Almost done! Please review your answers.</strong>";
   
@@ -231,7 +231,7 @@ function appendReviewInfoBubbles() {
   label2.textContent = "Client Assistant";
   
   const bubble2 = document.createElement('div');
-  bubble2.className = 'chat-bubble bot';
+  bubble2.className = 'chat-bubble bot review-info-bubble';
   bubble2.textContent = 'You can edit any response by clicking the "Edit" button. When you\'re satisfied with all answers, click "Submit All Answers" at the bottom.';
   
   messageWrapper2.appendChild(label2);
