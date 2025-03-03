@@ -22,7 +22,7 @@ let editIndex = null;        // For review/edit mode
 ------------------------- */
 /**
  * Displays an acknowledgement step.
- * It appends a permanent explanatory bubble, then an outlined, clickable confirmation bubble.
+ * Appends a permanent explanatory bubble, then an outlined, clickable confirmation bubble.
  * If removeOnClick is false, the button remains visible but becomes unclickable after the first click.
  *
  * @param {string} message - The explanatory text.
@@ -47,15 +47,14 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
   container.appendChild(buttonWrapper);
   container.scrollTop = container.scrollHeight;
 
-  // Ensure the click callback only fires once
+  // Ensure the click callback fires only once
   let clicked = false;
   buttonBubble.addEventListener('click', function() {
-    if (clicked) return; // Ignore subsequent clicks
+    if (clicked) return;
     clicked = true;
     if (removeOnClick) {
       container.removeChild(buttonWrapper);
     } else {
-      // Visually disable the button (it remains visible)
       buttonBubble.style.pointerEvents = 'none';
       buttonBubble.style.opacity = '0.5';
     }
@@ -64,7 +63,7 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
 }
 
 /* -------------------------
-   Utility Function: Get URL Parameter
+   Utility: Get URL Parameter
 ------------------------- */
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
@@ -85,7 +84,7 @@ function fetchQuestionsAndShowCount() {
   }
   const endpoint = "https://prod-32.westus.logic.azure.com:443/workflows/9f1f0ec63dd2496f82ad5d2392af37fe/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=N6wmNAfDyPA2mZFL9gr3LrKjl1KPvHZhgy7JM1yzvfk";
   const requestBody = { documentId: docId };
-  
+
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -121,7 +120,7 @@ function fetchQuestionsAndShowCount() {
   });
 }
 
-// Show a prompt that displays how many questions will be answered
+// Show a prompt that displays the number of questions to answer
 function showQuestionCount() {
   const count = questions.length;
   showAcknowledgementStep(
@@ -134,16 +133,16 @@ function showQuestionCount() {
         function() {
           showNextQuestion();
         },
-        false  // Keep the "Let's begin" button visible but disable further clicks
+        false // Keep the "Let's begin" button visible but disable further clicks
       );
     }
   );
 }
 
 /* -------------------------
-   Chat Message Functions (Q&A Flow)
+   Chat Message Functions (Q&A Mode)
 ------------------------- */
-// Append a chat bubble with a label above it
+// Append a chat bubble (with label above)
 function appendBubble(text, type = 'bot', extraClass = '') {
   const container = document.getElementById('chatContainer');
   const messageWrapper = document.createElement('div');
@@ -163,13 +162,13 @@ function appendBubble(text, type = 'bot', extraClass = '') {
   container.scrollTop = container.scrollHeight;
 }
 
-// Show the next question (Q&A mode)
+// Show the next question in Q&A mode
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     const questionObj = questions[currentQuestionIndex];
     appendBubble(questionObj.question, 'bot');
   } else {
-    // When finished with questions, delay and then show the review prompt.
+    // All questions answered – wait 2 seconds then show review prompt
     appendBubble("Complete. Please wait for confirmation...", "bot");
     setTimeout(showReviewPrompt, 2000);
   }
@@ -200,11 +199,11 @@ function appendReviewHeader() {
   container.appendChild(headerWrapper);
 }
 
-// Append a review item (question and answer) to the review screen
+// Append a review item (question and answer) for each Q&A pair
 function appendReviewItem(item, index) {
   const container = document.getElementById('chatContainer');
 
-  // REVIEW QUESTION: full-width grey box with padding
+  // Create a wrapper for the question (grey box) using review-question classes
   const questionWrapper = document.createElement('div');
   questionWrapper.className = 'review-question-wrapper';
   const questionElem = document.createElement('div');
@@ -213,16 +212,16 @@ function appendReviewItem(item, index) {
   questionWrapper.appendChild(questionElem);
   container.appendChild(questionWrapper);
 
-  // REVIEW ANSWER: separate right-aligned bubble below the question
+  // Create a wrapper for the answer (blue bubble) using review-answer classes
   const answerWrapper = document.createElement('div');
   answerWrapper.className = 'review-answer-wrapper';
   const answerElem = document.createElement('div');
-  answerElem.className = 'chat-bubble user';
+  answerElem.className = 'review-answer';
   answerElem.textContent = item.answer;
   answerWrapper.appendChild(answerElem);
   container.appendChild(answerWrapper);
 
-  // EDIT BUTTON: below the answer bubble, aligned left
+  // Create an edit button, placed below the answer wrapper, aligned to the right
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
   editBtn.textContent = 'Edit';
@@ -243,39 +242,38 @@ function appendSubmitButton() {
   submitBtn.textContent = 'Submit All Answers';
   
   submitBtn.addEventListener('click', function() {
-  if (submitBtn.disabled) return;
-  
-  // Disable all edit buttons so the client cannot re-edit during submission.
-  const editBtns = document.querySelectorAll('.edit-button');
-  editBtns.forEach(function(btn) {
-    btn.disabled = true;
-    btn.style.pointerEvents = 'none';
-    btn.style.opacity = '0.5';
+    if (submitBtn.disabled) return;
+    
+    // Disable all edit buttons so the client cannot re-edit during submission
+    const editBtns = document.querySelectorAll('.edit-button');
+    editBtns.forEach(function(btn) {
+      btn.disabled = true;
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.5';
+    });
+    
+    // Change button to "Please wait..." state and disable it
+    submitBtn.textContent = "Please wait...";
+    submitBtn.classList.add('pressed');
+    submitBtn.disabled = true;
+    
+    // Call the submission function
+    submitAnswers().then(data => {
+      submitBtn.classList.remove('pressed');
+      submitBtn.classList.add('success');
+      submitBtn.textContent = "Success!";
+    }).catch(error => {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('pressed');
+      submitBtn.textContent = "Submit All Answers";
+    });
   });
-  
-  // Change text to "Please wait..." and add pressed state.
-  submitBtn.textContent = "Please wait...";
-  submitBtn.classList.add('pressed');
-  submitBtn.disabled = true;
-  
-  // Call the submission function.
-  submitAnswers().then(data => {
-    submitBtn.classList.remove('pressed');
-    submitBtn.classList.add('success');
-    submitBtn.textContent = "Success!";
-  }).catch(error => {
-    submitBtn.disabled = false;
-    submitBtn.classList.remove('pressed');
-    submitBtn.textContent = "Submit All Answers";
-  });
-});
-
   
   submitWrapper.appendChild(submitBtn);
   container.appendChild(submitWrapper);
 }
 
-// Show the review screen (disable input controls)
+// Show the review screen – disable input controls so no new text can be added
 function showReviewScreen() {
   clearChatContainer();
   const container = document.getElementById('chatContainer');
@@ -286,7 +284,7 @@ function showReviewScreen() {
   });
   appendSubmitButton();
 
-  // Disable input and back controls on review screen
+  // Disable input controls on review screen
   document.getElementById('userInput').disabled = true;
   document.getElementById('sendButton').style.display = 'none';
   const backBtn = document.getElementById('backButton');
@@ -294,42 +292,41 @@ function showReviewScreen() {
   backBtn.style.color = "transparent";
 }
 
-// Edit a specific answer in review mode
+// When editing an answer, disable the back button so no new answers are added
 function editAnswer(index) {
   editIndex = index;
-  // Re-enable input field and show the send button for editing
+  // Re-enable input and send button for editing
   document.getElementById('userInput').disabled = false;
   document.getElementById('sendButton').style.display = 'block';
-  
-  // Disable the back button in edit mode
+  // Disable back button in edit mode
   const backBtn = document.getElementById('backButton');
   backBtn.style.pointerEvents = "none";
-  backBtn.style.color = "transparent"; // or you can hide it completely with display: none
-  
-  // Load the current answer into the input field for editing
+  backBtn.style.color = "transparent";
+
+  // Load the selected answer into the input field for editing
   document.getElementById('userInput').value = answers[index].answer;
   document.getElementById('userInput').focus();
-  
-  // Clear the review screen and show the corresponding question bubble for editing
+
+  // Clear the review screen and show only the corresponding question bubble for editing
   clearChatContainer();
   appendBubble(questions[index].question, 'bot');
 }
 
-// Process send button press (handles new answers and edits)
+// Process send button press (handles both new answers and edits)
 function processSend() {
   const inputField = document.getElementById('userInput');
   const userText = inputField.value.trim();
   if (userText === "") return;
 
   if (editIndex !== null) {
-    // In edit mode: update the answer and clear edit state
+    // Edit mode: update the answer, clear edit state, clear input, and show review screen
     answers[editIndex].answer = userText;
     appendBubble(userText, 'user');
     editIndex = null;
-    inputField.value = ""; // Clear input
+    inputField.value = "";
     setTimeout(showReviewScreen, 500);
   } else {
-    // Normal Q&A mode: record answer and move to next question
+    // Normal Q&A mode: record the answer and move to the next question
     appendBubble(userText, 'user');
     const currentQ = questions[currentQuestionIndex];
     answers.push({
@@ -354,6 +351,7 @@ function showReviewPrompt() {
     "Thank you for completing these questions. Ready to review your answers?",
     "Review Answers",
     function() {
+      // Disable back button when review begins
       const backBtn = document.getElementById('backButton');
       backBtn.style.pointerEvents = "none";
       backBtn.style.color = "transparent";
@@ -362,10 +360,7 @@ function showReviewPrompt() {
   );
 }
 
-/* -------------------------
-   Submit Answers Function
-------------------------- */
-// Submit the collected answers via AJAX to your ReplacePlaceholders endpoint
+// Submit answers via AJAX to the ReplacePlaceholders endpoint
 function submitAnswers() {
   const payload = {
     documentId: documentId,
@@ -435,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('backButton').addEventListener('click', function() {
     if (currentQuestionIndex > 0) {
       const container = document.getElementById('chatContainer');
-      // Remove the last two message wrappers (user answer + subsequent question bubble)
+      // Remove the last two message wrappers (assumed: one for the user's answer and one for the subsequent question bubble)
       if (container.children.length >= 2) {
         container.removeChild(container.lastElementChild);
         container.removeChild(container.lastElementChild);
@@ -443,6 +438,8 @@ document.addEventListener('DOMContentLoaded', function() {
       currentQuestionIndex--;
       answers.splice(currentQuestionIndex, 1);
       document.getElementById('userInput').value = "";
+      // Optionally, show the previous question bubble again for clarity:
+      appendBubble(questions[currentQuestionIndex].question, 'bot');
     }
   });
 });
