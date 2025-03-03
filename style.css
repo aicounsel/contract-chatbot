@@ -244,7 +244,20 @@ body {
 
 /*--------EDIT---------*/
 
-#edit-button {
+#chatContainer .edit-button {
+  display: inline-block;
+  padding: 10px 10px;
+  background-color: #80ADA0 !important;
+  color: #000 !important;
+  border: 1px solid #000 !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  text-align: right;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*#edit-button {
   font-weight: bold;
   color: #706DEB;
   cursor: pointer;
@@ -253,7 +266,7 @@ body {
   user-select: none;
   border-radius: 25px;
   padding: 10px 15px;
-}
+}*/
 
 /*.review-item .edit-button {
   display: inline-block;
