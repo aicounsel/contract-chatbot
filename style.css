@@ -249,7 +249,23 @@ body {
 }
 
 /*--------EDIT---------*/
-/* Removed the old #chatContainer .edit-button block in favor of the updated one below */
+
+#chatContainer .edit-button {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #FFFFFF;
+  color: #706DEB;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 1px solid #706DEB;
+  border-radius: 25px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: -10px; /* negative test - was 0*/
+  margin-bottom: 20px;
+  margin-left: auto;
+  user-select: none;
+}
 
 /*--------SUBMIT ALL BUTTON----------*/
 
@@ -260,7 +276,36 @@ body {
   margin-top: 20px;
 }
 
-/* Original submit button styles for #submitAllAnswers will be overridden by updated .submit-button rules below */
+/* Submit All Answers button styling */
+#submitAllAnswers {
+  background-color: #6dd3eb; /* At rest */
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 18px;      
+  margin: 0 auto; 
+}
+#submitAllAnswers:hover {
+  background-color: #d96deb; /* Hover */
+}
+#submitAllAnswers:active,
+#submitAllAnswers.pressed {
+  background-color: #322C5E; /* Press */
+  transform: scale(0.95);
+}
+#submitAllAnswers.success {
+  background-color: #706deb; /* Success state */
+  color: #fff;
+  border: none;
+  transform: none;
+}
+
 #chatControls.review-mode .review-submit-wrapper {
   order: -1;
   width: 100%;
@@ -299,11 +344,11 @@ body {
     padding: 15px 20px 40px;
   }
   
-  #chatControls.review-mode {
+   #chatControls.review-mode {
     padding: 10px !important;
     justify-content: center;
   }
-  
+   
   .input-wrapper {
     width: 100%;
   }
@@ -323,115 +368,4 @@ body {
     margin-left: 10px;
     margin-bottom: 0;
   }
-}
-
-/* ============================================================================
-   Update Additions & Overrides
-============================================================================ */
-
-/* Progress indicator for questions */
-.progress-indicator {
-  font-size: 0.85em;
-  opacity: 0.7;
-  background-color: #f0f0f0;
-  color: #555;
-  margin-bottom: 5px;
-  padding: 4px 12px;
-}
-
-/* Action button for acknowledgement steps */
-.action-button {
-  background-color: #1976d2;
-  color: white;
-  padding: 10px 16px;
-  transition: background-color 0.2s;
-}
-
-.action-button:hover {
-  background-color: #1565c0;
-  cursor: pointer;
-}
-
-/* Updated edit button styling */
-.edit-button {
-  background-color: transparent;
-  color: #1976d2;
-  border: 1px solid #1976d2;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.85em;
-  cursor: pointer;
-  margin: 4px 0 12px auto;
-  display: block;
-  transition: background-color 0.2s;
-}
-
-.edit-button:hover {
-  background-color: #f0f7ff;
-}
-
-/* Styling for edit context bubbles */
-.edit-context {
-  font-style: italic;
-  background-color: #f0f7ff;
-  border-left: 3px solid #1976d2;
-}
-
-/* Question number styling for review items */
-.question-number {
-  font-weight: bold;
-  margin-right: 4px;
-}
-
-/* Success message style */
-.success-message {
-  background-color: #e8f5e9;
-  border-left: 4px solid #4caf50;
-}
-
-/* Error message style */
-.error-message {
-  background-color: #ffebee;
-  border-left: 4px solid #f44336;
-}
-
-/* Updated review header styling */
-.review-header h2 {
-  margin-bottom: 8px;
-  color: #1976d2;
-}
-
-.review-header p {
-  margin-bottom: 24px;
-  color: #555;
-}
-
-/* Updated submit button styling */
-.submit-button {
-  background-color: #4caf50;
-  color: white;
-  font-weight: bold;
-  padding: 12px 24px;
-  border-radius: 4px;
-  margin: 16px auto;
-  display: block;
-  text-align: center;
-  transition: background-color 0.2s;
-}
-
-.submit-button:hover {
-  background-color: #388e3c;
-  cursor: pointer;
-}
-
-.submit-button.pressed {
-  background-color: #888;
-}
-
-.submit-button.success {
-  background-color: #4caf50;
-}
-
-.submit-button.error {
-  background-color: #f44336;
 }
