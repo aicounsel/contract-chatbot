@@ -91,6 +91,7 @@ body {
   border-radius: 25px;          /* Fully rounded by default */
   word-wrap: break-word;
   max-width: 75%;
+  white-space: pre-wrap;
 }
 
 /* Bot bubble modifications */
