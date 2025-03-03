@@ -235,7 +235,7 @@ body {
   color: #fff;
   text-align: left;
   margin-left: auto;           /* This pushes it to the right */
-  margin-right: 20px;           /* Consistent right margin */
+  /*margin-right: 20px;           Feels too much push from right margin */
 }
 
 /* Edit button for review items – aligned to the right */
