@@ -271,7 +271,7 @@ body {
 
 /* Submit All Answers button styling */
 #submitAllAnswers {
-  background-color: #EB6DBB; /* At rest */
+  background-color: #6dd3eb; /* At rest */
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -280,9 +280,10 @@ body {
   transition: background-color 0.3s, transform 0.1s;
   text-align: center;
   display: inline-block;
+  white-space: nowrap;
 }
 #submitAllAnswers:hover {
-  background-color: #BC6DEB; /* Hover */
+  background-color: #d96deb; /* Hover */
 }
 #submitAllAnswers:active,
 #submitAllAnswers.pressed {
@@ -290,7 +291,7 @@ body {
   transform: scale(0.95);
 }
 #submitAllAnswers.success {
-  background-color: #6DDBEB; /* Success state */
+  background-color: #706deb; /* Success state */
   color: #fff;
   border: none;
   transform: none;
