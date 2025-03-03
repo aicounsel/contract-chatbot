@@ -266,6 +266,7 @@ body {
 /* Submit All Answers button wrapper (centered) */
 .review-submit-wrapper {
   text-align: center;
+  width: 100%;
   margin-top: 20px;
 }
 
