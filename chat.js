@@ -124,11 +124,13 @@ function fetchQuestionsAndShowCount() {
 // Show a prompt that displays the number of questions to answer in one message
 function showQuestionCount() {
   const count = questions.length;
-  const message = `Welcome to AI Counsel! 👋 I'm your Client Assistant and I'll help collect the information we need for your project. A few quick notes:
-• This is a secure information collection tool
-• Please complete all questions in one session
-• Your best guess is fine if you're unsure about any answers
-• AI has pulled ${count} items that need your attention
+const message = `Welcome to AI Counsel! 👋 I'm your Client Assistant and I'll help collect the information we need for your project. A few quick notes:
+
+• This is a secure information collection tool.
+• Please complete all questions in one session.
+• Your best guess is fine if you're unsure about any answers.
+• AI has pulled 4 items that need your attention.
+
 Ready to get started?`;
   
   showAcknowledgementStep(
@@ -274,7 +276,7 @@ function appendReviewItem(item, index) {
   // Create an edit button, placed below the answer wrapper, aligned to the right
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
-  editBtn.textContent = 'Edit';
+  editBtn.textContent = '✏️ EDIT';
   editBtn.addEventListener('click', function() {
     editAnswer(index);
   });
