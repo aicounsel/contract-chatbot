@@ -218,7 +218,7 @@ body {
 }
 .review-question {
   display: inline-block;
-  padding: 10px 10px;         
+  padding: 15px 20px;   /* changed from 10 10 */        
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
@@ -233,7 +233,7 @@ body {
 }
 .review-answer {
   display: inline-block;    
-  padding: 10px 10px;        
+  padding: 15px 20px; /* changed from 10 10 */       
   border-radius: 25px;
   word-wrap: break-word;
   max-width: 75%;
@@ -242,13 +242,9 @@ body {
   text-align: left;        
 }
 
-/* Edit button for review items – aligned to the right */
-.review-item .edit-button {
+/*--------EDIT---------*/
+#edit-button {    /*.review-item .edit-button {*/
   display: inline-block;
-  /*margin: 5px auto 10px auto; Centered horizontally if desired, or use auto on left only
-  Alternatively, to force right alignment, you could use: */
-  margin-left: auto; 
-  margin-right: 20px;
   padding: 10px 10px;
   background-color: #fff;
   color: #000;
