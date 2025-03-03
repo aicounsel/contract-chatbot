@@ -1,12 +1,12 @@
 /******************************************************
- * Chatbot Script (chat.js)
+ * Improved Chatbot Script (chat.js)
  * 
- * This script handles:
- *   - The initial chained acknowledgement steps.
- *   - Fetching questions from a Power Automate endpoint.
- *   - Running the Q&A flow with "send" and "back" functionality.
- *   - Transitioning to a review screen where the user can
- *     edit answers and then submit them.
+ * Enhancements:
+ *   - Streamlined welcome and acknowledgement flow
+ *   - Progress indicators during question flow
+ *   - More engaging button text
+ *   - Clearer review instructions
+ *   - Enhanced success/error messaging
  ******************************************************/
 
 /* -------------------------
@@ -17,15 +17,13 @@ let currentQuestionIndex = 0;
 let answers = [];            // Array of objects: { placeholder, question, answer }
 let editIndex = null;        // For review/edit mode
 let savedScrollPos = 0;      // Added this missing variable
-let editScrollPos = null;  // To store the review scroll position before editing
+let editScrollPos = null;    // To store the review scroll position before editing
 
 /* -------------------------
-   Acknowledgement Step Function
+   Improved Acknowledgement Step Function
 ------------------------- */
 /**
- * Displays an acknowledgement step.
- * Appends a permanent explanatory bubble, then an outlined, clickable confirmation bubble.
- * If removeOnClick is false, the button remains visible but becomes unclickable after the first click.
+ * Displays an acknowledgement step with improved styling and more engaging button text.
  *
  * @param {string} message - The explanatory text.
  * @param {string} buttonLabel - The label for the confirmation button.
@@ -42,7 +40,7 @@ function showAcknowledgementStep(message, buttonLabel, callback, removeOnClick =
   buttonWrapper.className = 'message-wrapper acknowledgement';
 
   const buttonBubble = document.createElement('div');
-  buttonBubble.className = 'chat-bubble outline';
+  buttonBubble.className = 'chat-bubble outline action-button';
   buttonBubble.textContent = buttonLabel;
 
   buttonWrapper.appendChild(buttonBubble);
@@ -76,8 +74,8 @@ const documentId = getQueryParam('documentId') || 'default-doc-id';
 /* -------------------------
    Fetching Questions Functions
 ------------------------- */
-// Fetch questions and then show a question count prompt
-function fetchQuestionsAndShowCount() {
+// Fetch questions and then show a combined welcome message
+function fetchQuestionsAndShowWelcome() {
   const docId = getQueryParam('documentId');
   if (!docId) {
     console.error("No documentId found in URL");
@@ -114,37 +112,41 @@ function fetchQuestionsAndShowCount() {
     console.log("Fetched questions:", fetchedQuestions);
     questions = fetchedQuestions;
     currentQuestionIndex = 0;
-    showQuestionCount();
+    showWelcomeMessage();
   })
   .catch(error => {
     console.error("Error fetching questions:", error);
-    appendBubble("Error fetching questions. Please try again later.", "bot");
+    appendBubble("We're having trouble connecting to our servers. Please refresh the page and try again, or contact support at info@aicounsel.co if the issue persists.", "bot");
   });
 }
 
-// Show a prompt that displays the number of questions to answer
-function showQuestionCount() {
+// Show an improved single welcome message that combines all key information
+function showWelcomeMessage() {
   const count = questions.length;
+  const welcomeMessage = `
+Welcome to AI Counsel! 👋 I'm your Client Assistant and I'll help collect the information we need for your project.
+
+A few quick notes:
+• This is a secure information collection tool (${count} questions)
+• Please complete all questions in one session
+• Your best guess is fine if you're unsure about any answers
+
+Ready to get started?
+  `;
+  
   showAcknowledgementStep(
-    "You have " + count + " questions to complete, ranging from basic information (names, dates) to more detailed questions about your business.",
-    "Continue",
+    welcomeMessage,
+    "Start answering",
     function() {
-      showAcknowledgementStep(
-        "If you're unsure about an answer, your best guess is fine. We'll follow up if needed. Ready to begin?",
-        "Let's begin",
-        function() {
-          // Enable the input controls here once the user is ready
-          document.getElementById('userInput').disabled = false;
-          document.getElementById('sendButton').style.display = 'block';
-          // Now start the Q&A by showing the first question
-          showNextQuestion();
-        },
-        false // Keep the "Let's begin" button visible but disable further clicks
-      );
-    }
+      // Enable the input controls here once the user is ready
+      document.getElementById('userInput').disabled = false;
+      document.getElementById('sendButton').style.display = 'block';
+      // Now start the Q&A by showing the first question
+      showNextQuestion();
+    },
+    false // Keep the button visible but disable further clicks
   );
 }
-
 
 /* -------------------------
    Chat Message Functions (Q&A Mode)
@@ -157,7 +159,7 @@ function appendBubble(text, type = 'bot', extraClass = '') {
 
   const label = document.createElement('div');
   label.className = 'message-label';
-  label.textContent = type === 'user' ? "Client" : "Client Assistant";
+  label.textContent = type === 'user' ? "You" : "AI Counsel Assistant";
 
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot') + " " + extraClass;
@@ -169,14 +171,29 @@ function appendBubble(text, type = 'bot', extraClass = '') {
   container.scrollTop = container.scrollHeight;
 }
 
-// Show the next question in Q&A mode
+// Show the next question with progress indicator in Q&A mode
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     const questionObj = questions[currentQuestionIndex];
+    const progressText = `Question ${currentQuestionIndex + 1} of ${questions.length}:`;
+    
+    // Add progress indicator as a separate subtle bubble
+    const container = document.getElementById('chatContainer');
+    const progressWrapper = document.createElement('div');
+    progressWrapper.className = 'message-wrapper bot';
+    
+    const progressBubble = document.createElement('div');
+    progressBubble.className = 'chat-bubble bot progress-indicator';
+    progressBubble.textContent = progressText;
+    
+    progressWrapper.appendChild(progressBubble);
+    container.appendChild(progressWrapper);
+    
+    // Then add the actual question
     appendBubble(questionObj.question, 'bot');
   } else {
-    // All questions answered – wait 2 seconds then show review prompt
-    appendBubble("Complete. Please wait for confirmation...", "bot");
+    // All questions answered – show a better completion message
+    appendBubble("Great job! You've answered all the questions. Just a moment while I prepare your responses for review...", "bot");
     setTimeout(showReviewPrompt, 2000);
   }
 }
@@ -189,24 +206,24 @@ function clearChatContainer() {
   document.getElementById('chatContainer').innerHTML = '';
 }
 
-// Append the review header at the top of the review screen
+// Append the improved review header with clearer instructions
 function appendReviewHeader() {
   const container = document.getElementById('chatContainer');
   const headerWrapper = document.createElement('div');
   headerWrapper.className = 'review-header';
 
   const header = document.createElement('h2');
-  header.textContent = "Review Your Answers";
+  header.textContent = "Almost done! Please review your answers";
   headerWrapper.appendChild(header);
 
   const subheader = document.createElement('p');
-  subheader.textContent = "Please review and press 'Submit All Answers' at the bottom of the page.";
+  subheader.textContent = "You can edit any response by clicking the \"Edit\" button. When you're satisfied with all answers, click \"Complete my submission\" at the bottom.";
   headerWrapper.appendChild(subheader);
 
   container.appendChild(headerWrapper);
 }
 
-// Append a review item (question and answer) for each Q&A pair
+// Append a review item (question and answer) for each Q&A pair with improved styling
 function appendReviewItem(item, index) {
   const container = document.getElementById('chatContainer');
 
@@ -215,7 +232,15 @@ function appendReviewItem(item, index) {
   questionWrapper.className = 'review-question-wrapper';
   const questionElem = document.createElement('div');
   questionElem.className = 'review-question';
-  questionElem.textContent = item.question;
+  
+  // Add question number for better orientation
+  const questionNumber = document.createElement('span');
+  questionNumber.className = 'question-number';
+  questionNumber.textContent = `${index + 1}. `;
+  questionElem.appendChild(questionNumber);
+  
+  const questionText = document.createTextNode(item.question);
+  questionElem.appendChild(questionText);
   questionWrapper.appendChild(questionElem);
   container.appendChild(questionWrapper);
 
@@ -228,31 +253,38 @@ function appendReviewItem(item, index) {
   answerWrapper.appendChild(answerElem);
   container.appendChild(answerWrapper);
 
-  // Create an edit button, placed below the answer wrapper, aligned to the right
+  // Create an edit button with improved styling
   const editBtn = document.createElement('button');
   editBtn.className = 'edit-button';
-  editBtn.textContent = 'Edit';
+  
+  // Add pencil icon for better visual affordance
+  const pencilIcon = document.createElement('span');
+  pencilIcon.className = 'edit-icon';
+  pencilIcon.innerHTML = '✏️';
+  editBtn.appendChild(pencilIcon);
+  
+  const editText = document.createTextNode(' Edit');
+  editBtn.appendChild(editText);
+  
   editBtn.addEventListener('click', function() {
     editAnswer(index);
   });
   container.appendChild(editBtn);
 }
 
-// Append the "Submit All Answers" button (centered)
+// Append the "Submit All Answers" button with improved styling
 function appendSubmitButtonToControls() {
   const controls = document.getElementById('chatControls');
-  // Clear any existing controls inside chatControls if needed:
-  // controls.innerHTML = '';  // Uncomment if you want to remove all existing elements
-
-  // Create a wrapper for the submit button (optional styling wrapper)
+  
+  // Create a wrapper for the submit button
   const submitWrapper = document.createElement('div');
   submitWrapper.className = 'review-submit-wrapper';
 
-  // Create the submit button (assigning an ID helps with specificity)
+  // Create the submit button
   const submitBtn = document.createElement('div');
   submitBtn.id = 'submitAllAnswers';
   submitBtn.className = 'chat-bubble outline submit-button';
-  submitBtn.textContent = 'Submit All Answers';
+  submitBtn.textContent = 'Complete my submission';
 
   submitBtn.addEventListener('click', function() {
     if (submitBtn.disabled) return; // Prevent multiple submissions
@@ -263,30 +295,29 @@ function appendSubmitButtonToControls() {
       btn.style.pointerEvents = 'none';
       btn.style.opacity = '0.5';
     });
-    submitBtn.textContent = 'Please wait...';
+    submitBtn.textContent = 'Submitting...';
     submitBtn.classList.add('pressed');
     submitBtn.disabled = true;
 
     submitAnswers().then(data => {
       submitBtn.classList.remove('pressed');
       submitBtn.classList.add('success');
-      submitBtn.textContent = 'Success!';
+      submitBtn.textContent = 'Successfully submitted!';
     }).catch(error => {
-      // Optionally, re-enable on error
+      // Re-enable on error
       submitBtn.disabled = false;
       submitBtn.classList.remove('pressed');
-      submitBtn.textContent = 'Submit All Answers';
+      submitBtn.classList.add('error');
+      submitBtn.textContent = 'Try again';
     });
   });
 
   submitWrapper.appendChild(submitBtn);
-  // Append the wrapper to the chat controls container so it's always visible
   controls.appendChild(submitWrapper);
 }
 
-// Show the review screen – disable input controls so no new text can be added
+// Show the review screen with improved layout
 function showReviewScreen(scrollPos = 0) {
-  // Clear the chat container (review items)
   clearChatContainer();
   const container = document.getElementById('chatContainer');
   appendReviewHeader();
@@ -294,77 +325,71 @@ function showReviewScreen(scrollPos = 0) {
     appendReviewItem(item, index);
   });
   
-  // Instead of resetting scroll to 0, restore the passed scroll position.
   container.scrollTop = scrollPos;
   
-  // Hide the input controls and back button:
+  // Hide the input controls and back button
   document.getElementById('userInput').style.display = 'none';
   document.getElementById('sendButton').style.display = 'none';
   document.getElementById('backButton').style.display = 'none';
   
-  // Add review-mode class to chatControls for specific styling on review screen
   document.getElementById('chatControls').classList.add('review-mode');
-  
-  // Append the submit button to the chatControls container:
   appendSubmitButtonToControls();
 }
 
-// When editing an answer, disable the back button so no new answers are added
+// Enhanced edit answer function with clearer context
 function editAnswer(index) {
   editIndex = index;
   
-  // Capture the current scroll position in the review screen.
+  // Capture the current scroll position in the review screen
   editScrollPos = document.getElementById('chatContainer').scrollTop;
   
-  // Remove the review-mode class when leaving review screen
   document.getElementById('chatControls').classList.remove('review-mode');
   
-  // Remove the submit button wrapper from the chat controls, if it exists.
+  // Remove the submit button wrapper from the chat controls, if it exists
   const submitWrapper = document.querySelector('.review-submit-wrapper');
   if (submitWrapper) {
     submitWrapper.parentNode.removeChild(submitWrapper);
   }
   
-  // Ensure the chat controls container is visible.
   document.getElementById('chatControls').style.display = 'flex';
   
-  // Re-enable the input field and show the send button for editing.
+  // Re-enable the input field with the current answer
   const userInput = document.getElementById('userInput');
   userInput.disabled = false;
-  userInput.style.display = 'block'; // Ensure it's visible.
+  userInput.style.display = 'block';
   document.getElementById('sendButton').style.display = 'block';
   
-  // Disable the back button in edit mode.
-  const backBtn = document.getElementById('backButton');
-  backBtn.style.display = 'none'; // Hide it completely rather than making it transparent
+  // Hide the back button in edit mode
+  document.getElementById('backButton').style.display = 'none';
   
-  // Load the existing answer into the input field.
+  // Load the existing answer and focus
   userInput.value = answers[index].answer;
   userInput.focus();
   
-  // Clear the review screen so the user can see the input area.
   clearChatContainer();
   
-  // Display the corresponding question bubble for context.
+  // Add context to show which question is being edited
+  appendBubble(`Editing question ${index + 1} of ${questions.length}:`, 'bot', 'edit-context');
   appendBubble(questions[index].question, 'bot');
 }
 
-// Process send button press (handles both new answers and edits)
+// Process send button press with improved flow
 function processSend() {
   const inputField = document.getElementById('userInput');
   const userText = inputField.value.trim();
   if (userText === "") return;
   
   if (editIndex !== null) {
-    // Edit mode: update the answer, clear edit state, clear input, and show review screen
+    // Edit mode: update the answer, clear edit state, show confirmation
     answers[editIndex].answer = userText;
     appendBubble(userText, 'user');
+    appendBubble("Your answer has been updated. Returning to review...", 'bot');
     editIndex = null;
     inputField.value = "";
     setTimeout(() => {
       showReviewScreen(editScrollPos || 0);
-      editScrollPos = null;  // Reset after restoring
-    }, 500);
+      editScrollPos = null;
+    }, 1000);
   } else {
     // Normal Q&A mode: record the answer and move to the next question
     appendBubble(userText, 'user');
@@ -379,27 +404,25 @@ function processSend() {
     if (currentQuestionIndex < questions.length) {
       setTimeout(showNextQuestion, 500);
     } else {
-      // After the last question, wait 2 seconds then show review prompt
-      setTimeout(showReviewPrompt, 2000);
+      setTimeout(showReviewPrompt, 1000);
     }
   }
 }
 
-// After all questions answered, show a review prompt acknowledgement
+// After all questions answered, show an improved review prompt
 function showReviewPrompt() {
   showAcknowledgementStep(
-    "Thank you for completing these questions. Ready to review your answers?",
-    "Review Answers",
+    "Great work! You've completed all the questions. Now let's make sure everything is accurate before we submit.",
+    "Check my answers",
     function() {
       // Disable back button when review begins
-      const backBtn = document.getElementById('backButton');
-      backBtn.style.display = 'none'; // Hide completely instead of making transparent
+      document.getElementById('backButton').style.display = 'none';
       showReviewScreen();
     }
   );
 }
 
-// Submit answers via AJAX to the ReplacePlaceholders endpoint
+// Submit answers with improved success/error handling
 function submitAnswers() {
   const payload = {
     documentId: documentId,
@@ -420,11 +443,27 @@ function submitAnswers() {
     return response.json();
   })
   .then(data => {
-    appendBubble("Success! You may close this window. If you have any questions, email info@aicounsel.co", "bot");
+    // Enhanced success message
+    appendBubble(`
+✅ Success! Your information has been securely submitted to AI Counsel.
+
+What happens next? Our team will review your answers and reach out if we need any clarification. You can close this window now.
+
+If you have any questions, contact us at info@aicounsel.co
+    `, "bot", "success-message");
     return data;
   })
   .catch(error => {
-    appendBubble("Error submitting answers. Email info@aicounsel.co for instructions.", "bot");
+    // Enhanced error message with clear next steps
+    appendBubble(`
+❌ We encountered an issue submitting your answers. Don't worry - your responses are still saved on this page.
+
+Please try submitting again, or if the problem persists:
+1. Take screenshots of your answers
+2. Email them to info@aicounsel.co with subject line "Submission Error"
+
+Our team will help you complete the process.
+    `, "bot", "error-message");
     console.error(error);
     throw error;
   });
@@ -438,27 +477,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('userInput').disabled = true;
   document.getElementById('sendButton').style.display = 'none';
   
-  // Continue with the chained acknowledgement steps...
-  showAcknowledgementStep(
-    "Welcome to your AI Counsel Client Assistant! This secure chatbot collects essential information for your project through AI-generated questions tailored to your specific needs. Please note:",
-    "Continue",
-    function() {
-      showAcknowledgementStep(
-        "This is a one-way collection tool, so it won't respond to questions.",
-        "Continue",
-        function() {
-          showAcknowledgementStep(
-            "For security reasons, this chatbot does not store any data, so please complete all questions in one session (if you close your browser or refresh the page, you'll need to start over).",
-            "Continue",
-            function() {
-              // After the initial notices, fetch the questions and then show the question count prompt
-              fetchQuestionsAndShowCount();
-            }
-          );
-        }
-      );
-    }
-  );
+  // Start with streamlined welcome and fetch questions
+  fetchQuestionsAndShowWelcome();
 
   // Attach send button and Enter key event listener
   document.getElementById('sendButton').addEventListener('click', processSend);
@@ -469,38 +489,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Fixed back button event listener
-document.getElementById('backButton').addEventListener('click', function() {
-  if (currentQuestionIndex > 0 && editIndex === null) { // Make sure we're not in edit mode
-    const container = document.getElementById('chatContainer');
-    
-    // Find all message wrappers
-    const messageWrappers = container.querySelectorAll('.message-wrapper');
-    const messageCount = messageWrappers.length;
-    
-    if (messageCount >= 1) {
-      // Remove the current question (which is the last message bubble)
-      container.removeChild(messageWrappers[messageCount - 1]);
+  // Back button event listener with improved visual feedback
+  document.getElementById('backButton').addEventListener('click', function() {
+    if (currentQuestionIndex > 0 && editIndex === null) {
+      const container = document.getElementById('chatContainer');
       
-      // If there's a user answer for the current question, remove it too
-      if (messageCount >= 2 && messageWrappers[messageCount - 2].classList.contains('user')) {
-        container.removeChild(messageWrappers[messageCount - 2]);
+      // Find all message wrappers
+      const messageWrappers = container.querySelectorAll('.message-wrapper');
+      const messageCount = messageWrappers.length;
+      
+      if (messageCount >= 1) {
+        // Remove the current question bubble
+        container.removeChild(messageWrappers[messageCount - 1]);
+        
+        // If there's a progress indicator, remove it too
+        if (messageCount >= 2 && messageWrappers[messageCount - 2].querySelector('.progress-indicator')) {
+          container.removeChild(messageWrappers[messageCount - 2]);
+        }
+        
+        // If there's a user answer for the current question, remove it too
+        const userMessageIndex = messageCount - (messageWrappers[messageCount - 2].querySelector('.progress-indicator') ? 3 : 2);
+        if (userMessageIndex >= 0 && messageWrappers[userMessageIndex].classList.contains('user')) {
+          container.removeChild(messageWrappers[userMessageIndex]);
+        }
       }
+      
+      // Decrement the question index
+      currentQuestionIndex--;
+      
+      // Remove the last answer from our answers array if it exists
+      if (answers.length > currentQuestionIndex) {
+        answers.pop();
+      }
+      
+      // Clear the input field
+      document.getElementById('userInput').value = "";
+      
+      // Show the previous question again
+      showNextQuestion();
     }
-    
-    // Decrement the question index
-    currentQuestionIndex--;
-    
-    // Remove the last answer from our answers array if it exists
-    if (answers.length > currentQuestionIndex) {
-      answers.pop();
-    }
-    
-    // Clear the input field
-    document.getElementById('userInput').value = "";
-    
-    // Important: We do NOT call showNextQuestion() here as that would
-    // add the previous question again
-  }
-});
+  });
 });
