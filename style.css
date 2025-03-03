@@ -281,6 +281,8 @@ body {
   text-align: center;
   display: inline-block;
   white-space: nowrap;
+  font-size: 18px;      
+  margin: 0 auto; 
 }
 #submitAllAnswers:hover {
   background-color: #d96deb; /* Hover */
