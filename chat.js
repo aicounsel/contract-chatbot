@@ -196,21 +196,42 @@ function clearChatContainer() {
   document.getElementById('chatContainer').innerHTML = '';
 }
 
-// Append the review header at the top of the review screen
-function appendReviewHeader() {
+// Append two review info bubbles at the top of the review screen
+function appendReviewInfoBubbles() {
   const container = document.getElementById('chatContainer');
-  const headerWrapper = document.createElement('div');
-  headerWrapper.className = 'review-header';
   
-  const header = document.createElement('h2');
-  header.textContent = "Almost done! Please review your answers.";
-  headerWrapper.appendChild(header);
+  // First bubble: Bold text
+  const messageWrapper1 = document.createElement('div');
+  messageWrapper1.className = 'message-wrapper bot';
   
-  const subheader = document.createElement('p');
-  subheader.textContent = 'You can edit any response by clicking the "Edit" button. When you\'re satisfied with all answers, click "Submit All Answers" at the bottom.';
-  headerWrapper.appendChild(subheader);
+  const label1 = document.createElement('div');
+  label1.className = 'message-label';
+  label1.textContent = "Client Assistant";
   
-  container.appendChild(headerWrapper);
+  const bubble1 = document.createElement('div');
+  bubble1.className = 'chat-bubble bot';
+  // Using innerHTML to allow bold formatting:
+  bubble1.innerHTML = "<strong>Almost done! Please review your answers.</strong>";
+  
+  messageWrapper1.appendChild(label1);
+  messageWrapper1.appendChild(bubble1);
+  container.appendChild(messageWrapper1);
+  
+  // Second bubble: Instruction text
+  const messageWrapper2 = document.createElement('div');
+  messageWrapper2.className = 'message-wrapper bot';
+  
+  const label2 = document.createElement('div');
+  label2.className = 'message-label';
+  label2.textContent = "Client Assistant";
+  
+  const bubble2 = document.createElement('div');
+  bubble2.className = 'chat-bubble bot';
+  bubble2.textContent = 'You can edit any response by clicking the "Edit" button. When you\'re satisfied with all answers, click "Submit All Answers" at the bottom.';
+  
+  messageWrapper2.appendChild(label2);
+  messageWrapper2.appendChild(bubble2);
+  container.appendChild(messageWrapper2);
 }
 
 // Append a review item (question and answer) for each Q&A pair
@@ -308,12 +329,16 @@ function showReviewScreen(scrollPos = 0) {
   // Clear the chat container (review items)
   clearChatContainer();
   const container = document.getElementById('chatContainer');
-  appendReviewHeader();
+  
+  // Append the two info bubbles before the review items
+  appendReviewInfoBubbles();
+  
+  // Append each review item (question and answer)
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
   
-  // Instead of resetting scroll to 0, restore the passed scroll position.
+  // Restore the previous scroll position if any.
   container.scrollTop = scrollPos;
   
   // Hide the input controls and back button:
