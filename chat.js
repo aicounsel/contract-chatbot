@@ -17,6 +17,7 @@ let currentQuestionIndex = 0;
 let answers = [];            // Array of objects: { placeholder, question, answer }
 let editIndex = null;        // For review/edit mode
 let savedScrollPos = 0;      // Added this missing variable
+let editScrollPos = null;  // To store the review scroll position before editing
 
 /* -------------------------
    Acknowledgement Step Function
@@ -284,10 +285,7 @@ function appendSubmitButtonToControls() {
 }
 
 // Show the review screen – disable input controls so no new text can be added
-function showReviewScreen() {
-  // Save the current scroll position before clearing
-  savedScrollPos = document.getElementById('chatContainer').scrollTop;
-  
+function showReviewScreen(scrollPos = 0) {
   // Clear the chat container (review items)
   clearChatContainer();
   const container = document.getElementById('chatContainer');
@@ -295,13 +293,15 @@ function showReviewScreen() {
   answers.forEach((item, index) => {
     appendReviewItem(item, index);
   });
-  container.scrollTop = 0; // Start at the top of the review screen
-   
+  
+  // Instead of resetting scroll to 0, restore the passed scroll position.
+  container.scrollTop = scrollPos;
+  
   // Hide the input controls and back button:
   document.getElementById('userInput').style.display = 'none';
   document.getElementById('sendButton').style.display = 'none';
   document.getElementById('backButton').style.display = 'none';
-
+  
   // Append the submit button to the chatControls container:
   appendSubmitButtonToControls();
 }
@@ -310,12 +310,15 @@ function showReviewScreen() {
 function editAnswer(index) {
   editIndex = index;
   
+  // Capture the current scroll position in the review screen.
+  editScrollPos = document.getElementById('chatContainer').scrollTop;
+  
   // Remove the submit button wrapper from the chat controls, if it exists.
   const submitWrapper = document.querySelector('.review-submit-wrapper');
   if (submitWrapper) {
     submitWrapper.parentNode.removeChild(submitWrapper);
   }
-
+  
   // Ensure the chat controls container is visible.
   document.getElementById('chatControls').style.display = 'flex';
   
@@ -324,18 +327,18 @@ function editAnswer(index) {
   userInput.disabled = false;
   userInput.style.display = 'block'; // Ensure it's visible.
   document.getElementById('sendButton').style.display = 'block';
-
+  
   // Disable the back button in edit mode.
   const backBtn = document.getElementById('backButton');
   backBtn.style.display = 'none'; // Hide it completely rather than making it transparent
-
+  
   // Load the existing answer into the input field.
   userInput.value = answers[index].answer;
   userInput.focus();
-
+  
   // Clear the review screen so the user can see the input area.
   clearChatContainer();
-
+  
   // Display the corresponding question bubble for context.
   appendBubble(questions[index].question, 'bot');
 }
@@ -345,14 +348,17 @@ function processSend() {
   const inputField = document.getElementById('userInput');
   const userText = inputField.value.trim();
   if (userText === "") return;
-
+  
   if (editIndex !== null) {
     // Edit mode: update the answer, clear edit state, clear input, and show review screen
     answers[editIndex].answer = userText;
     appendBubble(userText, 'user');
     editIndex = null;
     inputField.value = "";
-    setTimeout(showReviewScreen, 500);
+    setTimeout(() => {
+      showReviewScreen(editScrollPos || 0);
+      editScrollPos = null;  // Reset after restoring
+    }, 500);
   } else {
     // Normal Q&A mode: record the answer and move to the next question
     appendBubble(userText, 'user');
