@@ -131,7 +131,7 @@ I'm your Client Assistant and I'll help collect the information we need for your
 ▪️ This is a secure information collection tool.
 ▪️ Please complete all questions in one session.
 ▪️ Your best guess is fine if you're unsure about any answers.
-• AI has pulled 4 items that need your attention.
+▪️ AI has pulled 4 items that need your attention.
 
 Ready to get started?`;
   
