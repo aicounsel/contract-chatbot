@@ -152,7 +152,7 @@ Ready to get started?`;
    Chat Message Functions (Q&A Mode)
 ------------------------- */
 // Append a chat bubble (with label above)
-function appendBubble(text, type = 'bot', extraClass = '', labelText = null) {
+function appendBubble(text, type = 'bot', extraClass = '', labelText = null, useHTML = false) {
   const container = document.getElementById('chatContainer');
   const messageWrapper = document.createElement('div');
   messageWrapper.className = 'message-wrapper ' + (type === 'user' ? 'user' : 'bot');
@@ -167,10 +167,11 @@ function appendBubble(text, type = 'bot', extraClass = '', labelText = null) {
   
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble ' + (type === 'user' ? 'user' : 'bot') + " " + extraClass;
-  bubble.textContent = text;
-  
-  // Add this line to preserve newlines:
-  bubble.style.whiteSpace = 'pre-wrap';
+  if (useHTML) {
+    bubble.innerHTML = text;
+  } else {
+    bubble.textContent = text;
+  }
   
   messageWrapper.appendChild(label);
   messageWrapper.appendChild(bubble);
@@ -476,11 +477,11 @@ function submitAnswers() {
     return response.json();
   })
   .then(data => {
-    appendBubble("Success! You may close this window. If you have any questions, email info@aicounsel.co", "bot");
+    appendBubble("Success! You may close this window. If you have any questions, email <a href="mailto:info@aicounsel.co">info@aicounsel.co</a>", "bot");
     return data;
   })
   .catch(error => {
-    appendBubble("Error submitting answers. Email info@aicounsel.co for instructions.", "bot");
+    appendBubble("Error submitting answers. Email <a href="mailto:info@aicounsel.co">info@aicounsel.co</a> for instructions.", "bot");
     console.error(error);
     throw error;
   });
