@@ -360,6 +360,9 @@ body {
     align-items: center;
     justify-content: center;
   }
+   .review-answer-wrapper {
+  font-size: 14px !important;
+}
    .review-question-wrapper {
   font-size: 14px !important;
 }
