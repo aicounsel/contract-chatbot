@@ -1,4 +1,4 @@
-<script>
+
 /******************************************************
  * Chatbot Script (chat.js)
  * 
@@ -551,4 +551,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-</script>
