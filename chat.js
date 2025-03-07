@@ -1,3 +1,4 @@
+<script>
 /******************************************************
  * Chatbot Script (chat.js)
  * 
@@ -98,6 +99,20 @@ function fetchQuestionsAndShowCount() {
     return response.json();
   })
   .then(data => {
+    // -------------------------------------------------------------------
+    // >>> NEW CHECK FOR PROCESSED FIELD <<<
+    // If "processed" is "True" (or true), show a "Thank you" and disable.
+    if (data.processed && data.processed.toString().toLowerCase() === "true") {
+      appendBubble("Thanks for submitting your answers already. If you have any questions, contact info@aicounsel.co", "bot");
+      // Disable all input controls to prevent further interaction
+      document.getElementById('userInput').disabled = true;
+      document.getElementById('userInput').style.display = 'none';
+      document.getElementById('sendButton').style.display = 'none';
+      document.getElementById('backButton').style.display = 'none';
+      return; // Stop execution
+    }
+    // -------------------------------------------------------------------
+    
     let fetchedQuestions;
     if (typeof data.questions === "string") {
       try {
@@ -124,7 +139,7 @@ function fetchQuestionsAndShowCount() {
 // Show a prompt that displays the number of questions to answer in one message
 function showQuestionCount() {
   const count = questions.length;
-const message = `Welcome to AI Counsel! 👋 
+  const message = `Welcome to AI Counsel! 👋 
 
 I'm your Client Assistant and I'll help collect the information we need for your project. A few quick notes:
 
@@ -288,8 +303,6 @@ function appendReviewItem(item, index) {
 // Append the "Submit All Answers" button (centered)
 function appendSubmitButtonToControls() {
   const controls = document.getElementById('chatControls');
-  // Clear any existing controls inside chatControls if needed:
-  // controls.innerHTML = '';  // Uncomment if you want to remove all existing elements
   
   // Create a wrapper for the submit button (optional styling wrapper)
   const submitWrapper = document.createElement('div');
@@ -538,3 +551,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+</script>
