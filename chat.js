@@ -103,7 +103,7 @@ function fetchQuestionsAndShowCount() {
     // >>> NEW CHECK FOR PROCESSED FIELD <<<
     // If "processed" is "True" (or true), show a "Thank you" and disable.
     if (data.processed && data.processed.toString().toLowerCase() === "true") {
-      appendBubble("Thanks for submitting your answers already. If you have any questions, contact info@aicounsel.co", "bot");
+      appendBubble("Thanks for submitting your answers! If you have any questions or need help, feel free to reach out to info@aicounsel.co.", "bot");
       // Disable all input controls to prevent further interaction
       document.getElementById('userInput').disabled = true;
       document.getElementById('userInput').style.display = 'none';
