@@ -306,7 +306,7 @@ body {
   background-color: #322C5E; /* Press */
   transform: scale(0.95);
    transform-origin: center;
-   padding: 15px 30px 15px 20px; /* top, right, bottom, left */
+   padding: 15px 20px 15px 20px !important; /* top, right, bottom, left */
 }
 #submitAllAnswers.success {
   background-color: #706deb; /* Success state */
