@@ -119,7 +119,7 @@ function fetchQuestionsAndShowCount() {
         fetchedQuestions = JSON.parse(data.questions);
       } catch (e) {
         console.error("Error parsing questions string:", e);
-        appendBubble("Error: Could not parse questions data.", "bot");
+        appendBubble("Error: Could not parse questions data. Please contact info@aicounsel.co", "bot");
         return;
       }
     } else {
@@ -132,7 +132,7 @@ function fetchQuestionsAndShowCount() {
   })
   .catch(error => {
     console.error("Error fetching questions:", error);
-    appendBubble("Error fetching questions. Please try again later.", "bot");
+    appendBubble("Error fetching questions. Please contact info@aicounsel.co", "bot");
   });
 }
 
@@ -323,7 +323,7 @@ function appendSubmitButtonToControls() {
       btn.style.pointerEvents = 'none';
       btn.style.opacity = '0.5';
     });
-    submitBtn.textContent = 'Please wait...';
+    submitBtn.textContent = 'Submitting... (this may take several moments)';
     submitBtn.classList.add('pressed');
     submitBtn.disabled = true;
     
