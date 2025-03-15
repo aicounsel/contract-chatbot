@@ -323,7 +323,7 @@ function appendSubmitButtonToControls() {
       btn.style.pointerEvents = 'none';
       btn.style.opacity = '0.5';
     });
-    submitBtn.textContent = 'Submitting... (this may take several moments)';
+    submitBtn.textContent = 'Submitting... (this may take a moment)';
     submitBtn.classList.add('pressed');
     submitBtn.disabled = true;
     
